@@ -1,0 +1,59 @@
+@extends('master_layout')
+
+@section('new-layout')
+    <div class="optech-breadcrumb" style="background-image: url({{ asset($general_setting->breadcrumb_image) }})">
+        <div class="container">
+            <h1 class="post__title">{{ __($pageTitle) }}</h1>
+            <nav class="breadcrumbs">
+                <ul>
+                    <li><a href="{{ route('home') }}">{{ __('translate.Home') }}</a></li>
+                    <li aria-current="page">{{ __($pageTitle) }}</li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="section optech-section-padding">
+        <div class="container">
+            <div class="row">
+                @foreach($testimonials as $testimonial)
+                    <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="400">
+                    <div class="optech-t-box3">
+                        <div class="optech-t-data3">
+                            <div class="optech-t-rating3">
+                                <ul>
+                                    @for($i = 0; $i < $testimonial->rating; $i++)
+                                        <li>
+                                            <span>
+                                                <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M9.9998 15L4.12197 18.5902L5.72007 11.8906L0.489258 7.40983L7.35479 6.85942L9.9998 0.5L12.6449 6.85942L19.5104 7.40983L14.2796 11.8906L15.8777 18.5902L9.9998 15Z" fill="#ECB014"/>
+                                                    </svg>
+
+                                            </span>
+                                        </li>
+                                    @endfor
+                                </ul>
+                            </div>
+                            <p>“ {{ $testimonial->translate?->comment }} ”</p>
+                            <div class="optech-t-footer">
+                                <div class="optech-t-author">
+                                    <h5>{{ $testimonial->translate?->name }}</h5>
+                                    <span>{{ $testimonial->translate?->designation }}</span>
+                                </div>
+                                <div class="optech-t-quote3">
+                                    <span>
+                                        <svg width="64" height="46" viewBox="0 0 64 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M15 0.715942C6.72725 0.715942 0 7.44507 0 15.7159C0 23.2672 5.60675 29.5331 12.8796 30.5658C12.2974 34.7956 10.6824 38.8202 8.15913 42.3102C7.66838 42.9913 7.68675 43.9142 8.21037 44.5733C8.72412 45.2219 9.61688 45.4678 10.4004 45.1373C22.3059 40.1679 30 28.6176 30 15.7159C30 7.44507 23.2728 0.715942 15 0.715942ZM49 0.715942C40.7272 0.715942 34 7.44507 34 15.7159C34 23.2672 39.6068 29.5331 46.8796 30.5658C46.2974 34.7956 44.6824 38.8202 42.1591 42.3102C41.6684 42.9913 41.6868 43.9142 42.2104 44.5733C42.7241 45.2219 43.6169 45.4678 44.4004 45.1373C56.3059 40.1679 64 28.6176 64 15.7159C64 7.44507 57.2728 0.715942 49 0.715942Z" fill="#2B4DFF"/>
+                                            </svg>
+
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+@endsection

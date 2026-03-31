@@ -1,0 +1,77 @@
+$flaticon_optech-font: "flaticon_optech";
+
+@font-face {
+    font-family: $flaticon_optech-font;
+    src: url("./flaticon_optech.woff2?1af72611aeacce1e3d034c502313dfa7") format("woff2"),
+url("./flaticon_optech.woff?1af72611aeacce1e3d034c502313dfa7") format("woff"),
+url("./flaticon_optech.eot?1af72611aeacce1e3d034c502313dfa7#iefix") format("embedded-opentype"),
+url("./flaticon_optech.ttf?1af72611aeacce1e3d034c502313dfa7") format("truetype"),
+url("./flaticon_optech.svg?1af72611aeacce1e3d034c502313dfa7#flaticon_optech") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon_optech !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon_optech-map: (
+    "gear": "\f101",
+    "customer-support": "\f102",
+    "money-bag": "\f103",
+    "developer": "\f104",
+    "password": "\f105",
+    "megaphone": "\f106",
+    "vector": "\f107",
+    "data": "\f108",
+    "wrench": "\f109",
+    "briefcase": "\f10a",
+    "like": "\f10b",
+    "trophy": "\f10c",
+    "user": "\f10d",
+);
+
+.flaticon-gear:before {
+    content: map-get($flaticon_optech-map, "gear");
+}
+.flaticon-customer-support:before {
+    content: map-get($flaticon_optech-map, "customer-support");
+}
+.flaticon-money-bag:before {
+    content: map-get($flaticon_optech-map, "money-bag");
+}
+.flaticon-developer:before {
+    content: map-get($flaticon_optech-map, "developer");
+}
+.flaticon-password:before {
+    content: map-get($flaticon_optech-map, "password");
+}
+.flaticon-megaphone:before {
+    content: map-get($flaticon_optech-map, "megaphone");
+}
+.flaticon-vector:before {
+    content: map-get($flaticon_optech-map, "vector");
+}
+.flaticon-data:before {
+    content: map-get($flaticon_optech-map, "data");
+}
+.flaticon-wrench:before {
+    content: map-get($flaticon_optech-map, "wrench");
+}
+.flaticon-briefcase:before {
+    content: map-get($flaticon_optech-map, "briefcase");
+}
+.flaticon-like:before {
+    content: map-get($flaticon_optech-map, "like");
+}
+.flaticon-trophy:before {
+    content: map-get($flaticon_optech-map, "trophy");
+}
+.flaticon-user:before {
+    content: map-get($flaticon_optech-map, "user");
+}

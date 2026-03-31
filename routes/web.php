@@ -12,8 +12,12 @@ use App\Http\Controllers\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
-
-Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], function () {
+Route::get('/clear-cache', function () {
+    Artisan::call('config:clear');
+    Artisan::call('cache:clear');
+    return 'Cache cleared!';
+});
+Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
@@ -43,10 +47,10 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
 
     Route::get('/custom-page/{slug}', [HomeController::class, 'custom_page'])->name('custom-page');
 
-    Route::get('/language-switcher', [HomeController::class,  'language_switcher'])->name('language-switcher');
+    Route::get('/language-switcher', [HomeController::class, 'language_switcher'])->name('language-switcher');
     Route::get('/currency-switcher', [HomeController::class, 'currency_switcher'])->name('currency-switcher');
 
-    Route::group(['as' => 'user.', 'prefix' => 'user'], function(){
+    Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
 
         Route::get('/login', [UserLoginController::class, 'custom_login_page'])->name('login');
         Route::post('/store-login', [UserLoginController::class, 'store_login'])->name('store-login');
@@ -71,7 +75,7 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
 
 
 
-        Route::group(['middleware' => 'auth:web'],function () {
+        Route::group(['middleware' => 'auth:web'], function () {
 
             Route::get('/dashboard', [UserProfileController::class, 'dashboard'])->name('dashboard');
 
@@ -95,12 +99,12 @@ Route::group(['middleware' => [ 'HtmlSpecialchars', 'MaintenanceMode']], functio
 
 });
 
-Route::get('admin', function() {
+Route::get('admin', function () {
     return null;
 })->middleware('admin.redirect');
 
 /* Admin Code */
-Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
+Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
     Route::get('login', [LoginController::class, 'custom_login_page'])->name('login');
     Route::post('store-login', [LoginController::class, 'store_login'])->name('store-login');
     Route::post('store-register', [LoginController::class, 'store_register'])->name('store-register');
@@ -111,7 +115,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin'],function (){
         Route::get('/', [DashboardController::class, 'dashboard']);
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-        Route::controller(ProfileController::class)->group(function(){
+        Route::controller(ProfileController::class)->group(function () {
             Route::get('edit-profile', 'edit_profile')->name('edit-profile');
             Route::put('profile-update', 'profile_update')->name('profile-update');
             Route::put('update-password', 'update_password')->name('update-password');

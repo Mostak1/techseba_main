@@ -20,7 +20,7 @@ jobs:
           username: techseba_main@techseba.com
           password: Mostak%12361236
           port: 21
-          server-dir: /public_html
+          server-dir: public_html/
           exclude: |
             **/.git*
             **/.git*/**

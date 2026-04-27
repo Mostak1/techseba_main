@@ -9,7 +9,7 @@
 <main class="bg-offWhite">
     <!-- Breadcrumb -->
         <!-- Breadcrumb -->
-        <div class="optech-breadcrumb" style="background-image: url({{ asset($general_setting->breadcrumb_image) }})">
+        <div class="optech-breadcrumb">
           <div class="container">
               <h1 class="post__title">{{ $custom_page->page_name }}</h1>
               <nav class="breadcrumbs">

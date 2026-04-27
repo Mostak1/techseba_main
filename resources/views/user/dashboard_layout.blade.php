@@ -214,7 +214,7 @@
 
     <div class="search-overlay"></div>
     <!--End index-header-section -->
-    <div class="optech-breadcrumb" style="background-image: url({{ asset($general_setting->breadcrumb_image) }})">
+    <div class="optech-breadcrumb">
         <div class="container">
             @yield('breadcrumb')
         </div>

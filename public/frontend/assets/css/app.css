@@ -3024,10 +3024,12 @@ button#optech-subscription-btn {
 .optech-breadcrumb {
     z-index: 0;
     text-align: center;
-    padding: 310px 0 160px;
+    padding: 160px 0 100px;
     position: relative;
-    background-size: cover;
-    background-position: center center;
+    background-color: var(--dark-bg3);
+    background-image: radial-gradient(circle at top right, rgba(43, 77, 255, 0.15), transparent), 
+                      radial-gradient(circle at bottom left, rgba(43, 77, 255, 0.1), transparent);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 @media (max-width: 991px) {
     .optech-breadcrumb {

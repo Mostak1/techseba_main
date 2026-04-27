@@ -11,7 +11,7 @@
         $getSidebarCTAData = getContent('main_demo_sidebar_cta_section.content', true);
     @endphp
     <!-- Page Update -->
-    <div class="optech-breadcrumb" style="background-image: url({{ asset($general_setting->breadcrumb_image)}})">
+    <div class="optech-breadcrumb">
         <div class="container">
             <h1 class="post__title">{{ __($service->translate->title) }}</h1>
             <nav class="breadcrumbs">

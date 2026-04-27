@@ -738,26 +738,7 @@
                     <div class="col-lg-6">
                         <div class="optech-social-icon-box right-align style-two">
                             <ul>
-                                <li>
-                                    <a href="{{ $footer->facebook }}">
-                                        <i class="ri-facebook-fill"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ $footer->linkedin }}">
-                                        <i class="ri-linkedin-fill"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ $footer->twitter }}">
-                                        <i class="ri-twitter-fill"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ $footer->instagram }}">
-                                        <i class="ri-instagram-fill"></i>
-                                    </a>
-                                </li>
+                                @include('frontend.templates.layouts.social_links')
                             </ul>
                         </div>
                     </div>

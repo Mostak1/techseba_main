@@ -32,9 +32,10 @@ class FooterContrllerController extends Controller
 
             $request->validate([
                 'facebook' => 'required|max:250',
-                'twitter' => 'required|max:250',
                 'linkedin' => 'required|max:250',
                 'instagram' => 'required|max:250',
+                'youtube' => 'nullable|max:250',
+                'tiktok' => 'nullable|max:250',
                 'copyright' => 'required|max:250',
                 'playstore' => 'required|max:250',
                 'appstore' => 'required|max:250',
@@ -43,7 +44,6 @@ class FooterContrllerController extends Controller
                 'phone' => 'required|max:250',
             ],[
                 'facebook' => trans('translate.Facebook is required'),
-                'twitter' => trans('translate.Twitter is required'),
                 'linkedin' => trans('translate.Linkedin is required'),
                 'instagram' => trans('translate.Instagram is required'),
                 'copyright' => trans('translate.Copyright is required'),
@@ -57,9 +57,10 @@ class FooterContrllerController extends Controller
             $footer = Footer::first();
 
             $footer->facebook = $request->facebook;
-            $footer->twitter = $request->twitter;
             $footer->linkedin = $request->linkedin;
             $footer->instagram = $request->instagram;
+            $footer->youtube = $request->youtube;
+            $footer->tiktok = $request->tiktok;
             $footer->copyright = $request->copyright;
             $footer->playstore = $request->playstore;
             $footer->appstore = $request->appstore;

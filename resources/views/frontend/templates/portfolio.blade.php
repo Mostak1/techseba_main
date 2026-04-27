@@ -3,8 +3,7 @@
 
     <!-- START GRID SECTION -->
     <!-- Main Start -->
-    <div class="optech-breadcrumb"
-         style="background-image: url({{ asset($general_setting->breadcrumb_image) }})">
+    <div class="optech-breadcrumb">
         <div class="container">
             <h1 class="post__title">{{ __('translate.Portfolio') }}</h1>
             <nav class="breadcrumbs">

@@ -13,6 +13,8 @@ use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
 Route::get('/clear-cache', function () {
+    Artisan::call('migrate');
+    Artisan::call('optimize:clear');
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
     return 'Cache cleared!';

@@ -168,8 +168,15 @@
 
                                                 <div class="col-12">
                                                     <div class="crancy__item-form--group mg-top-form-20">
-                                                        <label class="crancy__item-label">{{ __('translate.Twitter') }} </label>
-                                                        <input class="crancy__item-input" type="text" name="twitter" value="{{ $footer->twitter }}">
+                                                        <label class="crancy__item-label">{{ __('translate.Youtube') }} </label>
+                                                        <input class="crancy__item-input" type="text" name="youtube" value="{{ $footer->youtube }}">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div class="crancy__item-form--group mg-top-form-20">
+                                                        <label class="crancy__item-label">{{ __('translate.Tiktok') }} </label>
+                                                        <input class="crancy__item-input" type="text" name="tiktok" value="{{ $footer->tiktok }}">
                                                     </div>
                                                 </div>
 

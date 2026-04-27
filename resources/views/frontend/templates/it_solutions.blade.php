@@ -135,7 +135,7 @@
     <div class="container">
         <div class="optech-hero-content center">
             <div class="optech-hero-power">
-                <img src="{{ $general_setting->favicon }}" alt="">
+                <img src="{{ asset($general_setting->logo) }}" alt="">
             </div>
             <h1>{{ getTranslatedValue($heroContent, 'heading', $currentLang) }}</h1>
             <p>{{ getTranslatedValue($heroContent, 'description', $currentLang) }}</p>

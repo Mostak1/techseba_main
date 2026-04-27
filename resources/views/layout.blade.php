@@ -29,6 +29,8 @@
 
     @yield('front-content')
 
+    @include('frontend.whatsapp-floating')
+
     @include('frontend.script')
 
     @stack('js_section')

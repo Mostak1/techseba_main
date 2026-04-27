@@ -13,11 +13,38 @@ use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
 Route::get('/clear-cache', function () {
-    Artisan::call('migrate');
+    $message = '';
+
+    try {
+        $exitCode = Artisan::call('migrate', [
+            '--force' => true, // production e required
+        ]);
+
+        $output = Artisan::output();
+
+        if ($exitCode === 0) {
+            $message .= "Migrations run successfully!<br>";
+        } else {
+            $message .= "Migration failed with exit code: {$exitCode}<br>";
+        }
+
+        $message .= '<pre>' . e($output) . '</pre>';
+    } catch (Throwable $e) {
+        Log::error('Migration error from clear-cache route', [
+            'message' => $e->getMessage(),
+        ]);
+
+        $message .= "Migration error:<br>";
+        $message .= '<pre>' . e($e->getMessage()) . '</pre>';
+    }
+
     Artisan::call('optimize:clear');
     Artisan::call('config:clear');
     Artisan::call('cache:clear');
-    return 'Cache cleared!';
+
+    $message .= "Cache cleared!";
+
+    return response($message);
 });
 Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function () {
 

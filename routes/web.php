@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\FrontEndManagementController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DynamicPageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PageSectionController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
@@ -75,6 +77,7 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
     Route::get('/terms-conditions', [HomeController::class, 'terms_conditions'])->name('terms-conditions');
 
     Route::get('/custom-page/{slug}', [HomeController::class, 'custom_page'])->name('custom-page');
+    Route::get('/page/{slug}', [DynamicPageController::class, 'show'])->name('dynamic-page.show');
 
     Route::get('/language-switcher', [HomeController::class, 'language_switcher'])->name('language-switcher');
     Route::get('/currency-switcher', [HomeController::class, 'currency_switcher'])->name('currency-switcher');
@@ -182,6 +185,16 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
             Route::get('/frontend-section', 'index')->name('frontend-section');
             Route::get('/section/{id}', 'section')->name('section');
             Route::put('store/{key}/{id?}', 'store')->name('store');
+        });
+
+        Route::prefix('page-sections')->name('page-sections.')->controller(PageSectionController::class)->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::get('/{page}/edit', 'edit')->name('edit');
+            Route::put('/{page}', 'updatePage')->name('update-page');
+            Route::patch('/{page}/toggle', 'togglePage')->name('toggle-page');
+            Route::put('/{page}/sections', 'updateSections')->name('update-sections');
+            Route::delete('/sections/{section}', 'destroySection')->name('destroy-section');
         });
 
 

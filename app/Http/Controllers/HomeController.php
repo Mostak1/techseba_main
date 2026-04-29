@@ -29,6 +29,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
+        abort_unless_page_enabled('home');
 
         $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();
 
@@ -130,6 +131,8 @@ class HomeController extends Controller
 
     public function about_us()
     {
+        abort_unless_page_enabled('about-us');
+
         $pageTitle = trans('translate.About Us');
 
         $teams = Team::latest()->take(4)->get();
@@ -145,6 +148,8 @@ class HomeController extends Controller
 
     public function blogs(Request $request)
     {
+        abort_unless_page_enabled('blogs');
+
         $blogs = Blog::with('author', 'category')->where('status', 1);
 
         // Search by title
@@ -210,6 +215,8 @@ class HomeController extends Controller
 
     public function blog($slug)
     {
+        abort_unless_page_enabled('blogs');
+
         $blog = Blog::with('author')->where('status', 1)->where('slug', $slug)->firstOrFail();
 
         $blog_comments = BlogComment::where('blog_id', $blog->id)->where('status', 1)->latest()->get();
@@ -260,6 +267,8 @@ class HomeController extends Controller
 
     public function pricing()
     {
+        abort_unless_page_enabled('pricing-plan');
+
         $pageTitle = 'Pricing Plan';
         $faqs = Faq::latest()->take(5)->get();
 
@@ -293,6 +302,8 @@ class HomeController extends Controller
 
     public function contact_us()
     {
+        abort_unless_page_enabled('contact-us');
+
         $contact_us = ContactUs::first();
 
         $seo_setting = SeoSetting::where('id', 4)->first();
@@ -305,6 +316,8 @@ class HomeController extends Controller
 
     public function faq()
     {
+        abort_unless_page_enabled('faq');
+
         $faqs = Faq::latest()->get();
         $pageTitle = 'FAQs';
 
@@ -315,6 +328,8 @@ class HomeController extends Controller
 
     public function teams()
     {
+        abort_unless_page_enabled('teams');
+
         $teams = Team::latest()->get();
         $pageTitle = 'Our Teams';
 
@@ -329,6 +344,7 @@ class HomeController extends Controller
 
     public function teamPerson($slug)
     {
+        abort_unless_page_enabled('teams');
 
         $team = Team::with('translate')->where('slug', $slug)->firstOrFail();
         $pageTitle = $team->translate->name;
@@ -338,6 +354,8 @@ class HomeController extends Controller
 
     public function testimonials()
     {
+        abort_unless_page_enabled('testimonials');
+
         $pageTitle = 'Testimonials';
         $testimonials = Testimonial::with('translate')->active()->latest()->get();
 
@@ -348,6 +366,8 @@ class HomeController extends Controller
 
     public function privacy_policy()
     {
+        abort_unless_page_enabled('privacy-policy');
+
         $privacy_policy = PrivacyPolicy::first();
 
         $seo_setting = SeoSetting::where('id', 9)->first();
@@ -357,6 +377,8 @@ class HomeController extends Controller
 
     public function terms_conditions()
     {
+        abort_unless_page_enabled('terms-conditions');
+
         $terms_conditions = TermAndCondition::first();
 
         $seo_setting = SeoSetting::where('id', 6)->first();
@@ -373,6 +395,8 @@ class HomeController extends Controller
 
     public function services(Request $request)
     {
+        abort_unless_page_enabled('services');
+
         $services = Listing::where(['status' => 'enable'])->latest()->get();
 
         $seo_setting = SeoSetting::where('id', 10)->first();
@@ -388,6 +412,8 @@ class HomeController extends Controller
 
     public function service(Request $request, $slug)
     {
+        abort_unless_page_enabled('services');
+
         $service = Listing::where(['status' => 'enable', 'slug' => $slug])->firstOrFail();
 
         $showServices = Listing::where('id', '!=', $service->id)->where('status', 'enable')->latest()->take(5)->get();
@@ -444,6 +470,7 @@ class HomeController extends Controller
 
     public function portfolio(Request $request)
     {
+        abort_unless_page_enabled('portfolio');
 
         if($request->type == 'grid'){
             $projects = Project::latest()->paginate(9);
@@ -458,6 +485,8 @@ class HomeController extends Controller
 
     public function portfolioShow($slug)
     {
+        abort_unless_page_enabled('portfolio');
+
         $project = Project::where('slug', $slug)->firstOrFail();
         $previousProject = Project::where('id', '<', $project->id)->orderBy('id', 'desc')->first();
         $nextProject = Project::where('id', '>', $project->id)->orderBy('id', 'asc')->first();

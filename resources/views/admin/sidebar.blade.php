@@ -314,6 +314,18 @@
                 </div>
             </li>
 
+            <li class="{{ Route::is('admin.page-sections.*') ? 'active' : '' }}"><a class="collapsed" href="{{ route('admin.page-sections.index') }}"><span class="menu-bar__text">
+                <span class="crancy-menu-icon crancy-svg-icon__v1">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.33331 4.16667C3.33331 3.24619 4.07951 2.5 4.99998 2.5H15C15.9205 2.5 16.6666 3.24619 16.6666 4.16667V15.8333C16.6666 16.7538 15.9205 17.5 15 17.5H4.99998C4.07951 17.5 3.33331 16.7538 3.33331 15.8333V4.16667Z" stroke="currentcolor" stroke-width="1.5"/>
+                        <path d="M6.66669 6.66667H13.3334" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M6.66669 10H13.3334" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"/>
+                        <path d="M6.66669 13.3333H10" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span class="menu-bar__name">Page Permissions</span></span></a>
+            </li>
+
             <li class="{{ Route::is('admin.front-end.frontend-section') ? 'active' : '' }}"><a class="collapsed" href="{{ route('admin.front-end.frontend-section') }}"><span class="menu-bar__text">
                 <span class="crancy-menu-icon crancy-svg-icon__v1">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

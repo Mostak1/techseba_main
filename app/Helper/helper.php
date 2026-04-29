@@ -1,7 +1,37 @@
 <?php
 
 use App\Models\Frontend;
+use App\Models\Page;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
+
+function page_enabled(string $slug, bool $default = true): bool
+{
+    static $pages = null;
+
+    try {
+        if (!Schema::hasTable('pages')) {
+            return $default;
+        }
+
+        if ($pages === null) {
+            $pages = Page::pluck('is_enabled', 'slug');
+        }
+
+        if (!$pages->has($slug)) {
+            return $default;
+        }
+
+        return (bool) $pages->get($slug);
+    } catch (\Throwable $exception) {
+        return $default;
+    }
+}
+
+function abort_unless_page_enabled(string $slug): void
+{
+    abort_unless(page_enabled($slug), 404);
+}
 
 function admin_lang(){
     return 'en';

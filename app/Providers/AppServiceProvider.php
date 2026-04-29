@@ -6,11 +6,13 @@ use View;
 use Cache;
 use Exception;
 use Throwable;
+use App\Models\Page;
 use Illuminate\Support\Facades\Log;
 use Modules\Page\App\Models\Footer;
 use Modules\Ecommerce\Entities\Cart;
 use Modules\Listing\Entities\Listing;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Modules\Category\Entities\Category;
 use Modules\Page\App\Models\CustomPage;
@@ -63,6 +65,15 @@ class AppServiceProvider extends ServiceProvider
                 $currency_list = Currency::where('status', 'active')->get();
                 $custom_pages = CustomPage::where('status', 1)->get();
                 $services = Listing::latest()->take(5)->get();
+                $enabled_pages = collect();
+
+                try {
+                    if (Schema::hasTable('pages')) {
+                        $enabled_pages = Page::enabled()->oldest('id')->get();
+                    }
+                } catch (Throwable $exception) {
+                    $enabled_pages = collect();
+                }
 
                 $footer_categories = Category::where('status', 'enable')->latest()->take(7)->get();
                 $footer_blog_categories = BlogCategory::where('status', 1)->latest()->take(7)->get();
@@ -77,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('currency_list', $currency_list);
                 $view->with('footer', $footer);
                 $view->with('custom_pages', $custom_pages);
+                $view->with('enabled_pages', $enabled_pages);
                 $view->with('footer_categories', $footer_categories);
                 $view->with('footer_blog_categories', $footer_blog_categories);
 

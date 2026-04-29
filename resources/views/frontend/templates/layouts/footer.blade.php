@@ -22,36 +22,56 @@
                             <h5>{{ __('translate.Quick Links') }}</h5>
                         </div>
                         <ul>
-                            <li><a href="{{ route('about-us') }}">{{ __('translate.About Us') }}</a></li>
-                            <li><a href="{{ route('teams') }}">{{ __('translate.Our Team') }}</a></li>
-                            <li><a href="{{ route('pricing') }}">{{ __('translate.Pricing') }}</a></li>
-                            <li><a href="{{ route('blogs') }}">{{ __('translate.Blogs') }}</a></li>
-                            <li><a href="{{ route('contact-us') }}">{{ __('translate.Contact Us') }}</a></li>
+                            @if(page_enabled('about-us'))
+                                <li><a href="{{ route('about-us') }}">{{ __('translate.About Us') }}</a></li>
+                            @endif
+                            @if(page_enabled('teams'))
+                                <li><a href="{{ route('teams') }}">{{ __('translate.Our Team') }}</a></li>
+                            @endif
+                            @if(page_enabled('pricing-plan'))
+                                <li><a href="{{ route('pricing') }}">{{ __('translate.Pricing') }}</a></li>
+                            @endif
+                            @if(page_enabled('blogs'))
+                                <li><a href="{{ route('blogs') }}">{{ __('translate.Blogs') }}</a></li>
+                            @endif
+                            @if(page_enabled('contact-us'))
+                                <li><a href="{{ route('contact-us') }}">{{ __('translate.Contact Us') }}</a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>
-                <div class="col-xl-3 col-md-5">
-                    <div class="optech-footer-menu">
-                        <div class="optech-footer-title">
-                            <h5>{{ __('translate.Services') }}</h5>
+                @if(page_enabled('services'))
+                    <div class="col-xl-3 col-md-5">
+                        <div class="optech-footer-menu">
+                            <div class="optech-footer-title">
+                                <h5>{{ __('translate.Services') }}</h5>
+                            </div>
+                            <ul>
+                                @foreach($services as $service)
+                                    <li><a href="{{ $service->slug }}">{{ $service->translate?->title }}</a></li>
+                                @endforeach
+                            </ul>
                         </div>
-                        <ul>
-                            @foreach($services as $service)
-                                <li><a href="{{ $service->slug }}">{{ $service->translate?->title }}</a></li>
-                            @endforeach
-                        </ul>
                     </div>
-                </div>
+                @endif
                 <div class="col-xl-2 col-md-3">
                     <div class="optech-footer-menu mb-0">
                         <div class="optech-footer-title">
                             <h5>{{ __('translate.Information') }}</h5>
                         </div>
                         <ul>
-                            <li><a href="{{ route('services') }}">{{ __('translate.Services') }}</a></li>
-                            <li><a href="{{ route('privacy-policy') }}">{{ __('translate.Privacy Policy') }}</a></li>
-                            <li><a href="{{ route('terms-conditions') }}">{{ __('translate.Terms & Conditions') }}</a></li>
-                            <li><a href="{{ route('faq') }}">{{__('Faqs')}}</a></li>
+                            @if(page_enabled('services'))
+                                <li><a href="{{ route('services') }}">{{ __('translate.Services') }}</a></li>
+                            @endif
+                            @if(page_enabled('privacy-policy'))
+                                <li><a href="{{ route('privacy-policy') }}">{{ __('translate.Privacy Policy') }}</a></li>
+                            @endif
+                            @if(page_enabled('terms-conditions'))
+                                <li><a href="{{ route('terms-conditions') }}">{{ __('translate.Terms & Conditions') }}</a></li>
+                            @endif
+                            @if(page_enabled('faq'))
+                                <li><a href="{{ route('faq') }}">{{__('Faqs')}}</a></li>
+                            @endif
                         </ul>
                     </div>
                 </div>

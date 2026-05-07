@@ -34,6 +34,8 @@ class FooterContrllerController extends Controller
             'instagram' => 'required|max:250',
             'youtube' => 'nullable|max:250',
             'tiktok' => 'nullable|max:250',
+            'twitter' => 'nullable|max:250',
+            'whatsapp' => 'nullable|max:250',
             'copyright' => 'required|max:250',
             'playstore' => 'required|max:250',
             'appstore' => 'required|max:250',
@@ -59,6 +61,8 @@ class FooterContrllerController extends Controller
         $footer->instagram = $request->instagram;
         $footer->youtube = $request->youtube;
         $footer->tiktok = $request->tiktok;
+        $footer->twitter = $request->twitter;
+        $footer->whatsapp = $request->whatsapp;
         $footer->copyright = $request->copyright;
         $footer->playstore = $request->playstore;
         $footer->appstore = $request->appstore;

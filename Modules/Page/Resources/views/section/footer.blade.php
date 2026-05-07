@@ -177,6 +177,18 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="crancy__item-form--group mg-top-form-20">
+                                                        <label class="crancy__item-label"><i class="fab fa-twitter"></i> {{ __('translate.Twitter') }} </label>
+                                                        <input class="crancy__item-input" type="text" name="twitter" value="{{ $footer->twitter }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="crancy__item-form--group mg-top-form-20">
+                                                        <label class="crancy__item-label"><i class="fab fa-whatsapp"></i> {{ __('translate.Whatsapp') }} </label>
+                                                        <input class="crancy__item-input" type="text" name="whatsapp" value="{{ $footer->whatsapp }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="crancy__item-form--group mg-top-form-20">
                                                         <label class="crancy__item-label"><i class="fab fa-instagram"></i> {{ __('translate.Instagram') }} </label>
                                                         <input class="crancy__item-input" type="text" name="instagram" value="{{ $footer->instagram }}">
                                                     </div>

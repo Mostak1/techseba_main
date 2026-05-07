@@ -39,26 +39,21 @@
                             <div class="optech-extra-mt">
                                 <div class="optech-social-icon-box style-two">
                                     <ul>
-                                        <li>
-                                            <a href="{{ $team->facebook }}">
-                                                <i class="ri-facebook-fill"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ $team->linkedin }}">
-                                                <i class="ri-linkedin-fill"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ $team->twitter }}">
-                                                <i class="ri-twitter-fill"></i>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="{{ $team->instagram }}">
-                                                <i class="ri-instagram-fill"></i>
-                                            </a>
-                                        </li>
+                                        @if(!empty($team->facebook))
+                                            <li><a href="{{ $team->facebook }}" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                        @endif
+
+                                        @if(!empty($team->twitter))
+                                            <li><a href="{{ $team->twitter }}" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                        @endif
+
+                                        @if(!empty($team->linkedin))
+                                            <li><a href="{{ $team->linkedin }}" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+                                        @endif
+
+                                        @if(!empty($team->instagram))
+                                            <li><a href="{{ $team->instagram }}" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>

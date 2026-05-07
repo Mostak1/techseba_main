@@ -3023,47 +3023,59 @@ button#optech-subscription-btn {
 
 .optech-breadcrumb {
     z-index: 0;
-    text-align: center;
-    padding: 160px 0 100px;
+    text-align: left;
+    height: 250px;
+    padding: 150px 0 0;
+    display: flex;
+    align-items: flex-start;
     position: relative;
     background-color: var(--dark-bg3);
-    background-image: radial-gradient(circle at top right, rgba(43, 77, 255, 0.15), transparent), 
+    background-image: radial-gradient(circle at top right, rgba(43, 77, 255, 0.15), transparent),
                       radial-gradient(circle at bottom left, rgba(43, 77, 255, 0.1), transparent);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+.optech-breadcrumb .container {
+    width: 100%;
+}
 @media (max-width: 991px) {
     .optech-breadcrumb {
-        padding: 200px 0 100px;
+        height: 250px;
+        padding: 120px 0 0;
     }
 }
 @media (max-width: 767px) {
     .optech-breadcrumb {
-        padding: 200px 0 80px;
+        height: 250px;
+        padding: 110px 0 0;
     }
 }
 @media (max-width: 575px) {
     .optech-breadcrumb {
-        padding: 160px 0 80px;
+        height: 250px;
+        padding: 105px 0 0;
     }
 }
 
 h1.post__title {
-    margin-bottom: 20px;
-    color: var(--white-color);
+    margin-bottom: 4px;
+    color: var(--heading-color);
+    font-size: 30px;
+    line-height: 1.2;
+    letter-spacing: 0;
 }
 
 .breadcrumbs ul {
     display: flex;
     text-align: left;
-    justify-content: center;
+    justify-content: flex-start;
 }
 .breadcrumbs ul li {
-    line-height: 24px;
+    line-height: 22px;
     z-index: 0;
     padding: 0 20px;
     position: relative;
     display: inline-block;
-    color: var(--white-color);
+    color: var(--heading-color);
 }
 .breadcrumbs ul li:first-child {
     padding-left: 0;
@@ -3074,19 +3086,19 @@ h1.post__title {
 .breadcrumbs ul li:before {
     content: "\ea6e";
     right: -12px;
-    top: 6px;
+    top: 5px;
     font-size: 20px;
     z-index: -1;
     line-height: 12px;
     position: absolute;
     font-family: "remixicon";
-    color: var(--light-color2);
+    color: var(--heading-color);
 }
 .breadcrumbs ul li:last-child:before {
     content: none;
 }
 .breadcrumbs ul li a {
-    color: var(--light-color2);
+    color: var(--heading-color);
 }
 
 .optech-errors-section {
@@ -6324,16 +6336,16 @@ span.total-amount {
 }
 
 .optech-section-padding {
-    padding: 130px 0;
+    padding: 30px 0;
 }
 @media (max-width: 991px) {
     .optech-section-padding {
-        padding: 100px 0;
+        padding: 30px 0;
     }
 }
 @media (max-width: 767px) {
     .optech-section-padding {
-        padding: 80px 0;
+        padding: 30px 0;
     }
 }
 

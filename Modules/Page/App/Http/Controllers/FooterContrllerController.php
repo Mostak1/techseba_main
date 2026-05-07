@@ -28,48 +28,44 @@ class FooterContrllerController extends Controller
     public function update(Request $request)
     {
 
-        if($request->lang_code == admin_lang()){
+        $request->validate([
+            'facebook' => 'required|max:250',
+            'linkedin' => 'required|max:250',
+            'instagram' => 'required|max:250',
+            'youtube' => 'nullable|max:250',
+            'tiktok' => 'nullable|max:250',
+            'copyright' => 'required|max:250',
+            'playstore' => 'required|max:250',
+            'appstore' => 'required|max:250',
+            'address' => 'required|max:250',
+            'email' => 'required|max:250',
+            'phone' => 'required|max:250',
+        ],[
+            'facebook' => trans('translate.Facebook is required'),
+            'linkedin' => trans('translate.Linkedin is required'),
+            'instagram' => trans('translate.Instagram is required'),
+            'copyright' => trans('translate.Copyright is required'),
+            'playstore' => trans('translate.Playstore is required'),
+            'appstore' => trans('translate.Appstore is required'),
+            'address' => trans('translate.Address is required'),
+            'email' => trans('translate.Email is required'),
+            'phone' => trans('translate.Phone is required'),
+        ]);
 
-            $request->validate([
-                'facebook' => 'required|max:250',
-                'linkedin' => 'required|max:250',
-                'instagram' => 'required|max:250',
-                'youtube' => 'nullable|max:250',
-                'tiktok' => 'nullable|max:250',
-                'copyright' => 'required|max:250',
-                'playstore' => 'required|max:250',
-                'appstore' => 'required|max:250',
-                'address' => 'required|max:250',
-                'email' => 'required|max:250',
-                'phone' => 'required|max:250',
-            ],[
-                'facebook' => trans('translate.Facebook is required'),
-                'linkedin' => trans('translate.Linkedin is required'),
-                'instagram' => trans('translate.Instagram is required'),
-                'copyright' => trans('translate.Copyright is required'),
-                'playstore' => trans('translate.Playstore is required'),
-                'appstore' => trans('translate.Appstore is required'),
-                'address' => trans('translate.Address is required'),
-                'email' => trans('translate.Email is required'),
-                'phone' => trans('translate.Phone is required'),
-            ]);
+        $footer = Footer::first();
 
-            $footer = Footer::first();
-
-            $footer->facebook = $request->facebook;
-            $footer->linkedin = $request->linkedin;
-            $footer->instagram = $request->instagram;
-            $footer->youtube = $request->youtube;
-            $footer->tiktok = $request->tiktok;
-            $footer->copyright = $request->copyright;
-            $footer->playstore = $request->playstore;
-            $footer->appstore = $request->appstore;
-            $footer->phone = $request->phone;
-            $footer->email = $request->email;
-            $footer->address = $request->address;
-            $footer->save();
-
-        }
+        $footer->facebook = $request->facebook;
+        $footer->linkedin = $request->linkedin;
+        $footer->instagram = $request->instagram;
+        $footer->youtube = $request->youtube;
+        $footer->tiktok = $request->tiktok;
+        $footer->copyright = $request->copyright;
+        $footer->playstore = $request->playstore;
+        $footer->appstore = $request->appstore;
+        $footer->phone = $request->phone;
+        $footer->email = $request->email;
+        $footer->address = $request->address;
+        $footer->save();
 
         $request->validate([
             'about_us' => 'required',

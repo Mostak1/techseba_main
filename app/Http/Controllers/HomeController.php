@@ -397,7 +397,7 @@ class HomeController extends Controller
     {
         abort_unless_page_enabled('services');
 
-        $services = Listing::where(['status' => 'enable'])->latest()->get();
+        $services = Listing::where(['status' => 'enable'])->oldest()->get();
 
         $seo_setting = SeoSetting::where('id', 10)->first();
 

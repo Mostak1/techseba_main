@@ -167,7 +167,7 @@
 
 /* Pricing Table Styles */
 .optech-pricing-box {
-    padding: 35px 25px;
+    padding: 40px 30px;
     border-radius: 15px;
     background: #fff;
     border: 1px solid #eef1ff;
@@ -175,17 +175,23 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
     position: relative;
     z-index: 1;
+}
+
+.optech-pricing-box:not(.active) {
+    border: 1px solid #e0e6ff;
+    box-shadow: 0 5px 20px rgba(43, 89, 255, 0.05);
 }
 
 .optech-pricing-box.active {
     background: #2b59ff;
     border-color: #2b59ff;
     color: #fff;
-    transform: scale(1.03);
+    transform: scale(1.05);
     z-index: 2;
+    box-shadow: 0 20px 40px rgba(43, 89, 255, 0.2);
 }
 
 .optech-pricing-header h4 {
@@ -273,7 +279,16 @@
 .optech-pricing-btn .optech-default-btn {
     width: 100%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.optech-pricing-btn .optech-default-btn .btn-wraper {
     display: block;
+    width: 100%;
 }
 
 /* Ensure button text is visible in active plan */
@@ -289,7 +304,43 @@
 
 .optech-pricing-box.active .optech-default-btn::before,
 .optech-pricing-box.active .optech-default-btn::after {
-    background: #f0f3ff !important;
+    background: #2b59ff !important;
+}
+
+.optech-pricing-box.active .optech-default-btn:hover {
+    color: #fff !important;
+}
+
+.optech-pricing-box.active .optech-default-btn:hover .btn-wraper,
+.optech-pricing-box.active .optech-default-btn:hover span {
+    color: #fff !important;
+}
+
+.optech-pricing-box .optech-pricing-price h4 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 0;
+}
+
+.optech-pricing-box .optech-pricing-price h4 span {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.optech-pricing-btn .optech-default-btn span,
+.optech-pricing-btn .optech-default-btn .btn-wraper {
+    position: relative;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.optech-pricing-btn .optech-default-btn:hover span,
+.optech-pricing-btn .optech-default-btn:hover .btn-wraper {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: inherit !important;
 }
 
 .optech-pricing-box:hover {
@@ -308,6 +359,8 @@
 }
 
 .optech-pricing-plans .row {
+    margin: 55px 0 !important;
+
     display: flex;
     flex-wrap: wrap;
 }

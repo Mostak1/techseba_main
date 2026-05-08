@@ -843,5 +843,6 @@
   'Plan Features (One per line)' => 'Plan Features (One per line)',
   'Need To Discuss' => 'Need To Discuss',
   'Month' => 'Month',
+  'Starting from' => 'Starting from',
 );
  ?>

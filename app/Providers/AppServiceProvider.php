@@ -64,7 +64,7 @@ class AppServiceProvider extends ServiceProvider
                 $language_list = Language::where('status', 1)->get();
                 $currency_list = Currency::where('status', 'active')->get();
                 $custom_pages = CustomPage::where('status', 1)->get();
-                $services = Listing::latest()->take(5)->get();
+                $services = Listing::oldest()->take(5)->get();
                 $enabled_pages = collect();
 
                 try {

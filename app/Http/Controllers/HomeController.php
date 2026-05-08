@@ -63,11 +63,11 @@ class HomeController extends Controller
         }
 
         $listings = Listing::where(['status' => 'enable'])
-            ->latest()
+            ->oldest()
             ->take(10)
             ->get();
 
-        $services = Listing::latest()->take(5)->get();
+        $services = Listing::oldest()->take(5)->get();
 
         $blogPosts = Blog::latest()->take(4)->get();
 
@@ -82,7 +82,7 @@ class HomeController extends Controller
 
         $home2_filter_service = Listing::where(['status' => 'enable'])
             ->whereIn('category_id', $filter_array)
-            ->latest()
+            ->oldest()
             ->take(8)
             ->get();
 
@@ -416,7 +416,7 @@ class HomeController extends Controller
 
         $service = Listing::where(['status' => 'enable', 'slug' => $slug])->firstOrFail();
 
-        $showServices = Listing::where('id', '!=', $service->id)->where('status', 'enable')->latest()->take(5)->get();
+        $showServices = Listing::where('id', '!=', $service->id)->where('status', 'enable')->oldest()->take(5)->get();
 
         return view('service_detail', [
             'service' => $service,

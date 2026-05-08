@@ -19,7 +19,7 @@ class ListingController extends Controller
 
     public function index()
     {
-        $listings = Listing::with('translate','category')->latest()->get();
+        $listings = Listing::with('translate','category')->oldest()->get();
 
         return view('listing::index', compact('listings'));
     }

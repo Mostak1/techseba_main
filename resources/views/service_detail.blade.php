@@ -33,8 +33,50 @@
                         <img data-aos="fade-up" data-aos-duration="800" src="{{ asset($service->background_image) }}" alt="" class="optech-service-details-img">
                         <div class="optech-service-details-item">
                             <h3>{{ __('translate.Overview') }}</h3>
+                            <div class="optech-iconbox-price mb-3">
+                                <h3>{{ __('translate.Starting from') }}: {{ currency($service->price) }}</h3>
+                            </div>
                              {!! clean($service->translate->description) !!}
                         </div>
+
+                        @if($service->front_translate->plans)
+                            <div class="optech-pricing-plans mg-top-40">
+                                <div class="row">
+                                    @foreach($service->front_translate->plans as $index => $plan)
+                                        <div class="col-lg-4 col-md-6 mg-top-30">
+                                            <div class="optech-pricing-box {{ $index == 1 ? 'active' : '' }}">
+                                                <div class="optech-pricing-header">
+                                                    <h4>{{ $plan['name'] ?? '' }}</h4>
+                                                    <p>{{ $plan['description'] ?? '' }}</p>
+                                                </div>
+                                                <div class="optech-pricing-price">
+                                                    @if(!empty($plan['price']) && is_numeric($plan['price']))
+                                                        <h4>{{ currency($plan['price']) }}<span>/{{ __('translate.Month') }}</span></h4>
+                                                    @else
+                                                        <h4>{{ $plan['price'] ?: __('translate.Need To Discuss') }}</h4>
+                                                    @endif
+                                                </div>
+                                                <div class="optech-pricing-feature">
+                                                    <ul>
+                                                        @php
+                                                            $features = explode("\n", $plan['features'] ?? '');
+                                                        @endphp
+                                                        @foreach($features as $feature)
+                                                            @if(trim($feature))
+                                                                <li><i class="ri-check-line"></i> {{ trim($feature) }}</li>
+                                                            @endif
+                                                        @endforeach
+                                                    </ul>
+                                                </div>
+                                                <div class="optech-pricing-btn">
+                                                    <a class="optech-default-btn" href="{{ route('contact-us') }}" data-text="{{ __('translate.Select This Plan') }}"><span class="btn-wraper">{{ __('translate.Select This Plan') }}</span></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <div class="col-lg-4">

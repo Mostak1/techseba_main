@@ -562,6 +562,9 @@
                     <a href="{{ route('service', $listing->slug) }}">
                         <h5>{{ $listing->translate?->title }}</h5>
                     </a>
+                    <div class="optech-iconbox-price">
+                        <h3>{{ currency($listing->price) }}</h3>
+                    </div>
                     </div>
                 </div>
                 </div>

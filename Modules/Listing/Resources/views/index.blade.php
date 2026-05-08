@@ -55,6 +55,10 @@
                                                     {{ __('translate.Category') }}
                                                 </th>
 
+                                                <th class="crancy-table__column-2 crancy-table__h2 sorting" >
+                                                    {{ __('translate.Price') }}
+                                                </th>
+
 
 
                                                 <th class="crancy-table__column-3 crancy-table__h3 sorting">
@@ -79,6 +83,10 @@
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
                                                         <h4 class="crancy-table__product-title">{{ html_decode($listing?->category?->translate?->name) }}</h4>
+                                                    </td>
+
+                                                    <td class="crancy-table__column-2 crancy-table__data-2">
+                                                        <h4 class="crancy-table__product-title">{{ currency($listing->price) }}</h4>
                                                     </td>
 
 

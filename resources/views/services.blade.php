@@ -49,6 +49,9 @@
                         <div class="optech-iconbox-data">
                             <h5>{{ $service->translate?->title }}</h5>
                             <p>{{ $service->translate?->short_description }}</p>
+                            <div class="optech-iconbox-price">
+                                <h3>{{ currency($service->price) }}</h3>
+                            </div>
                             <a class="optech-icon-btn" href="{{ route('service', $service->slug) }}"><i class="icon-show ri-arrow-right-line"></i>
                                 <span>{{ __('translate.Learn More') }}</span> <i class="icon-hide ri-arrow-right-line"></i></a>
                         </div>

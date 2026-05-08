@@ -10,5 +10,9 @@ class ListingTranslation extends Model
 {
     use HasFactory;
 
-    protected $fillable = [];
+    protected $fillable = ['plans', 'listing_id', 'lang_code', 'title', 'description', 'address', 'seo_title', 'seo_description'];
+
+    protected $casts = [
+        'plans' => 'array'
+    ];
 }

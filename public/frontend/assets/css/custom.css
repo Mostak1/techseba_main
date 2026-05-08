@@ -164,3 +164,154 @@
 .dashbord_table_main .table tbody tr td {
     min-width: 150px !important;
 }
+
+/* Pricing Table Styles */
+.optech-pricing-box {
+    padding: 35px 25px;
+    border-radius: 15px;
+    background: #fff;
+    border: 1px solid #eef1ff;
+    transition: all 0.4s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 1;
+}
+
+.optech-pricing-box.active {
+    background: #2b59ff;
+    border-color: #2b59ff;
+    color: #fff;
+    transform: scale(1.03);
+    z-index: 2;
+}
+
+.optech-pricing-header h4 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.optech-pricing-box.active .optech-pricing-header h4 {
+    color: #fff;
+}
+
+.optech-pricing-header p {
+    font-size: 14px;
+    margin-bottom: 25px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.optech-pricing-box.active .optech-pricing-header p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.optech-pricing-price {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+
+.optech-pricing-price h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 0;
+    line-height: 1.2;
+    word-break: break-all;
+}
+
+.optech-pricing-price h2.custom-price {
+    font-size: 22px;
+}
+
+.optech-pricing-price h2 span {
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 5px;
+}
+
+.optech-pricing-box.active .optech-pricing-price h4,
+.optech-pricing-box.active .optech-pricing-feature ul li {
+    color: #fff;
+}
+
+.optech-pricing-feature {
+    margin-bottom: 30px;
+    flex-grow: 1;
+}
+
+.optech-pricing-feature ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.optech-pricing-feature ul li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.optech-pricing-feature ul li i {
+    color: #2b59ff;
+    margin-right: 10px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 3px;
+}
+
+.optech-pricing-box.active .optech-pricing-feature ul li i {
+    color: #fff;
+}
+
+.optech-pricing-btn .optech-default-btn {
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+/* Ensure button text is visible in active plan */
+.optech-pricing-box.active .optech-default-btn {
+    background: #fff !important;
+    color: #2b59ff !important;
+}
+
+.optech-pricing-box.active .optech-default-btn .btn-wraper,
+.optech-pricing-box.active .optech-default-btn span {
+    color: #2b59ff !important;
+}
+
+.optech-pricing-box.active .optech-default-btn::before,
+.optech-pricing-box.active .optech-default-btn::after {
+    background: #f0f3ff !important;
+}
+
+.optech-pricing-box:hover {
+    transform: translateY(-5px);
+}
+
+.optech-pricing-box.active:hover {
+    transform: translateY(-5px) scale(1.03);
+}
+
+/* Responsive fixes */
+@media (max-width: 1199px) {
+    .optech-pricing-price h2 {
+        font-size: 28px;
+    }
+}
+
+.optech-pricing-plans .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.optech-pricing-plans .col-lg-4 {
+    display: flex;
+}

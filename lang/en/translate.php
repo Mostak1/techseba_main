@@ -836,5 +836,12 @@
   'WishList' => 'WishList',
   'Browse Home' => 'Browse Home',
   'Order Update' => 'Order Update',
+  'Pricing Plans' => 'Pricing Plans',
+  'Plan Name' => 'Plan Name',
+  'Plan Price' => 'Plan Price',
+  'Plan Description' => 'Plan Description',
+  'Plan Features (One per line)' => 'Plan Features (One per line)',
+  'Need To Discuss' => 'Need To Discuss',
+  'Month' => 'Month',
 );
  ?>

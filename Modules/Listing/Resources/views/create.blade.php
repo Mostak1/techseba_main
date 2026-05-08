@@ -90,6 +90,13 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-12">
+                                                    <div class="crancy__item-form--group mg-top-form-20">
+                                                        <label class="crancy__item-label">{{ __('translate.Price') }} * </label>
+                                                        <input class="crancy__item-input" type="number" step="0.01" name="price" id="price" value="{{ old('price') }}">
+                                                    </div>
+                                                </div>
+
 
 
                                                 <div class="col-12">
@@ -117,6 +124,56 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+        </section>
+
+        <section class="crancy-adashboard crancy-show">
+            <div class="container container__bscreen">
+                <div class="row">
+                    <div class="col-12 mg-top-30">
+                        <div class="crancy-body">
+                            <div class="crancy-dsinner">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="crancy-product-card">
+                                            <div class="create_new_btn_inline_box">
+                                                <h4 class="crancy-product-card__title">{{ __('translate.Pricing Plans') }}</h4>
+                                            </div>
+                                            <div class="row">
+                                                @php
+                                                    $plan_names = ['Startup', 'Business', 'Enterprise'];
+                                                @endphp
+                                                @foreach($plan_names as $index => $plan_name)
+                                                    <div class="col-md-4 mg-top-form-20">
+                                                        <div class="p-3 border rounded bg-light">
+                                                            <h5>{{ $plan_name }} Plan</h5>
+                                                            <div class="crancy__item-form--group mg-top-form-10">
+                                                                <label class="crancy__item-label">{{ __('translate.Plan Name') }}</label>
+                                                                <input class="crancy__item-input" type="text" name="plans[{{ $index }}][name]" value="{{ $plan_name }}">
+                                                            </div>
+                                                            <div class="crancy__item-form--group mg-top-form-10">
+                                                                <label class="crancy__item-label">{{ __('translate.Plan Price') }}</label>
+                                                                <input class="crancy__item-input" type="text" name="plans[{{ $index }}][price]" value="">
+                                                            </div>
+                                                            <div class="crancy__item-form--group mg-top-form-10">
+                                                                <label class="crancy__item-label">{{ __('translate.Plan Description') }}</label>
+                                                                <textarea class="crancy__item-input crancy__item-textarea" style="height: 80px;" name="plans[{{ $index }}][description]"></textarea>
+                                                            </div>
+                                                            <div class="crancy__item-form--group mg-top-form-10">
+                                                                <label class="crancy__item-label">{{ __('translate.Plan Features (One per line)') }}</label>
+                                                                <textarea class="crancy__item-input crancy__item-textarea" style="height: 120px;" name="plans[{{ $index }}][features]"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

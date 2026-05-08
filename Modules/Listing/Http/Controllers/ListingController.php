@@ -57,6 +57,7 @@ class ListingController extends Controller
         $listing->sub_category_id = $request->sub_category_id;
         $listing->slug = $request->slug;
         $listing->status = 'enable';
+        $listing->price = $request->price;
         $listing->seo_title = $request->seo_title ? $request->seo_title : $request->title;
         $listing->seo_description = $request->seo_description ? $request->seo_description : $request->title;
         $listing->save();
@@ -70,6 +71,7 @@ class ListingController extends Controller
             $listing_translate->title = $request->title;
             $listing_translate->description = $request->description;
             $listing_translate->short_description = $request->short_description;
+            $listing_translate->plans = $request->plans;
             $listing_translate->save();
         }
 
@@ -140,6 +142,7 @@ class ListingController extends Controller
             $listing->slug = $request->slug;
             $listing->seo_title = $request->seo_title ? $request->seo_title : $request->title;
             $listing->seo_description = $request->seo_description ? $request->seo_description : $request->title;
+            $listing->price = $request->price;
             $listing->save();
 
         }
@@ -148,6 +151,7 @@ class ListingController extends Controller
         $listing_translate->title = $request->title;
         $listing_translate->description = $request->description;
         $listing_translate->short_description = $request->short_description;
+        $listing_translate->plans = $request->plans;
         $listing_translate->save();
 
         $notify_message = trans('translate.Updated Successfully');
@@ -183,6 +187,7 @@ class ListingController extends Controller
             $translate->title = $listing_translate->title;
             $translate->description = $listing_translate->description;
             $translate->short_description = $listing_translate->short_description;
+            $translate->plans = $listing_translate->plans;
             $translate->save();
         }
     }

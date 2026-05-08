@@ -505,6 +505,9 @@
                     <div class="optech-iconbox-data">
                         <h5> {{ __($listing->translate?->title) }} </h5>
                         <p>{{ $listing->translate?->short_description }}</p>
+                        <div class="optech-iconbox-price">
+                            <h3>{{ currency($listing->price) }}</h3>
+                        </div>
                         <a class="optech-icon-btn" href="{{ route('service', $listing->slug) }}">
                             <i class="icon-show ri-arrow-right-line"></i>
                             <span>{{ __('translate.Learn More') }}</span>

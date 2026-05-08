@@ -21,6 +21,7 @@ class ListingRequest extends FormRequest
                 'slug'=>'required|unique:listings',
                 'short_description'=>'required|max:255',
                 'description'=>'required',
+                'price'=>'required|numeric',
                 'thumb_image'=>'required',
             ];
         }
@@ -32,6 +33,7 @@ class ListingRequest extends FormRequest
                     'slug'=>'required|unique:listings,slug,'.$this->listing.',id',
                     'description'=>'required',
                     'short_description'=>'required|max:255',
+                    'price'=>'required|numeric',
                     'sub_category_id'=>'nullable',
                     'thumb_image'=>'sometimes|required',
                 ];

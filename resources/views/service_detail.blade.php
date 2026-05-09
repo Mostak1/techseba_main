@@ -43,9 +43,9 @@
                         <img data-aos="fade-up" data-aos-duration="800" src="{{ asset($service->background_image) }}" alt="" class="optech-service-details-img">
                         <div class="optech-service-details-item">
                             <h3>{{ __('translate.Overview') }}</h3>
-                            <div class="optech-iconbox-price mb-3">
+                            {{-- <div class="optech-iconbox-price mb-3">
                                 <h3>{{ __('translate.Starting from') }}: {{ currency($service->price) }}</h3>
-                            </div>
+                            </div> --}}
                              {!! clean($service->translate->description) !!}
                         </div>
 

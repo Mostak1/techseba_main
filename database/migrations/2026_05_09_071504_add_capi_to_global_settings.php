@@ -13,8 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         DB::table('global_settings')->insert([
-            ['key' => 'pixel_access_token', 'value' => null, 'created_at' => now(), 'updated_at' => now()],
-            ['key' => 'pixel_test_code', 'value' => null, 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'pixel_access_token', 'value' => '', 'created_at' => now(), 'updated_at' => now()],
+            ['key' => 'pixel_test_code', 'value' => '', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 

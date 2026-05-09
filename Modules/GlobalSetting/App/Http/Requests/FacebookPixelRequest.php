@@ -10,6 +10,8 @@ class FacebookPixelRequest extends FormRequest
     {
         return [
             'app_id' =>'required',
+            'access_token' => 'nullable',
+            'test_code' => 'nullable',
         ];
     }
 

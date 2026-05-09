@@ -49,6 +49,9 @@
 
 
     @if ($general_setting->pixel_status == 1)
+        @php
+            $pixel_event_id = uniqid();
+        @endphp
         <script>
             !function (f, b, e, v, n, t, s) {
                 if (f.fbq) return;
@@ -69,11 +72,14 @@
             }(window, document, 'script',
                 'https://connect.facebook.net/en_US/fbevents.js');
             fbq('init', '{{ $general_setting->pixel_app_id }}');
-            fbq('track', 'PageView');
+            fbq('track', 'PageView', {}, {eventID: '{{ $pixel_event_id }}'});
         </script>
         <noscript><img height="1" width="1" style="display:none"
                        src="https://www.facebook.com/tr?id={{ $general_setting->pixel_app_id }}&ev=PageView&noscript=1"
             /></noscript>
+        @php
+            \App\Helper\FacebookCapiHelper::sendEvent('PageView', [], [], $pixel_event_id);
+        @endphp
     @endif
 
 

@@ -497,6 +497,7 @@ class EcommercePaymentController extends Controller
         $order->save();
 
         $cartItems = Cart::where('user_id', $user->id)->get();
+        $contents = [];
 
         foreach ($cartItems as $item) {
             $price = $item->quantity * $item->product->finalPrice;
@@ -506,6 +507,34 @@ class EcommercePaymentController extends Controller
             $orderDetail->quantity = $item->quantity;
             $orderDetail->price = $price;
             $orderDetail->save();
+
+            $contents[] = [
+                'id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'item_price' => $item->product->finalPrice
+            ];
+        }
+
+        // Facebook CAPI Purchase Event
+        if ($payment_status == Status::APPROVED) {
+            try {
+                $userData = [
+                    'em' => hash('sha256', strtolower(trim($user->email))),
+                    'ph' => $user->phone ? hash('sha256', $user->phone) : null,
+                    'fn' => hash('sha256', strtolower(trim($user->name))),
+                ];
+
+                $customData = [
+                    'value' => $order->total,
+                    'currency' => 'BDT', // Adjust based on your currency logic if needed
+                    'contents' => $contents,
+                    'content_type' => 'product',
+                ];
+
+                \App\Helper\FacebookCapiHelper::sendEvent('Purchase', $userData, $customData, $order->order_id);
+            } catch (\Exception $e) {
+                \Log::error('Facebook CAPI Purchase Error: ' . $e->getMessage());
+            }
         }
 
         Cart::where('user_id', $user->id)->delete();

@@ -216,8 +216,10 @@ class GlobalSettingController extends Controller
 
     public function update_facebook_pixel(FacebookPixelRequest $request){
 
-        GlobalSetting::where('key', 'pixel_app_id')->update(['value' => $request->app_id]);
-        GlobalSetting::where('key', 'pixel_status')->update(['value' => $request->status ? 1 : 0]);
+        GlobalSetting::updateOrCreate(['key' => 'pixel_app_id'], ['value' => $request->app_id]);
+        GlobalSetting::updateOrCreate(['key' => 'pixel_status'], ['value' => $request->status ? 1 : 0]);
+        GlobalSetting::updateOrCreate(['key' => 'pixel_access_token'], ['value' => $request->access_token]);
+        GlobalSetting::updateOrCreate(['key' => 'pixel_test_code'], ['value' => $request->test_code]);
 
         $this->set_cache_setting();
 

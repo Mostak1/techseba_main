@@ -22,6 +22,7 @@ class Page extends Model
         'faq' => ['name' => 'FAQ', 'route' => 'faq'],
         'testimonials' => ['name' => 'Testimonials', 'route' => 'testimonials'],
         'contact-us' => ['name' => 'Contact Us', 'route' => 'contact-us'],
+        'shop' => ['name' => 'Shop', 'route' => 'product.shop'],
         'privacy-policy' => ['name' => 'Privacy Policy', 'route' => 'privacy-policy'],
         'terms-conditions' => ['name' => 'Terms & Conditions', 'route' => 'terms-conditions'],
     ];

@@ -82,11 +82,13 @@
                 @endunless
             @endforeach
 
+            @if(page_enabled('shop'))
             <li class="nav-item">
                 <a href="{{ route('product.shop') }}" class="nav-link-item">
                     <span class="menu-item-text">{{ __('translate.Shop') }}</span>
                 </a>
             </li>
+            @endif
 
             @if(page_enabled('services'))
                 <li class="nav-item">

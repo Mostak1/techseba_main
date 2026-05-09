@@ -14,6 +14,7 @@ class ProductController extends Controller
 {
     public function shop(Request $request)
     {
+        abort_unless_page_enabled('shop');
         try {
             $query = Product::with('translate')->active();
 
@@ -62,6 +63,7 @@ class ProductController extends Controller
 
     public function search(Request $request)
     {
+        abort_unless_page_enabled('shop');
         $pageTitle = trans('translate.Search Results');
 
         // 1. Get min/max prices before any filtering

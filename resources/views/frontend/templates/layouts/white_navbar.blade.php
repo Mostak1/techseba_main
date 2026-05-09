@@ -96,10 +96,12 @@
 
                         @include('frontend.templates.layouts._cart')
 
+                        @if(page_enabled('contact-us'))
                         <a class="optech-default-btn optech-header-btn" href="{{ route('contact-us') }}"
                            data-text="{{ __('translate.Get in Touch') }}"><span
                                 class="btn-wraper">{{ __('translate.Get in Touch') }}</span>
                         </a>
+                        @endif
                     </div>
                 </div>
                 <div class="mobile-menu-trigger">

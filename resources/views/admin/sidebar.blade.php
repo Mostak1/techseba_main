@@ -494,6 +494,8 @@
 
                         <li><a href="{{ route('admin.maintenance-mode') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Maintenance mode') }}</span></span></a></li>
 
+                        <li><a href="{{ route('admin.theme-color') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Theme Colors') }}</span></span></a></li>
+
                     </ul>
                 </div>
             </li>

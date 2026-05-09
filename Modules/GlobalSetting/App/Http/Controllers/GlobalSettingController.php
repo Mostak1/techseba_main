@@ -61,6 +61,7 @@ use Modules\GlobalSetting\App\Http\Requests\FacebookPixelRequest;
 use Modules\GlobalSetting\App\Http\Requests\GeneralSettingRequest;
 use Modules\GlobalSetting\App\Http\Requests\GoogleAnalyticRequest;
 use Modules\GlobalSetting\App\Http\Requests\GoogleRecaptchaRequest;
+use Modules\GlobalSetting\App\Http\Requests\ThemeColorRequest;
 
 class GlobalSettingController extends Controller
 {
@@ -220,6 +221,35 @@ class GlobalSettingController extends Controller
         GlobalSetting::updateOrCreate(['key' => 'pixel_status'], ['value' => $request->status ? 1 : 0]);
         GlobalSetting::updateOrCreate(['key' => 'pixel_access_token'], ['value' => $request->access_token]);
         GlobalSetting::updateOrCreate(['key' => 'pixel_test_code'], ['value' => $request->test_code]);
+
+        $this->set_cache_setting();
+
+        $notify_message = trans('translate.Updated successfully');
+        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+        return redirect()->back()->with($notify_message);
+
+    }
+
+    public function theme_color(){
+        return view('globalsetting::theme_color');
+    }
+
+    public function update_theme_color(ThemeColorRequest $request){
+
+        GlobalSetting::where('key', 'theme_heading_color')->update(['value' => $request->theme_heading_color]);
+        GlobalSetting::where('key', 'theme_body_color')->update(['value' => $request->theme_body_color]);
+        GlobalSetting::where('key', 'theme_accent_color')->update(['value' => $request->theme_accent_color]);
+        GlobalSetting::where('key', 'theme_white_color')->update(['value' => $request->theme_white_color]);
+        GlobalSetting::where('key', 'theme_light_color1')->update(['value' => $request->theme_light_color1]);
+        GlobalSetting::where('key', 'theme_light_color2')->update(['value' => $request->theme_light_color2]);
+        GlobalSetting::where('key', 'theme_dark_bg')->update(['value' => $request->theme_dark_bg]);
+        GlobalSetting::where('key', 'theme_dark_bg2')->update(['value' => $request->theme_dark_bg2]);
+        GlobalSetting::where('key', 'theme_dark_bg3')->update(['value' => $request->theme_dark_bg3]);
+        GlobalSetting::where('key', 'theme_white_bg')->update(['value' => $request->theme_white_bg]);
+        GlobalSetting::where('key', 'theme_accent_bg')->update(['value' => $request->theme_accent_bg]);
+        GlobalSetting::where('key', 'theme_light_bg1')->update(['value' => $request->theme_light_bg1]);
+        GlobalSetting::where('key', 'theme_light_bg2')->update(['value' => $request->theme_light_bg2]);
+        GlobalSetting::where('key', 'theme_light_bg3')->update(['value' => $request->theme_light_bg3]);
 
         $this->set_cache_setting();
 

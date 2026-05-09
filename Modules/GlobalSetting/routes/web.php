@@ -56,6 +56,8 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['auth:admin
             Route::put('maintenance-mode-update', 'maintenance_mode_update')->name('maintenance-mode-update');
 
             Route::get('cache-clear', 'cache_clear')->name('cache-clear');
+            Route::get('theme-color', 'theme_color')->name('theme-color');
+            Route::put('update-theme-color', 'update_theme_color')->name('update-theme-color');
 
         });
     });

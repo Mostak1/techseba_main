@@ -3,6 +3,16 @@
     <title>{{ html_decode($service->title) }}</title>
     <meta name="title" content="{{ $service->seo_title }}">
     <meta name="description" content="{{ $service->seo_description }}">
+    <style>
+        @media (min-width: 992px) {
+            .optech-service-sidebar {
+                position: -webkit-sticky;
+                position: sticky;
+                top: 120px; /* Adjust this value if you have a sticky header */
+                z-index: 10;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')

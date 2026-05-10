@@ -65,6 +65,22 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('user.cv.edit') }}" class="{{ request()->routeIs('user.cv.*') ? 'active' : '' }}">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 3.75H14.5L19 8.25V20.25H7C5.89543 20.25 5 19.3546 5 18.25V5.75C5 4.64543 5.89543 3.75 7 3.75Z"
+                                  stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M14.5 3.75V8.25H19" stroke="currentColor" stroke-width="1.5"
+                                  stroke-linejoin="round"/>
+                            <path d="M8.75 12H15.25M8.75 15H15.25M8.75 18H12.25" stroke="currentColor"
+                                  stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    Digital CV
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('user.transactions') }}" class="{{ request()->routeIs('user.transactions') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

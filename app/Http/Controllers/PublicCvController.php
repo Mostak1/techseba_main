@@ -1,0 +1,116 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Str;
+
+class PublicCvController extends Controller
+{
+    private array $reservedUsernames = [
+        'login',
+        'register',
+        'admin',
+        'user',
+        'dashboard',
+        'about',
+        'contact',
+        'blog',
+        'api',
+        'password',
+        'logout',
+    ];
+
+    private array $relations = [
+        'user',
+        'template',
+        'employments',
+        'academics',
+        'trainings',
+        'professionalQualifications',
+        'skills',
+        'languages',
+        'references',
+    ];
+
+    public function show(string $username)
+    {
+        $cv = $this->publicCv($username);
+
+        return $this->renderCv($cv, [
+            'showActions' => true,
+            'printEnabled' => $cv->public_print_enabled,
+            'pdfEnabled' => $cv->public_pdf_enabled,
+            'printUrl' => route('public.cv.print', $username),
+            'pdfUrl' => route('public.cv.pdf', $username),
+            'printMode' => false,
+            'forPdf' => false,
+        ]);
+    }
+
+    public function print(string $username)
+    {
+        $cv = $this->publicCv($username);
+
+        abort_unless($cv->public_print_enabled, 403);
+
+        return $this->renderCv($cv, [
+            'showActions' => true,
+            'printEnabled' => true,
+            'pdfEnabled' => $cv->public_pdf_enabled,
+            'printUrl' => route('public.cv.print', $username),
+            'pdfUrl' => route('public.cv.pdf', $username),
+            'printMode' => true,
+            'forPdf' => false,
+        ]);
+    }
+
+    public function pdf(string $username)
+    {
+        $cv = $this->publicCv($username);
+
+        abort_unless($cv->public_pdf_enabled, 403);
+
+        $filename = Str::slug($cv->full_name ?: $username).'-cv.pdf';
+
+        return Pdf::loadView($this->viewPath($cv), $this->viewData($cv, [
+            'showActions' => false,
+            'printEnabled' => false,
+            'pdfEnabled' => false,
+            'printUrl' => null,
+            'pdfUrl' => null,
+            'printMode' => false,
+            'forPdf' => true,
+        ]))->setPaper('a4')->download($filename);
+    }
+
+    private function publicCv(string $username)
+    {
+        abort_if(in_array(strtolower($username), $this->reservedUsernames, true), 404);
+
+        $user = User::where('username', $username)->firstOrFail();
+        $cv = $user->userCv()->with($this->relations)->first();
+
+        abort_unless($cv && $cv->is_public, 404);
+
+        return $cv;
+    }
+
+    private function renderCv($cv, array $options)
+    {
+        return view($this->viewPath($cv), $this->viewData($cv, $options));
+    }
+
+    private function viewData($cv, array $options): array
+    {
+        return array_merge(['cv' => $cv], $options);
+    }
+
+    private function viewPath($cv): string
+    {
+        $viewPath = $cv->template?->view_path ?: 'frontend.cv.templates.bdjobs';
+
+        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.templates.bdjobs';
+    }
+}

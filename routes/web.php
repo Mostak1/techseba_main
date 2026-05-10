@@ -12,7 +12,9 @@ use App\Http\Controllers\Admin\PageSectionController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
+use App\Http\Controllers\PublicCvController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
+use App\Http\Controllers\User\UserCvController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
 Route::get('/clear-cache', function () {
     $message = '';
@@ -111,6 +113,12 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
 
             Route::get('/dashboard', [UserProfileController::class, 'dashboard'])->name('dashboard');
 
+            Route::get('/cv', [UserCvController::class, 'edit'])->name('cv.edit');
+            Route::post('/cv', [UserCvController::class, 'update'])->name('cv.update');
+            Route::get('/cv/preview', [UserCvController::class, 'preview'])->name('cv.preview');
+            Route::get('/cv/print', [UserCvController::class, 'print'])->name('cv.print');
+            Route::get('/cv/pdf', [UserCvController::class, 'pdf'])->name('cv.pdf');
+
             Route::get('/edit-profile', [UserProfileController::class, 'edit_profile'])->name('edit-profile');
             Route::put('/update-profile', [UserProfileController::class, 'update_profile'])->name('update-profile');
 
@@ -203,3 +211,17 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 
     });
 });
+
+$reservedUsernames = 'login|register|admin|user|dashboard|about|contact|blog|api|password|logout';
+
+Route::get('/{username}/print', [PublicCvController::class, 'print'])
+    ->where('username', '^(?!('.$reservedUsernames.')$)[A-Za-z0-9._-]+$')
+    ->name('public.cv.print');
+
+Route::get('/{username}/pdf', [PublicCvController::class, 'pdf'])
+    ->where('username', '^(?!('.$reservedUsernames.')$)[A-Za-z0-9._-]+$')
+    ->name('public.cv.pdf');
+
+Route::get('/{username}', [PublicCvController::class, 'show'])
+    ->where('username', '^(?!('.$reservedUsernames.')$)[A-Za-z0-9._-]+$')
+    ->name('freelancer');

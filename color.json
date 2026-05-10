@@ -1,0 +1,78 @@
+{
+  "brand_name": "TechSeba",
+  "colors": {
+    "heading_color": {
+      "name": "Deep Navy Blue",
+      "hex": "#07145C",
+      "rgb": "rgb(7, 20, 92)"
+    },
+    "body_color": {
+      "name": "Soft Dark Gray",
+      "hex": "#565B6E",
+      "rgb": "rgb(86, 91, 110)"
+    },
+    "accent_color": {
+      "name": "Brand Blue",
+      "hex": "#2F55F6",
+      "rgb": "rgb(47, 85, 246)"
+    },
+    "white_color": {
+      "name": "White",
+      "hex": "#FFFFFF",
+      "rgb": "rgb(255, 255, 255)"
+    },
+    "light_color_1": {
+      "name": "Soft Lavender Gray",
+      "hex": "#E7E8F2",
+      "rgb": "rgb(231, 232, 242)"
+    },
+    "light_color_2": {
+      "name": "Cool Light Gray",
+      "hex": "#C9CDDC",
+      "rgb": "rgb(201, 205, 220)"
+    },
+    "dark_background_1": {
+      "name": "Dark Navy",
+      "hex": "#06104B",
+      "rgb": "rgb(6, 16, 75)"
+    },
+    "dark_background_2": {
+      "name": "Deep Indigo",
+      "hex": "#20295E",
+      "rgb": "rgb(32, 41, 94)"
+    },
+    "dark_background_3": {
+      "name": "Brand Dark Blue",
+      "hex": "#071E73",
+      "rgb": "rgb(7, 30, 115)"
+    },
+    "white_background": {
+      "name": "White Background",
+      "hex": "#FFFFFF",
+      "rgb": "rgb(255, 255, 255)"
+    },
+    "accent_background": {
+      "name": "Accent Blue Background",
+      "hex": "#2F55F6",
+      "rgb": "rgb(47, 85, 246)"
+    },
+    "light_background_1": {
+      "name": "Off White",
+      "hex": "#F8FAFF",
+      "rgb": "rgb(248, 250, 255)"
+    },
+    "light_background_2": {
+      "name": "Light Gray Blue",
+      "hex": "#E5E7F0",
+      "rgb": "rgb(229, 231, 240)"
+    },
+    "light_background_3": {
+      "name": "Very Light Blue",
+      "hex": "#EEF2FF",
+      "rgb": "rgb(238, 242, 255)"
+    }
+  },
+  "gradient": {
+    "brand_gradient": "linear-gradient(135deg, #0078F5 0%, #7A2CF2 60%, #B832F5 100%)"
+  }
+}

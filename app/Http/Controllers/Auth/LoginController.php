@@ -56,8 +56,11 @@ class LoginController extends Controller
         $rules = [
             'email' => 'required',
             'password' => 'required',
-            'g-recaptcha-response'=>new Captcha()
         ];
+
+        if ($this->recaptchaEnabled()) {
+            $rules['g-recaptcha-response'] = new Captcha();
+        }
 
         $custom_error = [
             'email.required' => trans('translate.Email is required'),
@@ -76,41 +79,34 @@ class LoginController extends Controller
 
         if($user){
             if($user->status == $user::STATUS_ACTIVE && $user->is_banned == $user::BANNED_INACTIVE){
-                if($user->email_verified_at != null){
-                    if($user->provider){
-                        $notify_message = trans('translate.Please try to login with social media');
-                        $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
-                        return redirect()->back()->with($notify_message);
-                    }
-
-                    if($user->feez_status == 1){
-                        $notify_message = trans('translate.Your account is in freeze mode. Please contact the admin.');
-                        $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
-                        return redirect()->back()->with($notify_message);
-                    }
-
-                    if(Hash::check($request->password, $user->password)){
-                        // Get the session ID before login changes it
-                        $sessionId = session()->getId();
-
-                        if(Auth::guard('web')->attempt($credentials, $request->remember)){
-                        // Convert guest cart to user cart
-                        \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
-                        ->update(['user_id' => $user->id]);
-                        $notify_message = trans('translate.Login successfully');
-                        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
-                            return redirect()->route('user.dashboard')->with($notify_message);
-                        }
-                    }else{
-                        $notify_message = trans('translate.Credential does not match');
-                        $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
-                        return redirect()->back()->with($notify_message);
-                    }
-                }else{
-                    $notify_message = trans('translate.Please verify your email');
+                if($user->provider){
+                    $notify_message = trans('translate.Please try to login with social media');
                     $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
                     return redirect()->back()->with($notify_message);
+                }
 
+                if($user->feez_status == 1){
+                    $notify_message = trans('translate.Your account is in freeze mode. Please contact the admin.');
+                    $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
+                    return redirect()->back()->with($notify_message);
+                }
+
+                if(Hash::check($request->password, $user->password)){
+                    // Get the session ID before login changes it
+                    $sessionId = session()->getId();
+
+                    if(Auth::guard('web')->attempt($credentials, $request->remember)){
+                    // Convert guest cart to user cart
+                    \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
+                    ->update(['user_id' => $user->id]);
+                    $notify_message = trans('translate.Login successfully');
+                    $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+                        return redirect()->route('user.dashboard')->with($notify_message);
+                    }
+                }else{
+                    $notify_message = trans('translate.Credential does not match');
+                    $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
+                    return redirect()->back()->with($notify_message);
                 }
 
             }else{
@@ -143,19 +139,17 @@ class LoginController extends Controller
 
         $rules = [
             'email' => 'required',
-            'g-recaptcha-response'=>new Captcha()
         ];
+
+        if ($this->recaptchaEnabled()) {
+            $rules['g-recaptcha-response'] = new Captcha();
+        }
 
         $custom_error = [
             'email.required' => trans('translate.Email is required'),
         ];
 
         $this->validate($request, $rules, $custom_error);
-
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password,
-        ];
 
         $user = User::where('email', $request->email)->first();
 
@@ -170,8 +164,8 @@ class LoginController extends Controller
             $reset_link = '<a href="'.$reset_link.'">'.$reset_link.'</a>';
 
             $template = EmailTemplate::where('id',1)->first();
-            $subject = $template->subject;
-            $message = $template->description;
+            $subject = $template?->subject ?: 'Reset your password';
+            $message = $template?->description ?: 'Hello {{user_name}}, please reset your password from this link: {{reset_link}}';
             $message = str_replace('{{user_name}}',$user->name,$message);
             $message = str_replace('{{reset_link}}',$reset_link,$message);
             Mail::to($user->email)->send(new UserForgetPassword($message,$subject,$user));
@@ -198,12 +192,16 @@ class LoginController extends Controller
 
     public function custom_reset_password(Request $request){
 
+        if(!$request->token || !$request->email){
+            return view('auth.forgot_password');
+        }
+
         $user = User::select('id','name','email','forget_password_token')->where('forget_password_token', $request->token)->where('email', $request->email)->first();
 
         if(!$user){
             $notify_message = trans('translate.Invalid token, please try again');
             $notify_message = array('message'=>$notify_message,'alert-type'=>'error');
-            return redirect()->route('user.reset-password')->with($notify_message);
+            return redirect()->route('user.login')->with($notify_message);
         }
 
         return view('auth.reset_password', compact('user'));
@@ -214,7 +212,6 @@ class LoginController extends Controller
         $request->validate([
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'confirmed', 'min:4', 'max:100'],
-            'g-recaptcha-response'=>new Captcha()
 
         ],[
             'email.required' => trans('translate.Email is required'),
@@ -223,6 +220,12 @@ class LoginController extends Controller
             'password.confirmed' => trans('translate.Confirm password does not match'),
             'password.min' => trans('translate.You have to provide minimum 4 character password'),
         ]);
+
+        if ($this->recaptchaEnabled()) {
+            $request->validate([
+                'g-recaptcha-response' => [new Captcha()],
+            ]);
+        }
 
 
         $user = User::where('forget_password_token', $token)->where('email', $request->email)->first();
@@ -240,6 +243,13 @@ class LoginController extends Controller
         $notify_message= trans('translate.Password reset successfully');
         $notify_message = array('message'=>$notify_message,'alert-type'=>'success');
         return redirect()->route('user.login')->with($notify_message);
+    }
+
+    private function recaptchaEnabled(): bool
+    {
+        $setting = GlobalSetting::where('key', 'recaptcha_status')->first();
+
+        return (int) ($setting?->value ?? 0) === 1;
     }
 
     public function redirect_to_google(){

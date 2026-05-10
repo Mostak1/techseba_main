@@ -37,6 +37,11 @@
                             <input type="text" placeholder="Email Address" name="email"/>
                         </div>
                     </div>
+                    @if($general_setting->recaptcha_status==1)
+                        <div class="sign_up_form_item">
+                            <div class="g-recaptcha" data-sitekey="{{ $general_setting->recaptcha_site_key }}"></div>
+                        </div>
+                    @endif
                     <a href="{{ route('user.login') }}" data-bs-dismiss="modal">
                         {{ __('translate.Back to login') }}
                     </a>
@@ -214,7 +219,7 @@
                         </label>
                     </div>
 
-                    <a href="#" class="forgot_pass" data-bs-toggle="modal" data-bs-target="#exampleModal">{{ __('translate.Forgot Password?') }}</a>
+                    <a href="{{ route('user.reset-password') }}" class="forgot_pass" data-bs-toggle="modal" data-bs-target="#exampleModal">{{ __('translate.Forgot Password?') }}</a>
 
                 </div>
                 @if($general_setting->recaptcha_status==1)

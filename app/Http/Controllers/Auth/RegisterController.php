@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Mail, Str;
+use Str;
 use App\Models\User;
 use App\Rules\Captcha;
-use App\Helper\EmailHelper;
 use Illuminate\Http\Request;
-use App\Mail\UserRegistration;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Modules\EmailSetting\App\Models\EmailTemplate;
+use Modules\GlobalSetting\App\Models\GlobalSetting;
 
 class RegisterController extends Controller
 {
@@ -60,7 +58,6 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', 'min:4', 'max:100'],
-            'g-recaptcha-response'=>new Captcha()
 
         ],[
             'name.required' => trans('translate.Name is required'),
@@ -71,6 +68,12 @@ class RegisterController extends Controller
             'password.min' => trans('translate.You have to provide minimum 4 character password'),
         ]);
 
+        if ($this->recaptchaEnabled()) {
+            $request->validate([
+                'g-recaptcha-response' => [new Captcha()],
+            ]);
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -78,26 +81,13 @@ class RegisterController extends Controller
             'status' => 'enable',
             'is_banned' => 'no',
             'password' => Hash::make($request->password),
-            'verification_token' => Str::random(100),
+            'email_verified_at' => now(),
+            'verification_token' => null,
         ]);
 
-        EmailHelper::mail_setup();
-
-        $verification_link = route('user.register-verification').'?verification_link='.$user->verification_token.'&email='.$user->email;
-        $verification_link = '<a href="'.$verification_link.'">'.$verification_link.'</a>';
-
-        $template=EmailTemplate::where('id',4)->first();
-        $subject=$template->subject;
-        $message=$template->description;
-        $message = str_replace('{{user_name}}',$request->name,$message);
-        $message = str_replace('{{varification_link}}',$verification_link,$message);
-
-        Mail::to($user->email)->send(new UserRegistration($message,$subject,$user));
-
-
-        $notify_message = trans('translate.Account created successful, a verification link has been send to your mail, please verify it');
+        $notify_message = trans('translate.Account created successful, please login now');
         $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
-        return redirect()->back()->with($notify_message);
+        return redirect()->route('user.login')->with($notify_message);
 
     }
 
@@ -156,5 +146,12 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+    }
+
+    private function recaptchaEnabled(): bool
+    {
+        $setting = GlobalSetting::where('key', 'recaptcha_status')->first();
+
+        return (int) ($setting?->value ?? 0) === 1;
     }
 }

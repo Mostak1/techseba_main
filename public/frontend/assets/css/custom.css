@@ -365,6 +365,15 @@
     flex-wrap: wrap;
 }
 
+
 .optech-pricing-plans .col-lg-4 {
     display: flex;
+}
+
+.optech-iconbox-wrap:hover .optech-iconbox-icon {
+    background-color: var(--light-bg3) !important;
+}
+
+.optech-iconbox-wrap:hover .optech-iconbox-icon img {
+    filter: none !important;
 }

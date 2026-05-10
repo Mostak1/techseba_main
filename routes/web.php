@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CvTemplateController;
 use App\Http\Controllers\Admin\PageSectionController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginController as UserLoginController;
@@ -171,6 +172,8 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 
             Route::get('feez-profile/{id}', 'user_feez')->name('feez-profile');
         });
+
+        Route::resource('cv-templates', CvTemplateController::class)->except(['show']);
 
         Route::controller(OrderController::class)->group(function () {
             Route::get('orders', 'index')->name('orders');

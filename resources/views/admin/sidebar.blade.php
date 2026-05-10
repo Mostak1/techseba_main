@@ -173,6 +173,21 @@
                 </div>
             </li>
 
+            <li class="{{ Route::is('admin.cv-templates.*') ? 'active' : '' }}">
+                <a class="collapsed" href="{{ route('admin.cv-templates.index') }}">
+                    <span class="menu-bar__text">
+                        <span class="crancy-menu-icon crancy-svg-icon__v1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 3H14.5L19 7.5V21H7C5.89543 21 5 20.1046 5 19V5C5 3.89543 5.89543 3 7 3Z" stroke="currentcolor" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M14.5 3V7.5H19" stroke="currentcolor" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M8.5 12H15.5M8.5 15H15.5M8.5 18H12" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <span class="menu-bar__name">CV Templates</span>
+                    </span>
+                </a>
+            </li>
+
             <h4 class="admin-menu__title pt-2">{{ __('translate.CMS & Blogs') }}</h4>
 
 

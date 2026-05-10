@@ -55,6 +55,9 @@
                                                     </td>
                                                     <td>{{ $template->cvs_count }}</td>
                                                     <td>
+                                                        <a href="{{ route('admin.cv-templates.preview', $template) }}" class="btn btn-info btn-sm" target="_blank" title="Preview Template">
+                                                            <i class="fas fa-eye"></i>
+                                                        </a>
                                                         <a href="{{ route('admin.cv-templates.edit', $template) }}" class="btn btn-primary btn-sm">
                                                             <i class="fas fa-edit"></i>
                                                         </a>

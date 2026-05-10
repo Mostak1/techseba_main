@@ -173,6 +173,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
             Route::get('feez-profile/{id}', 'user_feez')->name('feez-profile');
         });
 
+        Route::get('cv-templates/{cv_template}/preview', [CvTemplateController::class, 'preview'])->name('cv-templates.preview');
         Route::resource('cv-templates', CvTemplateController::class)->except(['show']);
 
         Route::controller(OrderController::class)->group(function () {

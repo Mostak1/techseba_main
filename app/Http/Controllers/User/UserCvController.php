@@ -83,8 +83,10 @@ class UserCvController extends Controller
             $this->syncChildren($cv, $validated);
         });
 
+        $tab = $request->input('next_tab') ?: $request->input('active_tab', 'personal');
+
         return redirect()
-            ->route('user.cv.edit')
+            ->route('user.cv.edit', ['tab' => $tab])
             ->with(['message' => trans('translate.Updated successfully'), 'alert-type' => 'success']);
     }
 

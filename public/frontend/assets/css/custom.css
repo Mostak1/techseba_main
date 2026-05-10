@@ -377,3 +377,15 @@
 .optech-iconbox-wrap:hover .optech-iconbox-icon img {
     filter: none !important;
 }
+
+/* Mobile responsive space adjustments */
+@media (max-width: 767px) {
+    .optech-breadcrumb {
+        height: auto !important;
+        padding-bottom: 30px !important;
+    }
+    .optech-section-padding2,
+    .optech-section-padding5 {
+        padding-top: 30px !important;
+    }
+}

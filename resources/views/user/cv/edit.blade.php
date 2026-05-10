@@ -360,7 +360,7 @@
                     <div class="cv-field"><label>Religion</label><input type="text" name="religion" value="{{ old('religion', $cv->religion ?? '') }}"></div>
                     <div class="cv-field"><label>National ID / Passport</label><input type="text" name="nid_or_passport" value="{{ old('nid_or_passport', $cv->nid_or_passport ?? '') }}"></div>
                     <div class="cv-field">
-                        <label>Photo</label>
+                        <label>Photo (300*300)px</label>
                         <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/*">
                         @if($cv?->photo)<img src="{{ asset($cv->photo) }}" alt="CV photo" class="cv-preview-image">@endif
                     </div>
@@ -548,7 +548,7 @@
                     <div class="cv-field cv-full"><label>Declaration Text</label><textarea name="declaration">{{ old('declaration', $cv->declaration ?? 'I hereby declare that the information given above is true and correct to the best of my knowledge.') }}</textarea></div>
                     <div class="cv-field"><label>Declaration Date</label><input type="date" name="declaration_date" value="{{ old('declaration_date', $dateValue($cv->declaration_date ?? now())) }}"></div>
                     <div class="cv-field">
-                        <label>Signature Image</label>
+                        <label>Signature Image (300*80)px</label>
                         <input type="file" name="signature" accept=".jpg,.jpeg,.png,.webp,image/*">
                         @if($cv?->signature)<img src="{{ asset($cv->signature) }}" alt="Signature" class="cv-preview-image">@endif
                     </div>

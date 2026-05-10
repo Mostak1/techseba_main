@@ -22,6 +22,7 @@ class UserCv extends Model
         'permanent_address',
         'mobile',
         'email',
+        'website_url',
         'photo',
         'career_objective',
         'career_summary',

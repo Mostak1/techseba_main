@@ -29,6 +29,7 @@ class UserCvRequest extends FormRequest
             'permanent_address' => ['nullable', 'string', 'max:2000'],
             'mobile' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:255'],
+            'website_url' => ['nullable', 'string', 'max:255'],
             'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'career_objective' => ['nullable', 'string', 'max:2000'],
             'career_summary' => ['nullable', 'string', 'max:3000'],

@@ -337,6 +337,7 @@
                     <div class="cv-field"><label>Full Name*</label><input type="text" name="full_name" value="{{ old('full_name', $cv->full_name ?? $user->name) }}"></div>
                     <div class="cv-field"><label>Email*</label><input type="email" name="email" value="{{ old('email', $cv->email ?? $user->email) }}"></div>
                     <div class="cv-field"><label>Mobile Number*</label><input type="text" name="mobile" value="{{ old('mobile', $cv->mobile ?? ($user->phone ?? '')) }}"></div>
+                    <div class="cv-field"><label>Website / Portfolio URL</label><input type="text" name="website_url" value="{{ old('website_url', $cv->website_url ?? '') }}" placeholder="https://example.com"></div>
                     <div class="cv-field"><label>Date of Birth</label><input type="date" name="date_of_birth" value="{{ old('date_of_birth', $dateValue($cv->date_of_birth ?? null)) }}"></div>
                     <div class="cv-field"><label>Father's Name</label><input type="text" name="father_name" value="{{ old('father_name', $cv->father_name ?? '') }}"></div>
                     <div class="cv-field"><label>Mother's Name</label><input type="text" name="mother_name" value="{{ old('mother_name', $cv->mother_name ?? '') }}"></div>

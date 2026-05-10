@@ -258,6 +258,7 @@
         <div class="cv-contact">
             @if($cv->mobile)<div><strong>Mobile:</strong> {{ $cv->mobile }}</div>@endif
             @if($cv->email)<div><strong>Email:</strong> {{ $cv->email }}</div>@endif
+            @if($cv->website_url)<div><strong>Website:</strong> {{ $cv->website_url }}</div>@endif
             @if($cv->present_address)<div><strong>Address:</strong> {{ $cv->present_address }}</div>@endif
         </div>
         @if($photoSrc)

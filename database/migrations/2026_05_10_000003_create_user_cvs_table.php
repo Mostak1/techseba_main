@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text('permanent_address')->nullable();
             $table->string('mobile');
             $table->string('email');
+            $table->string('website_url')->nullable();
             $table->string('photo')->nullable();
             $table->text('career_objective')->nullable();
             $table->text('career_summary')->nullable();

@@ -41,6 +41,7 @@ class UserCvController extends Controller
         'permanent_address',
         'mobile',
         'email',
+        'website_url',
         'career_objective',
         'career_summary',
         'total_experience',

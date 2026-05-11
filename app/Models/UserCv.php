@@ -9,6 +9,7 @@ class UserCv extends Model
     protected $fillable = [
         'user_id',
         'template_id',
+        'portfolio_template_id',
         'full_name',
         'father_name',
         'mother_name',
@@ -54,6 +55,11 @@ class UserCv extends Model
     public function template()
     {
         return $this->belongsTo(CvTemplate::class, 'template_id');
+    }
+
+    public function portfolioTemplate()
+    {
+        return $this->belongsTo(PortfolioTemplate::class, 'portfolio_template_id');
     }
 
     public function employments()

@@ -120,6 +120,7 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
             Route::get('/cv', [UserCvController::class, 'edit'])->name('cv.edit');
             Route::post('/cv', [UserCvController::class, 'update'])->name('cv.update');
             Route::get('/cv/preview', [UserCvController::class, 'preview'])->name('cv.preview');
+            Route::get('/cv/portfolio-preview', [UserCvController::class, 'portfolioPreview'])->name('cv.portfolio-preview');
             Route::get('/cv/print', [UserCvController::class, 'print'])->name('cv.print');
             Route::get('/cv/pdf', [UserCvController::class, 'pdf'])->name('cv.pdf');
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserCvRequest;
 use App\Models\CvTemplate;
+use App\Models\PortfolioTemplate;
 use App\Models\UserCv;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Arr;
@@ -17,6 +18,7 @@ class UserCvController extends Controller
 {
     private array $relations = [
         'template',
+        'portfolioTemplate',
         'employments',
         'academics',
         'trainings',
@@ -29,6 +31,7 @@ class UserCvController extends Controller
 
     private array $mainFields = [
         'template_id',
+        'portfolio_template_id',
         'full_name',
         'father_name',
         'mother_name',
@@ -55,8 +58,9 @@ class UserCvController extends Controller
         $user = Auth::guard('web')->user();
         $cv = $user->userCv()->with($this->relations)->first();
         $templates = CvTemplate::where('is_active', true)->orderBy('name')->get();
+        $portfolioTemplates = PortfolioTemplate::where('is_active', true)->orderBy('name')->get();
 
-        return view('user.cv.edit', compact('user', 'cv', 'templates'));
+        return view('user.cv.edit', compact('user', 'cv', 'templates', 'portfolioTemplates'));
     }
 
     public function update(UserCvRequest $request)
@@ -104,6 +108,22 @@ class UserCvController extends Controller
             'pdfUrl' => route('user.cv.pdf'),
             'printMode' => false,
             'forPdf' => false,
+        ]);
+    }
+
+    public function portfolioPreview()
+    {
+        $user = Auth::guard('web')->user();
+        $cv = $this->ownerCv();
+
+        return view($this->portfolioViewPath($cv), [
+            'cv' => $cv,
+            'username' => $user->username,
+            'cvUrl' => route('user.cv.preview'),
+            'printUrl' => route('user.cv.print'),
+            'pdfUrl' => route('user.cv.pdf'),
+            'printEnabled' => true,
+            'pdfEnabled' => true,
         ]);
     }
 
@@ -280,6 +300,15 @@ class UserCvController extends Controller
         $viewPath = $cv->template?->view_path ?: 'frontend.cv.templates.bdjobs';
 
         return view()->exists($viewPath) ? $viewPath : 'frontend.cv.templates.bdjobs';
+    }
+
+    private function portfolioViewPath(UserCv $cv): string
+    {
+        $viewPath = $cv->portfolioTemplate?->is_active
+            ? $cv->portfolioTemplate->view_path
+            : 'frontend.cv.portfolio';
+
+        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.portfolio';
     }
 
     private function pdfOptions(): array

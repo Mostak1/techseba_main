@@ -11,6 +11,7 @@ use App\Models\CvTraining;
 use App\Models\CvSkill;
 use App\Models\CvLanguage;
 use App\Models\CvReference;
+use App\Models\PortfolioTemplate;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,6 +29,26 @@ class UserCvSeeder extends Seeder
             'name' => 'Modern Professional',
             'view_path' => 'frontend.cv.templates.modern',
             'is_active' => true
+        ]
+    );
+
+    $portfolioTemplate = PortfolioTemplate::updateOrCreate(
+        ['slug' => 'modern'],
+        [
+            'name' => 'Modern Portfolio',
+            'preview_image' => null,
+            'view_path' => 'frontend.cv.portfolio',
+            'is_active' => true,
+        ]
+    );
+
+    PortfolioTemplate::updateOrCreate(
+        ['slug' => 'classic'],
+        [
+            'name' => 'Classic Portfolio',
+            'preview_image' => null,
+            'view_path' => 'frontend.cv.portfolio_classic',
+            'is_active' => true,
         ]
     );
 
@@ -61,6 +82,7 @@ class UserCvSeeder extends Seeder
         ['user_id' => $user->id],
         [
             'template_id' => $template->id,
+            'portfolio_template_id' => $portfolioTemplate->id,
 
             'full_name' => 'Md. Mostak Ahmed',
             'father_name' => 'Md. Abdul Motin Sarker',

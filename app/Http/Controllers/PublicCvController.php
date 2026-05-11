@@ -25,6 +25,7 @@ class PublicCvController extends Controller
     private array $relations = [
         'user',
         'template',
+        'portfolioTemplate',
         'employments',
         'academics',
         'trainings',
@@ -39,7 +40,7 @@ class PublicCvController extends Controller
     {
         $cv = $this->publicCv($username);
 
-        return view('frontend.cv.portfolio', [
+        return view($this->portfolioViewPath($cv), [
             'cv' => $cv,
             'username' => $username,
             'cvUrl' => route('cv.public', $username),
@@ -149,6 +150,15 @@ class PublicCvController extends Controller
         $viewPath = $cv->template?->view_path ?: 'frontend.cv.templates.bdjobs';
 
         return view()->exists($viewPath) ? $viewPath : 'frontend.cv.templates.bdjobs';
+    }
+
+    private function portfolioViewPath($cv): string
+    {
+        $viewPath = $cv->portfolioTemplate?->is_active
+            ? $cv->portfolioTemplate->view_path
+            : 'frontend.cv.portfolio';
+
+        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.portfolio';
     }
 
     private function pdfOptions(): array

@@ -19,6 +19,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        $this->call(CvTemplateSeeder::class);
+        $this->call([
+            CvTemplateSeeder::class,
+            PortfolioTemplateSeeder::class,
+        ]);
     }
 }

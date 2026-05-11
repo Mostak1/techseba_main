@@ -302,6 +302,13 @@
             margin-right: 8px;
         }
 
+        .cv-template-card small {
+            display: block;
+            margin-top: 6px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
         @media (max-width: 991px) {
             .cv-grid,
             .cv-grid.three,
@@ -558,7 +565,7 @@
             </section>
 
             <section class="cv-tab-panel {{ $activeTab === 'settings' ? 'active' : '' }}" data-tab-panel="settings">
-                <h5 class="cv-section-title">CV Settings</h5>
+                <h5 class="cv-section-title">CV & Portfolio Settings</h5>
                 <div class="cv-grid">
                     <div class="cv-field cv-full">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
@@ -581,6 +588,33 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="cv-field cv-full">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                            <label style="margin: 0;">Portfolio Template</label>
+                            @if($cv)
+                                <a href="{{ route('user.cv.portfolio-preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
+                                    <i class="fas fa-eye"></i> View Portfolio Preview
+                                </a>
+                            @endif
+                        </div>
+                        <div class="cv-template-options">
+                            @forelse($portfolioTemplates as $portfolioTemplate)
+                                <label class="cv-template-card">
+                                    <input type="radio" name="portfolio_template_id" value="{{ $portfolioTemplate->id }}" @checked(old('portfolio_template_id', $cv->portfolio_template_id ?? $portfolioTemplates->first()?->id) == $portfolioTemplate->id)>
+                                    <strong>{{ $portfolioTemplate->name }}</strong>
+                                    <small>{{ $portfolioTemplate->slug }} layout</small>
+                                    @if($portfolioTemplate->preview_image)
+                                        <img src="{{ asset($portfolioTemplate->preview_image) }}" alt="{{ $portfolioTemplate->name }}" class="cv-preview-image">
+                                    @endif
+                                </label>
+                            @empty
+                                <div class="cv-template-card">
+                                    <strong>No active portfolio templates found.</strong>
+                                    <small>Run the portfolio template seeder to create selectable layouts.</small>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
                         <div class="cv-toggle-grid cv-full">
                             <label class="cv-toggle">
                                 <input type="hidden" name="is_public" value="0">
@@ -590,7 +624,7 @@
                             @if($cv?->is_public)
                                 <div style="grid-column: span 2; display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #dbe3ef; padding: 12px; border-radius: 8px;">
                                     <div style="flex: 1; font-size: 13px; color: #0a165e; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        <strong>Digital CV (user web link):</strong> <span id="publicCvLink">{{ url($user->username ?: 'cv/id/'.$user->id) }}</span>
+                                        <strong>Portfolio Link:</strong> <span id="publicCvLink">{{ url($user->username ?: 'cv/id/'.$user->id) }}</span>
                                     </div>
                                     <button type="button" class="cv-small-btn" onclick="copyToClipboard('{{ url($user->username ?: 'cv/id/'.$user->id) }}')" title="Copy Link">
                                         <i class="fas fa-copy"></i> Copy Link

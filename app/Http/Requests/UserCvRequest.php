@@ -16,6 +16,7 @@ class UserCvRequest extends FormRequest
     {
         return [
             'template_id' => ['required', Rule::exists('cv_templates', 'id')->where('is_active', 1)],
+            'portfolio_template_id' => ['nullable', Rule::exists('portfolio_templates', 'id')->where('is_active', 1)],
             'full_name' => ['required', 'string', 'max:255'],
             'father_name' => ['nullable', 'string', 'max:255'],
             'mother_name' => ['nullable', 'string', 'max:255'],

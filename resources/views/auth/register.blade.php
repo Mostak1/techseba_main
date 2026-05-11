@@ -53,10 +53,13 @@
                             <div class="g-recaptcha" data-sitekey="{{ $general_setting->recaptcha_site_key }}"></div>
                         </div>
                     @endif
+                    @if ($general_setting->is_facebook == 1 || $general_setting->is_gmail == 1)
                     <div class="sign_up_form_text">
                         <p>{{ __('translate.Or with email') }}</p>
                     </div>
+                    @endif
 
+                    @if ($general_setting->is_facebook == 1 || $general_setting->is_gmail == 1)
                     <div class="sign_up_form_df">
                         @if ($general_setting->is_facebook == 1)
                         <a href="{{ route('user.login-facebook') }}" class="sign_up_form_btn">
@@ -92,6 +95,7 @@
 
 
                     </div>
+                    @endif
 
                     <div class="sign_up_form_btm">
                         <button class="optech-default-btn" data-text="{{ __('translate.Sign Up') }}">

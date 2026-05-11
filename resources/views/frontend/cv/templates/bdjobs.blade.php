@@ -27,6 +27,8 @@
 
         * {
             box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         body {
@@ -233,6 +235,53 @@
                 page-break-inside: avoid;
             }
         }
+
+        @if(!empty($forPdf))
+        body {
+            background: #fff;
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .cv-actions {
+            display: none !important;
+        }
+
+        .cv-page {
+            width: auto;
+            max-width: none;
+            min-height: auto;
+            margin: 0;
+            padding: 0;
+            box-shadow: none;
+        }
+
+        .cv-header {
+            min-height: 105px;
+            padding-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .cv-name {
+            font-size: 24px;
+        }
+
+        .section {
+            margin-top: 11px;
+        }
+
+        .section-title {
+            padding: 4px 7px;
+            margin-bottom: 6px;
+        }
+
+        .info-grid th,
+        .info-grid td,
+        .cv-table th,
+        .cv-table td {
+            padding: 4px 6px;
+        }
+        @endif
     </style>
 </head>
 <body>

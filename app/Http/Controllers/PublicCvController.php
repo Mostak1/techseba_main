@@ -32,6 +32,7 @@ class PublicCvController extends Controller
         'skills',
         'languages',
         'references',
+        'projects',
     ];
 
     public function show(string $username)
@@ -82,7 +83,10 @@ class PublicCvController extends Controller
             'pdfUrl' => null,
             'printMode' => false,
             'forPdf' => true,
-        ]))->setPaper('a4')->download($filename);
+        ]))
+            ->setOptions($this->pdfOptions(), true)
+            ->setPaper('a4', 'portrait')
+            ->download($filename);
     }
 
     private function publicCv(string $username)
@@ -112,5 +116,16 @@ class PublicCvController extends Controller
         $viewPath = $cv->template?->view_path ?: 'frontend.cv.templates.bdjobs';
 
         return view()->exists($viewPath) ? $viewPath : 'frontend.cv.templates.bdjobs';
+    }
+
+    private function pdfOptions(): array
+    {
+        return [
+            'defaultMediaType' => 'screen',
+            'defaultFont' => 'DejaVu Sans',
+            'dpi' => 96,
+            'isHtml5ParserEnabled' => true,
+            'chroot' => base_path(),
+        ];
     }
 }

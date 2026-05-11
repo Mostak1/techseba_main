@@ -17,22 +17,32 @@
     $formatFullDate = function ($date) {
         return $date ? \Illuminate\Support\Carbon::parse($date)->format('d F Y') : '';
     };
+
+    $fontAwesomeHref = !empty($forPdf)
+        ? public_path('frontend/assets/css/fontawesome.css')
+        : asset('frontend/assets/css/fontawesome.css');
 @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <title>{{ $cv->full_name }} - CV</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ $fontAwesomeHref }}">
     <style>
         @page {
             size: A4;
             margin: 0;
         }
 
+        html {
+            margin: 0;
+            padding: 0;
+        }
+
         * {
             box-sizing: border-box;
             -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         body {
@@ -376,56 +386,107 @@
         }
 
         @media print {
+            html,
             body {
                 background: white;
+                width: 210mm;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             .no-print-area {
-                display: none;
+                display: none !important;
             }
             .page {
-                margin: 0;
-                box-shadow: none;
+                width: 210mm !important;
+                height: 297mm !important;
+                min-height: 0 !important;
+                margin: 0 !important;
+                padding: 9mm 10mm !important;
+                box-shadow: none !important;
+                overflow: hidden;
+                page-break-after: auto;
+                break-after: auto;
             }
-            .page {
+            .cv-page-one {
                 page-break-after: always;
-                min-height: auto;
-                height: auto;
-            }
-            .page:last-child {
-                page-break-after: avoid;
+                break-after: page;
             }
         }
 
         /* PDF Specific Styles (DomPDF Compatibility) */
         @if(!empty($forPdf))
+        html,
+        body {
+            width: 210mm;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+        }
+
+        body {
+            font-size: 9.5px;
+            line-height: 1.2;
+        }
+
+        .no-print-area {
+            display: none !important;
+        }
+
+        .page {
+            width: auto;
+            height: auto;
+            min-height: 0;
+            margin: 0;
+            padding: 8mm 9mm;
+            box-shadow: none;
+            overflow: visible;
+            page-break-after: auto;
+        }
+
+        .cv-page-one {
+            page-break-after: auto;
+            break-after: auto;
+        }
+
+        .cv-page-two {
+            page-break-before: always;
+        }
+
+        .page::before {
+            width: 18px;
+        }
+
         .main-grid {
             display: block;
             width: 100%;
         }
         .grid-left {
             float: left;
-            width: 40%;
-            padding-right: 20px;
+            width: 39%;
+            padding-right: 14px;
         }
         .grid-right {
             float: left;
-            width: 55%;
+            width: 58%;
         }
         .section {
-            clear: both;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .header {
             display: block;
             width: 100%;
+            margin-bottom: 10px;
+            padding-left: 8px;
         }
         .header-left {
             float: left;
-            width: 75%;
+            width: 74%;
         }
         .header-right {
             float: right;
-            width: 120px;
+            width: 100px;
+            height: 118px;
+            border-width: 2px;
         }
         .contact-info {
             display: block;
@@ -434,6 +495,48 @@
             display: inline-block;
             margin-right: 10px;
             margin-bottom: 5px;
+        }
+        .contact-icon,
+        .section-icon {
+            display: inline-block;
+            text-align: center;
+            line-height: 20px;
+        }
+        .section-icon {
+            float: left;
+            width: 22px;
+            height: 22px;
+            line-height: 22px;
+        }
+        .section-header {
+            display: block;
+            overflow: hidden;
+        }
+        .section-title {
+            display: block;
+            margin-left: 30px;
+            padding-top: 3px;
+            font-size: 12px;
+        }
+        .name {
+            font-size: 21px;
+        }
+        .designation {
+            font-size: 13px;
+            margin: 4px 0 10px;
+        }
+        .exp-header {
+            display: block;
+            overflow: hidden;
+        }
+        .exp-company {
+            float: left;
+            max-width: 62%;
+        }
+        .exp-header .muted {
+            float: right;
+            max-width: 36%;
+            text-align: right;
         }
         .skills-grid {
             display: block;
@@ -451,6 +554,32 @@
             width: 48%;
             margin-right: 2%;
             margin-bottom: 15px;
+        }
+        .skills-cloud {
+            display: block;
+        }
+        .skill-tag {
+            display: inline-block;
+            margin: 0 4px 4px 0;
+        }
+        .signature-area {
+            display: block;
+            overflow: hidden;
+        }
+        .sig-item {
+            float: left;
+            width: 45%;
+            margin-right: 5%;
+        }
+        p {
+            margin: 3px 0;
+        }
+        .cv-table {
+            margin-top: 6px;
+        }
+        .cv-table th,
+        .cv-table td {
+            padding: 3px 5px;
         }
         .clearfix::after {
             content: "";
@@ -473,7 +602,7 @@
     </div>
 @endif
 
-<div class="page">
+<div class="page cv-page-one">
     <div class="page-content clearfix">
         <header class="header clearfix">
             <div class="header-left">
@@ -677,7 +806,7 @@
     </div>
 </div>
 
-<div class="page">
+<div class="page cv-page-two">
     <div class="page-content clearfix">
         <div class="main-grid clearfix">
             <div class="grid-left">
@@ -830,5 +959,12 @@
     </div>
 </div>
 
+@if(!empty($printMode))
+    <script>
+        window.addEventListener('load', function () {
+            window.print();
+        });
+    </script>
+@endif
 </body>
 </html>

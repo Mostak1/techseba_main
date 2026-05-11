@@ -45,9 +45,9 @@ class PublicCvController extends Controller
             'username' => $username,
             'cvUrl' => route('cv.public', $username),
             'printUrl' => route('public.cv.print', $username),
-            'pdfUrl' => route('public.cv.pdf', $username),
+            'pdfUrl' => null,
             'printEnabled' => $cv->public_print_enabled,
-            'pdfEnabled' => $cv->public_pdf_enabled,
+            'pdfEnabled' => false,
         ]);
     }
 
@@ -58,9 +58,9 @@ class PublicCvController extends Controller
         return $this->renderCv($cv, [
             'showActions' => true,
             'printEnabled' => $cv->public_print_enabled,
-            'pdfEnabled' => $cv->public_pdf_enabled,
+            'pdfEnabled' => false,
             'printUrl' => route('public.cv.print', $username),
-            'pdfUrl' => route('public.cv.pdf', $username),
+            'pdfUrl' => null,
             'printMode' => false,
             'forPdf' => false,
         ]);
@@ -76,9 +76,9 @@ class PublicCvController extends Controller
         return $this->renderCv($cv, [
             'showActions' => true,
             'printEnabled' => $cv->public_print_enabled,
-            'pdfEnabled' => $cv->public_pdf_enabled,
+            'pdfEnabled' => false,
             'printUrl' => route('public.cv.print', $user->username ?: 'cv/id/'.$id),
-            'pdfUrl' => route('public.cv.pdf', $user->username ?: 'cv/id/'.$id),
+            'pdfUrl' => null,
             'printMode' => false,
             'forPdf' => false,
         ]);
@@ -93,9 +93,9 @@ class PublicCvController extends Controller
         return $this->renderCv($cv, [
             'showActions' => true,
             'printEnabled' => true,
-            'pdfEnabled' => $cv->public_pdf_enabled,
+            'pdfEnabled' => false,
             'printUrl' => route('public.cv.print', $username),
-            'pdfUrl' => route('public.cv.pdf', $username),
+            'pdfUrl' => null,
             'printMode' => true,
             'forPdf' => false,
         ]);
@@ -103,6 +103,9 @@ class PublicCvController extends Controller
 
     public function pdf(string $username)
     {
+        // Public visitor PDF download is intentionally disabled for now.
+        abort(404);
+
         $cv = $this->publicCv($username);
 
         abort_unless($cv->public_pdf_enabled, 403);

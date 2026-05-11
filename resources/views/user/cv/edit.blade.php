@@ -636,11 +636,13 @@
                                 <input type="checkbox" name="public_print_enabled" value="1" @checked(old('public_print_enabled', $cv->public_print_enabled ?? false))>
                                 <span></span><span>Public visitor print করতে পারবে</span>
                             </label>
+                            {{-- Public visitor PDF download option is not needed for now.
                             <label class="cv-toggle">
                                 <input type="hidden" name="public_pdf_enabled" value="0">
                                 <input type="checkbox" name="public_pdf_enabled" value="1" @checked(old('public_pdf_enabled', $cv->public_pdf_enabled ?? false))>
                                 <span></span><span>Public visitor PDF download করতে পারবে</span>
                             </label>
+                            --}}
                         </div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'settings', 'next' => 'settings', 'cv' => $cv, 'last' => true])

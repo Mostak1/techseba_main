@@ -73,7 +73,7 @@ class UserCvController extends Controller
             $cv->fill(Arr::only($validated, $this->mainFields));
             $cv->is_public = $request->boolean('is_public');
             $cv->public_print_enabled = $request->boolean('public_print_enabled');
-            $cv->public_pdf_enabled = $request->boolean('public_pdf_enabled');
+            $cv->public_pdf_enabled = false;
 
             if ($request->hasFile('photo')) {
                 $this->deleteFile($cv->photo);

@@ -114,7 +114,7 @@ class UserCvSeeder extends Seeder
 
             'is_public' => true,
             'public_print_enabled' => true,
-            'public_pdf_enabled' => true,
+            'public_pdf_enabled' => false,
         ]
     );
 

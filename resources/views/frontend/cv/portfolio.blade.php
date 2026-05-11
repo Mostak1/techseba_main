@@ -19,7 +19,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $cv->full_name }} - Portfolio</title>
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/fontawesome.css') }}">
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/all.min.css') }}">
     <style>
         :root {
             --bg: #f7f6ef;
@@ -679,7 +678,7 @@
 
                 <div class="hero-actions">
                     <a href="{{ $cvUrl }}" class="btn btn-primary">
-                        <i class="fa fa-file-text"></i>
+                        <i class="fa fa-file-alt"></i>
                         <span>CV View</span>
                     </a>
                     @if($cv->email)
@@ -721,12 +720,12 @@
                     <div class="quick-links">
                         @if($cv->github_url)
                             <a href="{{ $cv->github_url }}" target="_blank" rel="noopener" aria-label="GitHub">
-                                <i class="fa-brands fa-github"></i>
+                                <i class="fab fa-github"></i>
                             </a>
                         @endif
                         @if($cv->linkedin_url)
                             <a href="{{ $cv->linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn">
-                                <i class="fa-brands fa-linkedin-in"></i>
+                                <i class="fab fa-linkedin-in"></i>
                             </a>
                         @endif
                         @if($cv->website_url)
@@ -887,7 +886,7 @@
                     <p>Use the CV view for full career details and print support, or reach out directly through the contact information.</p>
                     <div class="hero-actions">
                         <a href="{{ $cvUrl }}" class="btn btn-primary">
-                            <i class="fa fa-file-text"></i>
+                            <i class="fa fa-file-alt"></i>
                             <span>CV View</span>
                         </a>
                         @if(!empty($printEnabled))
@@ -913,7 +912,7 @@
                     @endif
                     @if($cv->present_address)
                         <div class="contact-item">
-                            <i class="fa fa-location-dot"></i>
+                            <i class="fa fa-map-marker-alt"></i>
                             <span>{{ $cv->present_address }}</span>
                         </div>
                     @endif

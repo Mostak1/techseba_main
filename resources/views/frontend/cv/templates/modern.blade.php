@@ -630,28 +630,28 @@
 
                     @if($cv->github_url)
                     <div class="contact-item">
-                        <div class="contact-icon"><i class="fa-brands fa-github"></i></div>
+                        <div class="contact-icon"><i class="fab fa-github"></i></div>
                         <span>{{ str_replace(['http://', 'https://'], '', $cv->github_url) }}</span>
                     </div>
                     @endif
 
                     @if($cv->linkedin_url)
                     <div class="contact-item">
-                        <div class="contact-icon"><i class="fa-brands fa-linkedin-in"></i></div>
+                        <div class="contact-icon"><i class="fab fa-linkedin-in"></i></div>
                         <span>{{ str_replace(['http://', 'https://'], '', $cv->linkedin_url) }}</span>
                     </div>
                     @endif
 
                     @if($cv->present_address)
                     <div class="contact-item" style="grid-column: 1 / -1;">
-                        <div class="contact-icon"><i class="fa fa-location-dot"></i></div>
+                        <div class="contact-icon"><i class="fa fa-map-marker-alt"></i></div>
                         <span><strong>Present Address:</strong> {{ $cv->present_address }}</span>
                     </div>
                     @endif
 
                     @if($cv->permanent_address)
                     <div class="contact-item" style="grid-column: 1 / -1;">
-                        <div class="contact-icon"><i class="fa fa-location-dot"></i></div>
+                        <div class="contact-icon"><i class="fa fa-map-marker-alt"></i></div>
                         <span><strong>Permanent Address:</strong> {{ $cv->permanent_address }}</span>
                     </div>
                     @endif
@@ -782,13 +782,13 @@
         @if($cv->skills->isNotEmpty())
         <div class="section">
             <div class="section-header">
-                <div class="section-icon"><i class="fa fa-gear"></i></div>
+                <div class="section-icon"><i class="fa fa-cog"></i></div>
                 <h2 class="section-title">Key Skills</h2>
             </div>
             <div class="skills-grid clearfix">
                 @foreach($cv->skills as $skill)
                 <div class="skill-item">
-                    <i class="fa fa-circle-check"></i>
+                    <i class="fa fa-check-circle"></i>
                     <span>{{ $skill->skill_name }} @if($skill->skill_level)({{ $skill->skill_level }})@endif</span>
                 </div>
                 @endforeach
@@ -861,7 +861,7 @@
                 @if($cv->projects->isNotEmpty())
                 <div class="section">
                     <div class="section-header">
-                        <div class="section-icon"><i class="fa fa-diagram-project"></i></div>
+                        <div class="section-icon"><i class="fa fa-project-diagram"></i></div>
                         <h2 class="section-title">Projects</h2>
                     </div>
                     @foreach($cv->projects as $project)

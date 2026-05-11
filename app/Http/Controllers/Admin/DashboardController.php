@@ -50,7 +50,7 @@ class DashboardController extends Controller
         $data = json_encode($data);
         $lable = json_encode($lable);
 
-        $orders = Order::with('order_detail.singleProduct.translate')->latest()->take(10)->get();
+        $orders = Order::with('user', 'order_detail.singleProduct.translate')->latest()->take(10)->get();
 
         return view('admin.dashboard', [
             'lable' => $lable,

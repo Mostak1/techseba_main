@@ -245,7 +245,7 @@
                                                 <td class="crancy-table__column-2 crancy-table__data-2">
                                                     <h4 class="crancy-table__product-title">
                                                         <br>
-                                                        {{ $order->user->name }}
+                                                        {{ $order->user?->name }}
                                                     </h4>
                                                 </td>
 

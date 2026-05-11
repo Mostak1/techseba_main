@@ -41,8 +41,8 @@
             color: #1f2937;
             background: #f3f4f6;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 10.5px;
-            line-height: 1.3;
+            font-size: 10px;
+            line-height: 1.25;
         }
 
         .no-print-area {
@@ -71,7 +71,7 @@
         .page {
             width: 210mm;
             min-height: 297mm;
-            padding: 12mm;
+            padding: 10mm;
             margin: 0 auto 20px;
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -110,7 +110,7 @@
         }
 
         .name {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
             color: #0a165e;
             margin: 0;
@@ -171,7 +171,8 @@
         }
 
         .section {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
         }
 
         .section-header {
@@ -209,6 +210,7 @@
             padding: 0;
             margin: 0;
         }
+        p { margin: 4px 0; }
 
         .list-item {
             margin-bottom: 8px;
@@ -232,7 +234,8 @@
 
         /* Experience Item */
         .experience-item {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
+            page-break-inside: avoid;
         }
 
         .exp-header {
@@ -294,8 +297,8 @@
         /* Skills */
         .skills-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 15px;
         }
 
         .skill-item {
@@ -306,8 +309,9 @@
 
         .skill-item i {
             color: #0a165e;
-            font-size: 10px;
+            font-size: 9px;
         }
+        .skill-item span { font-size: 9.5px; }
 
         /* Skills Cloud (Tags) */
         .skills-cloud {
@@ -376,6 +380,8 @@
             }
             .page {
                 page-break-after: always;
+                min-height: auto;
+                height: auto;
             }
             .page:last-child {
                 page-break-after: avoid;

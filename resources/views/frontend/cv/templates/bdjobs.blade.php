@@ -292,12 +292,6 @@
         @else
             <span class="cv-action-btn disabled">Print Disabled</span>
         @endif
-
-        @if(!empty($pdfEnabled))
-            <a href="{{ $pdfUrl }}" class="cv-action-btn">PDF Download</a>
-        @else
-            <span class="cv-action-btn disabled">PDF Disabled</span>
-        @endif
     </div>
 @endif
 

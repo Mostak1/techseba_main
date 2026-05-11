@@ -596,9 +596,6 @@
         @if(!empty($printEnabled))
             <button onclick="window.print()" class="btn">Print</button>
         @endif
-        @if(!empty($pdfEnabled))
-            <a href="{{ $pdfUrl }}" class="btn btn-secondary">Download PDF</a>
-        @endif
     </div>
 @endif
 

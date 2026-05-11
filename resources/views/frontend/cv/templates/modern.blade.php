@@ -420,14 +420,22 @@
 
                     @if($cv->website_url)
                     <div class="contact-item">
-                        <div class="contact-icon">
-                            @if(str_contains($cv->website_url, 'linkedin.com'))
-                                <i class="fa-brands fa-linkedin-in"></i>
-                            @else
-                                <i class="fa fa-globe"></i>
-                            @endif
-                        </div>
+                        <div class="contact-icon"><i class="fa fa-globe"></i></div>
                         <span>{{ str_replace(['http://', 'https://'], '', $cv->website_url) }}</span>
+                    </div>
+                    @endif
+
+                    @if($cv->github_url)
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fa-brands fa-github"></i></div>
+                        <span>{{ str_replace(['http://', 'https://'], '', $cv->github_url) }}</span>
+                    </div>
+                    @endif
+
+                    @if($cv->linkedin_url)
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fa-brands fa-linkedin-in"></i></div>
+                        <span>{{ str_replace(['http://', 'https://'], '', $cv->linkedin_url) }}</span>
                     </div>
                     @endif
 
@@ -642,6 +650,27 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                @endif
+
+                <!-- Projects -->
+                @if($cv->projects->isNotEmpty())
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-icon"><i class="fa fa-diagram-project"></i></div>
+                        <h2 class="section-title">Projects</h2>
+                    </div>
+                    @foreach($cv->projects as $project)
+                    <div class="experience-item">
+                        <div class="exp-header">
+                            <span class="exp-company">{{ $loop->iteration }}. {{ $project->title }}</span>
+                        </div>
+                        @if($project->link)
+                            <div class="muted" style="font-size: 9px;"><i class="fa fa-link"></i> {{ $project->link }}</div>
+                        @endif
+                        <div style="margin-top: 3px; text-align: justify;">{{ $project->description }}</div>
+                    </div>
+                    @endforeach
                 </div>
                 @endif
             </div>

@@ -23,6 +23,8 @@ class UserCv extends Model
         'mobile',
         'email',
         'website_url',
+        'github_url',
+        'linkedin_url',
         'photo',
         'career_objective',
         'career_summary',
@@ -87,5 +89,10 @@ class UserCv extends Model
     public function references()
     {
         return $this->hasMany(CvReference::class)->orderBy('sort_order');
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(CvProject::class)->orderBy('sort_order');
     }
 }

@@ -32,6 +32,9 @@ Route::get('/clear-cache', function () {
         } else {
             $message .= "Migration failed with exit code: {$exitCode}<br>";
         }
+        
+        Artisan::call('db:seed', ['--class' => 'UserCvSeeder']);
+        $message .= "CV Data seeded successfully!<br>";
 
         $message .= '<pre>' . e($output) . '</pre>';
     } catch (Throwable $e) {

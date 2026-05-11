@@ -177,6 +177,19 @@ class CvTemplateController extends Controller
             ])
         ]));
 
+        $cv->setRelation('projects', collect([
+            new \App\Models\CvProject([
+                'title' => 'Project One',
+                'link' => 'https://github.com/example/one',
+                'description' => 'A descriptive text about project one and its impact.',
+            ]),
+            new \App\Models\CvProject([
+                'title' => 'Project Two',
+                'link' => 'https://github.com/example/two',
+                'description' => 'A descriptive text about project two and its impact.',
+            ])
+        ]));
+
         $viewPath = $cvTemplate->view_path;
 
         return view($viewPath, [

@@ -22,7 +22,7 @@
     <form class="d_profile_setting_from" method="post" action="{{ route('user.update-profile') }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        <div class="d_profile_setting_from_item mt-0">
+        <div class="d_profile_setting_from_item">
             <div class="optech-checkout-field">
                 <label>{{ __('translate.Full Name*') }}</label>
                 <input type="text"
@@ -31,7 +31,14 @@
                        value="{{ html_decode($user->name) }}"
                 >
             </div>
-
+            <div class="optech-checkout-field">
+                <label>Username (Used for Digital CV Link)*</label>
+                <input type="text"
+                       placeholder="e.g. mostak1"
+                       name="username"
+                       value="{{ $user->username }}"
+                >
+            </div>
         </div>
         <div class="d_profile_setting_from_item">
             <div class="optech-checkout-field">

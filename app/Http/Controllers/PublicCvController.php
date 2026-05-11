@@ -50,6 +50,24 @@ class PublicCvController extends Controller
         ]);
     }
 
+    public function showById(int $id)
+    {
+        $user = User::findOrFail($id);
+        $cv = $user->userCv()->with($this->relations)->first();
+
+        abort_unless($cv && $cv->is_public, 404);
+
+        return $this->renderCv($cv, [
+            'showActions' => true,
+            'printEnabled' => $cv->public_print_enabled,
+            'pdfEnabled' => $cv->public_pdf_enabled,
+            'printUrl' => route('public.cv.print', $user->username ?: 'cv/id/'.$id),
+            'pdfUrl' => route('public.cv.pdf', $user->username ?: 'cv/id/'.$id),
+            'printMode' => false,
+            'forPdf' => false,
+        ]);
+    }
+
     public function print(string $username)
     {
         $cv = $this->publicCv($username);

@@ -581,23 +581,33 @@
                             @endforeach
                         </div>
                     </div>
-                    <div class="cv-toggle-grid cv-full">
-                        <label class="cv-toggle">
-                            <input type="hidden" name="is_public" value="0">
-                            <input type="checkbox" name="is_public" value="1" @checked(old('is_public', $cv->is_public ?? false))>
-                            <span></span><span>CV public হবে</span>
-                        </label>
-                        <label class="cv-toggle">
-                            <input type="hidden" name="public_print_enabled" value="0">
-                            <input type="checkbox" name="public_print_enabled" value="1" @checked(old('public_print_enabled', $cv->public_print_enabled ?? false))>
-                            <span></span><span>Public visitor print করতে পারবে</span>
-                        </label>
-                        <label class="cv-toggle">
-                            <input type="hidden" name="public_pdf_enabled" value="0">
-                            <input type="checkbox" name="public_pdf_enabled" value="1" @checked(old('public_pdf_enabled', $cv->public_pdf_enabled ?? false))>
-                            <span></span><span>Public visitor PDF download করতে পারবে</span>
-                        </label>
-                    </div>
+                        <div class="cv-toggle-grid cv-full">
+                            <label class="cv-toggle">
+                                <input type="hidden" name="is_public" value="0">
+                                <input type="checkbox" name="is_public" value="1" @checked(old('is_public', $cv->is_public ?? false))>
+                                <span></span><span>CV public হবে</span>
+                            </label>
+                            @if($cv?->is_public)
+                                <div style="grid-column: span 2; display: flex; align-items: center; gap: 10px; background: #f8fafc; border: 1px solid #dbe3ef; padding: 12px; border-radius: 8px;">
+                                    <div style="flex: 1; font-size: 13px; color: #0a165e; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        <strong>Digital CV (user web link):</strong> <span id="publicCvLink">{{ url($user->username ?: 'cv/id/'.$user->id) }}</span>
+                                    </div>
+                                    <button type="button" class="cv-small-btn" onclick="copyToClipboard('{{ url($user->username ?: 'cv/id/'.$user->id) }}')" title="Copy Link">
+                                        <i class="fas fa-copy"></i> Copy Link
+                                    </button>
+                                </div>
+                            @endif
+                            <label class="cv-toggle">
+                                <input type="hidden" name="public_print_enabled" value="0">
+                                <input type="checkbox" name="public_print_enabled" value="1" @checked(old('public_print_enabled', $cv->public_print_enabled ?? false))>
+                                <span></span><span>Public visitor print করতে পারবে</span>
+                            </label>
+                            <label class="cv-toggle">
+                                <input type="hidden" name="public_pdf_enabled" value="0">
+                                <input type="checkbox" name="public_pdf_enabled" value="1" @checked(old('public_pdf_enabled', $cv->public_pdf_enabled ?? false))>
+                                <span></span><span>Public visitor PDF download করতে পারবে</span>
+                            </label>
+                        </div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'settings', 'next' => 'settings', 'cv' => $cv, 'last' => true])
             </section>
@@ -607,6 +617,12 @@
 
 @push('js_section')
     <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Public link copied to clipboard!');
+            });
+        }
+
         (function () {
             const form = document.getElementById('cvForm');
             const activeInput = document.getElementById('active_tab');

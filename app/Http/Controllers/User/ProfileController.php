@@ -53,6 +53,9 @@ class ProfileController extends Controller
 
         $user = Auth::guard('web')->user();
         $user->name = $request->name;
+        if ($request->filled('username')) {
+            $user->username = Str::slug($request->username);
+        }
         $user->phone = $request->phone;
         $user->address = $request->address;
         $user->save();

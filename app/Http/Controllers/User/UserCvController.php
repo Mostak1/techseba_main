@@ -7,6 +7,7 @@ use App\Http\Requests\UserCvRequest;
 use App\Models\CvTemplate;
 use App\Models\PortfolioTemplate;
 use App\Models\UserCv;
+use App\Services\CvSourceExtractor;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -63,12 +64,13 @@ class UserCvController extends Controller
         return view('user.cv.edit', compact('user', 'cv', 'templates', 'portfolioTemplates'));
     }
 
-    public function update(UserCvRequest $request)
+    public function update(UserCvRequest $request, CvSourceExtractor $extractor)
     {
         $user = Auth::guard('web')->user();
         $validated = $request->validated();
+        $cv = null;
 
-        DB::transaction(function () use ($request, $validated, $user) {
+        DB::transaction(function () use ($request, $validated, $user, &$cv) {
             $cv = UserCv::firstOrNew(['user_id' => $user->id]);
             $cv->fill(Arr::only($validated, $this->mainFields));
             $cv->is_public = $request->boolean('is_public');
@@ -95,6 +97,10 @@ class UserCvController extends Controller
             $cv->save();
             $this->syncChildren($cv, $validated);
         });
+
+        if ($request->boolean('extract_source')) {
+            return $this->extractSourceAndRedirect($cv, $extractor);
+        }
 
         $tab = $request->input('next_tab') ?: $request->input('active_tab', 'personal');
 
@@ -175,6 +181,74 @@ class UserCvController extends Controller
             ->userCv()
             ->with($this->relations)
             ->firstOrFail();
+    }
+
+    private function extractSourceAndRedirect(UserCv $cv, CvSourceExtractor $extractor)
+    {
+        if (! $cv->source_file || ! File::exists(public_path($cv->source_file))) {
+            return redirect()
+                ->route('user.cv.edit', ['tab' => 'upload'])
+                ->with(['message' => 'Please upload a PDF or image first.', 'alert-type' => 'error']);
+        }
+
+        $result = $extractor->extract(public_path($cv->source_file), $cv->source_file_original_name);
+
+        DB::transaction(function () use ($cv, $result) {
+            $cv->source_text = $result['text'] ?: null;
+            $cv->source_extract_status = $result['status'];
+            $cv->source_extracted_at = now();
+            $this->applyExtractedData($cv, $result['data'] ?? []);
+            $cv->save();
+        });
+
+        $messages = $result['messages'] ?? [];
+        $message = $result['status'] === 'success'
+            ? 'CV data extracted and inserted into empty fields. Please review before saving final changes.'
+            : 'Could not extract readable text from this file. '.implode(' ', $messages);
+
+        return redirect()
+            ->route('user.cv.edit', ['tab' => $result['status'] === 'success' ? 'personal' : 'upload'])
+            ->with([
+                'message' => $message,
+                'alert-type' => $result['status'] === 'success' ? 'success' : 'error',
+            ]);
+    }
+
+    private function applyExtractedData(UserCv $cv, array $data): void
+    {
+        $this->fillIfBlank($cv, 'full_name', $data['full_name'] ?? null);
+        $this->fillIfBlank($cv, 'email', $data['email'] ?? null);
+        $this->fillIfBlank($cv, 'mobile', $data['mobile'] ?? null);
+        $this->fillIfBlank($cv, 'website_url', $data['website_url'] ?? null);
+        $this->fillIfBlank($cv, 'github_url', $data['github_url'] ?? null);
+        $this->fillIfBlank($cv, 'linkedin_url', $data['linkedin_url'] ?? null);
+        $this->fillIfBlank($cv, 'career_objective', $data['career_objective'] ?? null);
+        $this->fillIfBlank($cv, 'career_summary', $data['career_summary'] ?? null);
+        $this->fillIfBlank($cv, 'present_address', $data['present_address'] ?? null);
+        $this->fillIfBlank($cv, 'permanent_address', $data['permanent_address'] ?? null);
+
+        if (! empty($data['skills']) && $cv->skills()->doesntExist()) {
+            $cv->skills()->createMany($data['skills']);
+        }
+
+        if (! empty($data['academics']) && $cv->academics()->doesntExist()) {
+            $cv->academics()->createMany($data['academics']);
+        }
+
+        if (! empty($data['trainings']) && $cv->trainings()->doesntExist()) {
+            $cv->trainings()->createMany($data['trainings']);
+        }
+
+        if (! empty($data['projects']) && $cv->projects()->doesntExist()) {
+            $cv->projects()->createMany($data['projects']);
+        }
+    }
+
+    private function fillIfBlank(UserCv $cv, string $field, ?string $value): void
+    {
+        if ($value !== null && $value !== '' && blank($cv->{$field})) {
+            $cv->{$field} = $value;
+        }
     }
 
     private function syncChildren(UserCv $cv, array $validated): void

@@ -34,6 +34,9 @@ class UserCv extends Model
         'signature',
         'source_file',
         'source_file_original_name',
+        'source_text',
+        'source_extract_status',
+        'source_extracted_at',
         'declaration_date',
         'is_public',
         'public_print_enabled',
@@ -43,6 +46,7 @@ class UserCv extends Model
     protected $casts = [
         'date_of_birth' => 'date',
         'declaration_date' => 'date',
+        'source_extracted_at' => 'datetime',
         'total_experience' => 'decimal:2',
         'is_public' => 'boolean',
         'public_print_enabled' => 'boolean',

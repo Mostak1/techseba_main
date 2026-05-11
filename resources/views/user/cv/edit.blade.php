@@ -372,11 +372,21 @@
                                 <a href="{{ asset($cv->source_file) }}" target="_blank" rel="noopener">
                                     {{ $cv->source_file_original_name ?: basename($cv->source_file) }}
                                 </a>
+                                @if($cv->source_extracted_at)
+                                    <span>Last extracted: {{ $cv->source_extracted_at->format('d M Y, h:i A') }}</span>
+                                @endif
                             </div>
                         @endif
                     </div>
                 </div>
-                @include('user.cv.partials.actions', ['tab' => 'upload', 'next' => $nextTab('upload'), 'cv' => $cv])
+                <div class="cv-actions">
+                    @if($cv)
+                        <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
+                    @endif
+                    <button type="submit" class="cv-secondary-btn" data-save-tab="upload">Save Upload</button>
+                    <button type="submit" class="cv-small-btn" name="extract_source" value="1" data-save-tab="upload">Save & Extract Data</button>
+                    <button type="button" class="cv-small-btn" data-current-tab="upload" data-save-next="{{ $nextTab('upload') }}">Skip & Next</button>
+                </div>
             </section>
 
             <section class="cv-tab-panel {{ $activeTab === 'personal' ? 'active' : '' }}" data-tab-panel="personal">

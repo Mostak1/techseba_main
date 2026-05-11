@@ -35,7 +35,6 @@ class UserCvSeeder extends Seeder
     $user = User::where('email', 'mostakidb@gmail.com')
         ->orWhere('email', 'mdmostaka@gmail.com')
         ->orWhere('phone', '01834160283')
-        ->orWhere('phone', '+8801752243665')
         ->first();
 
     if (!$user) {

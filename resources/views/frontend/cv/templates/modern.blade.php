@@ -85,7 +85,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 40px;
+            width: 25px;
             height: 100%;
             background: linear-gradient(to bottom, #0a165e 0%, #0a165e 150px, transparent 150px);
             z-index: 0;
@@ -296,22 +296,30 @@
 
         /* Skills */
         .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px 15px;
+            display: block;
+            width: 100%;
         }
-
         .skill-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: block;
+            float: left;
+            width: 48%;
+            margin-right: 2%;
+            margin-bottom: 8px;
+            min-height: 35px;
         }
 
         .skill-item i {
             color: #0a165e;
-            font-size: 9px;
+            font-size: 8px;
+            float: left;
+            margin-top: 3px;
+            margin-right: 6px;
         }
-        .skill-item span { font-size: 9.5px; }
+        .skill-item span { 
+            font-size: 9.5px;
+            display: block;
+            overflow: hidden;
+        }
 
         /* Skills Cloud (Tags) */
         .skills-cloud {
@@ -651,7 +659,7 @@
                 <div class="section-icon"><i class="fa fa-gear"></i></div>
                 <h2 class="section-title">Key Skills</h2>
             </div>
-            <div class="skills-grid">
+            <div class="skills-grid clearfix">
                 @foreach($cv->skills as $skill)
                 <div class="skill-item">
                     <i class="fa fa-circle-check"></i>
@@ -659,10 +667,11 @@
                 </div>
                 @endforeach
             </div>
+            <div class="clearfix"></div>
         </div>
         @endif
 
-        <div style="position: absolute; bottom: 15mm; left: 0; width: 100%; text-align: center; color: #6b7280; font-size: 10px; border-top: 1px solid #e5e7eb; padding-top: 5px;">
+        <div style="text-align: center; color: #6b7280; font-size: 9px; border-top: 1px solid #e5e7eb; padding-top: 3px; margin-top: 10px;">
             Page 1 of 2
         </div>
     </div>
@@ -815,7 +824,7 @@
             </div>
         </div>
 
-        <div style="position: absolute; bottom: 15mm; left: 0; width: 100%; text-align: center; color: #6b7280; font-size: 10px; border-top: 1px solid #e5e7eb; padding-top: 5px;">
+        <div style="text-align: center; color: #6b7280; font-size: 9px; border-top: 1px solid #e5e7eb; padding-top: 3px; margin-top: 10px;">
             Page 2 of 2
         </div>
     </div>

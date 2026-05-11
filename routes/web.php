@@ -221,7 +221,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 
 $reservedUsernames = 'login|register|admin|user|dashboard|about|contact|blog|api|password|logout';
 
-Route::get('/cv/{username}', [PublicCvController::class, 'show'])->name('cv.public');
+Route::get('/cv/{username}', [PublicCvController::class, 'cv'])->name('cv.public');
 Route::get('/cv/id/{id}', [PublicCvController::class, 'showById'])->name('cv.public.id');
 
 Route::get('/{username}/print', [PublicCvController::class, 'print'])

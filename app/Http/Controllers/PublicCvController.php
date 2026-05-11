@@ -39,6 +39,21 @@ class PublicCvController extends Controller
     {
         $cv = $this->publicCv($username);
 
+        return view('frontend.cv.portfolio', [
+            'cv' => $cv,
+            'username' => $username,
+            'cvUrl' => route('cv.public', $username),
+            'printUrl' => route('public.cv.print', $username),
+            'pdfUrl' => route('public.cv.pdf', $username),
+            'printEnabled' => $cv->public_print_enabled,
+            'pdfEnabled' => $cv->public_pdf_enabled,
+        ]);
+    }
+
+    public function cv(string $username)
+    {
+        $cv = $this->publicCv($username);
+
         return $this->renderCv($cv, [
             'showActions' => true,
             'printEnabled' => $cv->public_print_enabled,

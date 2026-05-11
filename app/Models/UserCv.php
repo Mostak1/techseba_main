@@ -32,6 +32,8 @@ class UserCv extends Model
         'total_experience',
         'declaration',
         'signature',
+        'source_file',
+        'source_file_original_name',
         'declaration_date',
         'is_public',
         'public_print_enabled',

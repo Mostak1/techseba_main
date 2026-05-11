@@ -26,6 +26,7 @@
     $references = count($references) ? $references : [$emptyReference, $emptyReference];
 
     $tabs = [
+        'upload' => 'Upload',
         'personal' => 'Personal',
         'career' => 'Career',
         'employment' => 'Employment',
@@ -39,8 +40,8 @@
         'settings' => 'Settings',
     ];
     $tabKeys = array_keys($tabs);
-    $activeTab = request('tab', old('active_tab', 'personal'));
-    $activeTab = array_key_exists($activeTab, $tabs) ? $activeTab : 'personal';
+    $activeTab = request('tab', old('active_tab', 'upload'));
+    $activeTab = array_key_exists($activeTab, $tabs) ? $activeTab : 'upload';
     $dateValue = fn($value) => $value ? \Illuminate\Support\Carbon::parse($value)->format('Y-m-d') : '';
     $nextTab = fn($tab) => $tabKeys[min(array_search($tab, $tabKeys) + 1, count($tabKeys) - 1)];
 @endphp
@@ -309,6 +310,25 @@
             line-height: 1.4;
         }
 
+        .cv-source-file {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 12px;
+            border: 1px solid #dbe3ef;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .cv-source-file a {
+            color: #0a165e;
+            font-weight: 700;
+            text-decoration: none;
+            overflow-wrap: anywhere;
+        }
+
         @media (max-width: 991px) {
             .cv-grid,
             .cv-grid.three,
@@ -337,6 +357,27 @@
             @csrf
             <input type="hidden" name="active_tab" id="active_tab" value="{{ $activeTab }}">
             <input type="hidden" name="next_tab" id="next_tab" value="">
+
+            <section class="cv-tab-panel {{ $activeTab === 'upload' ? 'active' : '' }}" data-tab-panel="upload">
+                <h5 class="cv-section-title">Upload CV PDF / Image</h5>
+                <div class="cv-grid">
+                    <div class="cv-field cv-full">
+                        <label>Upload Existing CV File</label>
+                        <input type="file" name="source_file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*">
+                        <small>Accepted file: PDF, JPG, JPEG, PNG, WEBP. Maximum size: 5MB.</small>
+
+                        @if($cv?->source_file)
+                            <div class="cv-source-file">
+                                <strong>Uploaded File:</strong>
+                                <a href="{{ asset($cv->source_file) }}" target="_blank" rel="noopener">
+                                    {{ $cv->source_file_original_name ?: basename($cv->source_file) }}
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+                @include('user.cv.partials.actions', ['tab' => 'upload', 'next' => $nextTab('upload'), 'cv' => $cv])
+            </section>
 
             <section class="cv-tab-panel {{ $activeTab === 'personal' ? 'active' : '' }}" data-tab-panel="personal">
                 <h5 class="cv-section-title">Personal Information</h5>

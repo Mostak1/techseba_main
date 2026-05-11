@@ -85,6 +85,13 @@ class UserCvController extends Controller
                 $cv->signature = $this->uploadFile($request->file('signature'), 'uploads/cv/signatures', $validated['full_name'].' signature');
             }
 
+            if ($request->hasFile('source_file')) {
+                $this->deleteFile($cv->source_file);
+                $sourceFile = $request->file('source_file');
+                $cv->source_file = $this->uploadFile($sourceFile, 'uploads/cv/source-files', $validated['full_name'].' source cv');
+                $cv->source_file_original_name = $sourceFile->getClientOriginalName();
+            }
+
             $cv->save();
             $this->syncChildren($cv, $validated);
         });

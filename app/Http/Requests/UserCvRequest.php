@@ -37,6 +37,7 @@ class UserCvRequest extends FormRequest
             'total_experience' => ['nullable', 'numeric', 'min:0', 'max:99.99'],
             'declaration' => ['nullable', 'string', 'max:2000'],
             'signature' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:1024'],
+            'source_file' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png,webp', 'max:5120'],
             'declaration_date' => ['nullable', 'date'],
             'is_public' => ['nullable', 'boolean'],
             'public_print_enabled' => ['nullable', 'boolean'],

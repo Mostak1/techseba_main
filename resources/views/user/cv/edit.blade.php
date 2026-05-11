@@ -561,7 +561,14 @@
                 <h5 class="cv-section-title">CV Settings</h5>
                 <div class="cv-grid">
                     <div class="cv-field cv-full">
-                        <label>CV Template*</label>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
+                            <label style="margin: 0;">CV Template*</label>
+                            @if($cv)
+                                <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
+                                    <i class="fas fa-eye"></i> View Live Preview
+                                </a>
+                            @endif
+                        </div>
                         <div class="cv-template-options">
                             @foreach($templates as $template)
                                 <label class="cv-template-card">

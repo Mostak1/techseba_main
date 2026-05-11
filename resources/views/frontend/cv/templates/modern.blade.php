@@ -381,6 +381,69 @@
                 page-break-after: avoid;
             }
         }
+
+        /* PDF Specific Styles (DomPDF Compatibility) */
+        @if(!empty($forPdf))
+        .main-grid {
+            display: block;
+            width: 100%;
+        }
+        .grid-left {
+            float: left;
+            width: 40%;
+            padding-right: 20px;
+        }
+        .grid-right {
+            float: left;
+            width: 55%;
+        }
+        .section {
+            clear: both;
+            margin-bottom: 10px;
+        }
+        .header {
+            display: block;
+            width: 100%;
+        }
+        .header-left {
+            float: left;
+            width: 75%;
+        }
+        .header-right {
+            float: right;
+            width: 120px;
+        }
+        .contact-info {
+            display: block;
+        }
+        .contact-item {
+            display: inline-block;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+        .skills-grid {
+            display: block;
+        }
+        .skill-item {
+            float: left;
+            width: 31%;
+            margin-bottom: 5px;
+        }
+        .reference-grid {
+            display: block;
+        }
+        .ref-box {
+            float: left;
+            width: 48%;
+            margin-right: 2%;
+            margin-bottom: 15px;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        @endif
     </style>
 </head>
 <body>
@@ -397,8 +460,8 @@
 @endif
 
 <div class="page">
-    <div class="page-content">
-        <header class="header">
+    <div class="page-content clearfix">
+        <header class="header clearfix">
             <div class="header-left">
                 <h1 class="name">{{ $cv->full_name }}</h1>
                 <p class="designation">{{ $cv->employments->first()->designation ?? '' }}</p>
@@ -464,7 +527,7 @@
             </div>
         </header>
 
-        <div class="main-grid">
+        <div class="main-grid clearfix">
             <div class="grid-left">
                 <!-- Career Objective -->
                 @if($cv->career_objective)
@@ -600,8 +663,8 @@
 </div>
 
 <div class="page">
-    <div class="page-content">
-        <div class="main-grid">
+    <div class="page-content clearfix">
+        <div class="main-grid clearfix">
             <div class="grid-left">
                 <!-- Training & Certifications -->
                 @if($cv->trainings->isNotEmpty())

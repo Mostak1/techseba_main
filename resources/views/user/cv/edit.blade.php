@@ -363,8 +363,18 @@
                 <div class="cv-grid">
                     <div class="cv-field cv-full">
                         <label>Upload Existing CV File</label>
-                        <input type="file" name="source_file" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*">
+                        <input type="file" name="source_file" id="ocr_file_input" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*">
                         <small>Accepted file: PDF, JPG, JPEG, PNG, WEBP. Maximum size: 5MB.</small>
+
+                        <div id="ocr_progress_container" style="display: none; margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                <span id="ocr_status" style="font-size: 12px; font-weight: 700; color: #0a165e;">Processing CV...</span>
+                                <span id="ocr_percent" style="font-size: 12px; font-weight: 700; color: #0a165e;">0%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                                <div id="ocr_bar" style="width: 0%; height: 100%; background: #0a165e; transition: width 0.3s ease;"></div>
+                            </div>
+                        </div>
 
                         @if($cv?->source_file)
                             <div class="cv-source-file">
@@ -383,8 +393,10 @@
                     @if($cv)
                         <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
                     @endif
+                    <button type="button" id="scan_cv_btn" class="cv-small-btn" style="background: #10b981; border-color: #10b981;">
+                        <i class="fas fa-magic"></i> Scan & Auto-fill Form
+                    </button>
                     <button type="submit" class="cv-secondary-btn" data-save-tab="upload">Save Upload</button>
-                    <button type="submit" class="cv-small-btn" name="extract_source" value="1" data-save-tab="upload">Save & Extract Data</button>
                     <button type="button" class="cv-small-btn" data-current-tab="upload" data-save-next="{{ $nextTab('upload') }}">Skip & Next</button>
                 </div>
             </section>
@@ -785,6 +797,154 @@
                     nextInput.value = '';
                 });
             });
+        })();
+
+        // --- OCR & CV Scanning Logic ---
+        (function() {
+            // Load Scripts Dynamically
+            const scripts = [
+                'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+                'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js'
+            ];
+            
+            scripts.forEach(src => {
+                const script = document.createElement('script');
+                script.src = src;
+                document.head.appendChild(script);
+            });
+
+            window.addEventListener('load', () => {
+                if (window.pdfjsLib) {
+                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js';
+                }
+            });
+
+            const scanBtn = document.getElementById('scan_cv_btn');
+            const fileInput = document.getElementById('ocr_file_input');
+            const progressContainer = document.getElementById('ocr_progress_container');
+            const progressBar = document.getElementById('ocr_bar');
+            const progressStatus = document.getElementById('ocr_status');
+            const progressPercent = document.getElementById('ocr_percent');
+
+            scanBtn.addEventListener('click', async function() {
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert('Please select a CV file (PDF or Image) first.');
+                    return;
+                }
+
+                scanBtn.disabled = true;
+                progressContainer.style.display = 'block';
+                updateProgress('Initializing AI Engine...', 5);
+
+                try {
+                    let imageSource = file;
+
+                    // If PDF, convert first page to image
+                    if (file.type === 'application/pdf') {
+                        updateProgress('Converting PDF to readable image...', 15);
+                        imageSource = await convertPdfToImage(file);
+                    }
+
+                    updateProgress('Starting OCR Scan...', 25);
+                    
+                    const worker = await Tesseract.createWorker({
+                        logger: m => {
+                            if (m.status === 'recognizing text') {
+                                const p = 25 + (m.progress * 65);
+                                updateProgress('Reading text from file...', p);
+                            }
+                        }
+                    });
+
+                    await worker.loadLanguage('eng');
+                    await worker.initialize('eng');
+                    const { data: { text } } = await worker.recognize(imageSource);
+                    await worker.terminate();
+
+                    updateProgress('Extracting information...', 95);
+                    parseAndFillData(text);
+
+                    updateProgress('Scanning complete!', 100);
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        scanBtn.disabled = false;
+                        // Switch to personal tab
+                        document.querySelector('[data-tab-target="personal"]').click();
+                        alert('Scanning complete! Data has been filled in the Personal Information tab. Please review it.');
+                    }, 1000);
+
+                } catch (error) {
+                    console.error(error);
+                    alert('OCR Failed: ' + error.message);
+                    progressContainer.style.display = 'none';
+                    scanBtn.disabled = false;
+                }
+            });
+
+            function updateProgress(status, percent) {
+                progressStatus.innerText = status;
+                progressPercent.innerText = Math.round(percent) + '%';
+                progressBar.style.width = percent + '%';
+            }
+
+            async function convertPdfToImage(file) {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+                const page = await pdf.getPage(1); // Get first page
+                const viewport = page.getViewport({ scale: 2.0 }); // Higher scale for better OCR
+                
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                await page.render({ canvasContext: context, viewport: viewport }).promise;
+                return canvas.toDataURL('image/png');
+            }
+
+            function parseAndFillData(text) {
+                console.log("Raw Extracted Text:", text);
+
+                // 1. Email Extraction
+                const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+                if (emailMatch) {
+                    document.querySelector('input[name="email"]').value = emailMatch[0];
+                }
+
+                // 2. Phone Extraction (Bangladesh Format)
+                const phoneMatch = text.match(/(?:\+?88)?\s*01[3-9][\s.\-]?\d{3}[\s.\-]?\d{4}/);
+                if (phoneMatch) {
+                    document.querySelector('input[name="mobile"]').value = phoneMatch[0].replace(/\s/g, '');
+                }
+
+                // 3. Name Extraction (Guessing)
+                const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 3);
+                for (let line of lines) {
+                    // Ignore common header words
+                    if (line.toLowerCase().includes('curriculum') || 
+                        line.toLowerCase().includes('resume') || 
+                        line.toLowerCase().includes('email') || 
+                        line.toLowerCase().includes('phone')) continue;
+                    
+                    if (/^[a-zA-Z\s.]{3,30}$/.test(line)) {
+                        document.querySelector('input[name="full_name"]').value = line;
+                        break;
+                    }
+                }
+
+                // 4. Website
+                const webMatch = text.match(/https?:\/\/(?!github|linkedin)[^\s<>)]+/i);
+                if (webMatch) {
+                    document.querySelector('input[name="website_url"]').value = webMatch[0];
+                }
+
+                // 5. Objective (Try to find a block after the word "Objective")
+                const objMatch = text.match(/(?:Objective|Profile|Summary)[:\s]+([\s\S]{20,300})/i);
+                if (objMatch && objMatch[1]) {
+                    document.querySelector('textarea[name="career_objective"]').value = objMatch[1].split('\n\n')[0].trim();
+                }
+            }
         })();
     </script>
 @endpush

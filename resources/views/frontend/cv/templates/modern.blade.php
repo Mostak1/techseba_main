@@ -41,8 +41,8 @@
             color: #1f2937;
             background: #f3f4f6;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 11px;
-            line-height: 1.4;
+            font-size: 10.5px;
+            line-height: 1.3;
         }
 
         .no-print-area {
@@ -71,7 +71,7 @@
         .page {
             width: 210mm;
             min-height: 297mm;
-            padding: 15mm;
+            padding: 12mm;
             margin: 0 auto 20px;
             background: white;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
@@ -101,7 +101,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
             padding-left: 10px;
         }
 
@@ -110,7 +110,7 @@
         }
 
         .name {
-            font-size: 32px;
+            font-size: 28px;
             font-weight: 800;
             color: #0a165e;
             margin: 0;
@@ -171,16 +171,16 @@
         }
 
         .section {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .section-header {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
             border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 5px;
+            padding-bottom: 3px;
         }
 
         .section-icon {
@@ -281,7 +281,7 @@
 
         .cv-table th, .cv-table td {
             border: 1px solid #e5e7eb;
-            padding: 6px;
+            padding: 4px 6px;
             text-align: left;
         }
 
@@ -338,14 +338,14 @@
 
         /* Declaration */
         .declaration-box {
-            margin-top: 30px;
+            margin-top: 15px;
         }
 
         .signature-area {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: 40px;
+            margin-top: 25px;
         }
 
         .sig-item {

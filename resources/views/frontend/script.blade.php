@@ -1,4 +1,4 @@
-@if ($general_setting->cookie_consent_status == 1)
+@if (($general_setting->cookie_consent_status ?? 0) == 1)
     <!-- common-modal start  -->
     <div class="common-modal cookie_consent_modal d-none bg-white">
         <button type="button" class="btn-close cookie_consent_close_btn" aria-label="Close"></button>
@@ -19,7 +19,7 @@
 @endif
 
 
-@if ($general_setting->tawk_status == 1)
+@if (($general_setting->tawk_status ?? 0) == 1)
     <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         (function () {

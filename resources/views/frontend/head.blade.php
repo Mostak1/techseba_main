@@ -3,6 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     @yield('title')
+    @include('frontend.seo')
 
     <link rel="shortcut icon" href="{{ asset($general_setting->favicon) }}" type="image/x-icon">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -86,20 +87,20 @@
 
     <style>
         :root {
-            --heading-color: {{ $general_setting->theme_heading_color }};
-            --body-color: {{ $general_setting->theme_body_color }};
-            --accent-color: {{ $general_setting->theme_accent_color }};
-            --white-color: {{ $general_setting->theme_white_color }};
-            --light-color1: {{ $general_setting->theme_light_color1 }};
-            --light-color2: {{ $general_setting->theme_light_color2 }};
-            --dark-bg: {{ $general_setting->theme_dark_bg }};
-            --dark-bg2: {{ $general_setting->theme_dark_bg2 }};
-            --dark-bg3: {{ $general_setting->theme_dark_bg3 }};
-            --white-bg: {{ $general_setting->theme_white_bg }};
-            --accent-bg: {{ $general_setting->theme_accent_bg }};
-            --light-bg1: {{ $general_setting->theme_light_bg1 }};
-            --light-bg2: {{ $general_setting->theme_light_bg2 }};
-            --light-bg3: {{ $general_setting->theme_light_bg3 }};
+            --heading-color: {{ $general_setting->theme_heading_color ?? '#07145c' }};
+            --body-color: {{ $general_setting->theme_body_color ?? '#565b6e' }};
+            --accent-color: {{ $general_setting->theme_accent_color ?? '#2f55f6' }};
+            --white-color: {{ $general_setting->theme_white_color ?? '#ffffff' }};
+            --light-color1: {{ $general_setting->theme_light_color1 ?? '#e7e8f2' }};
+            --light-color2: {{ $general_setting->theme_light_color2 ?? '#c9cddc' }};
+            --dark-bg: {{ $general_setting->theme_dark_bg ?? '#06104b' }};
+            --dark-bg2: {{ $general_setting->theme_dark_bg2 ?? '#20295e' }};
+            --dark-bg3: {{ $general_setting->theme_dark_bg3 ?? '#071e73' }};
+            --white-bg: {{ $general_setting->theme_white_bg ?? '#ffffff' }};
+            --accent-bg: {{ $general_setting->theme_accent_bg ?? '#2f55f6' }};
+            --light-bg1: {{ $general_setting->theme_light_bg1 ?? '#f5f6fb' }};
+            --light-bg2: {{ $general_setting->theme_light_bg2 ?? '#eef1ff' }};
+            --light-bg3: {{ $general_setting->theme_light_bg3 ?? '#f8f9ff' }};
         }
     </style>
 </head>

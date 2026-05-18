@@ -1,9 +1,9 @@
 
 @extends('master_layout')
 @section('title')
-    <title>{{ $seo_setting->seo_title }}</title>
-    <meta name="title" content="{{ $seo_setting->seo_title }}">
-    <meta name="description" content="{!! strip_tags(clean($seo_setting->seo_description)) !!}">
+    <title>{{ $seoTitle ?? $seo_setting->seo_title }}</title>
+    <meta name="title" content="{{ $seoTitle ?? $seo_setting->seo_title }}">
+    <meta name="description" content="{{ techseba_seo_description($seoDescription ?? $seo_setting->seo_description) }}">
 @endsection
 @php
     $currentLang = session()->get('front_lang');
@@ -35,16 +35,19 @@
     <div class="section optech-section-padding2 bg-light1">
         <div class="container">
             <div class="optech-section-title center">
-                <h2></h2>
+                <h2>IT Services in Dhaka, Bangladesh</h2>
             </div>
             <div class="row">
+                @php
+                    $existingServiceSlugs = $services_list->pluck('slug')->all();
+                @endphp
 
                 @foreach($services_list as $index => $service)
 
                 <div class="col-lg-6" data-aos="fade-up" data-aos-duration="600">
                     <div class="optech-iconbox-wrap style-two">
                         <div class="optech-iconbox-icon">
-                            <img src="{{ asset($service->thumb_image) }}" alt="Image">
+                            <img src="{{ asset($service->thumb_image) }}" alt="{{ $service->translate?->title ?? $service->title }}">
                         </div>
                         <div class="optech-iconbox-data">
                             <h5>{{ $service->translate?->title }}</h5>
@@ -58,10 +61,24 @@
                     </div>
                 </div>
                 @endforeach
+                @foreach(($configuredServices ?? collect()) as $configuredService)
+                    @continue(in_array($configuredService['slug'], $existingServiceSlugs, true) || count(array_intersect($configuredService['aliases'] ?? [], $existingServiceSlugs)) > 0)
+                    <div class="col-lg-6" data-aos="fade-up" data-aos-duration="600">
+                        <div class="optech-iconbox-wrap style-two">
+                            <div class="optech-iconbox-icon">
+                                <img src="{{ asset($general_setting->favicon) }}" alt="{{ $configuredService['title'] }}">
+                            </div>
+                            <div class="optech-iconbox-data">
+                                <h5>{{ $configuredService['title'] }}</h5>
+                                <p>{{ $configuredService['short_description'] }}</p>
+                                <a class="optech-icon-btn" href="{{ route('service', $configuredService['slug']) }}"><i class="icon-show ri-arrow-right-line"></i>
+                                    <span>{{ __('translate.Learn More') }}</span> <i class="icon-hide ri-arrow-right-line"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
     <!-- End section -->
 @endsection
-
-

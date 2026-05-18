@@ -221,6 +221,69 @@ function getTranslatedValue($content, $key, $lang = 'en') {
     return html_decode($decode_value);
 }
 
+function seo_front_lang(): string
+{
+    return front_lang() ?: 'en';
+}
+
+function techseba_service_pages(): array
+{
+    return config('techseba_seo.services', []);
+}
+
+function techseba_service_config(?string $slug): ?array
+{
+    if (!$slug) {
+        return null;
+    }
+
+    foreach (techseba_service_pages() as $canonicalSlug => $service) {
+        if ($slug === $canonicalSlug || in_array($slug, $service['aliases'] ?? [], true)) {
+            return ['slug' => $canonicalSlug] + $service;
+        }
+    }
+
+    return null;
+}
+
+function techseba_localized_service(?string $slug, ?string $lang = null): ?array
+{
+    $service = techseba_service_config($slug);
+
+    if (!$service) {
+        return null;
+    }
+
+    $lang = $lang ?: seo_front_lang();
+    $localized = $service[$lang] ?? $service['en'] ?? [];
+
+    return array_merge($localized, [
+        'slug' => $service['slug'],
+        'canonical_slug' => $service['slug'],
+        'aliases' => $service['aliases'] ?? [],
+    ]);
+}
+
+function techseba_seo_title(?string $title = null): string
+{
+    return trim($title ?: config('techseba_seo.pages.home.title', config('app.name', 'TechSeba')));
+}
+
+function techseba_seo_description(?string $description = null): string
+{
+    return trim(strip_tags($description ?: config('techseba_seo.pages.home.description', config('app.name', 'TechSeba'))));
+}
+
+function techseba_canonical_url(?string $url = null): string
+{
+    $url = $url ?: url()->current();
+    $parts = parse_url($url);
+    $path = $parts['path'] ?? '/';
+    $query = isset($parts['query']) ? '?' . $parts['query'] : '';
+
+    return 'https://' . config('techseba_seo.canonical_host', 'techseba.com') . $path . $query;
+}
+
 function randomNumber($length = 10) {
     $random = '';
     $possible = '0123456789';

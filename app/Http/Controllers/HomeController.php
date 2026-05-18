@@ -400,12 +400,21 @@ class HomeController extends Controller
         $services = Listing::where(['status' => 'enable'])->oldest()->get();
 
         $seo_setting = SeoSetting::where('id', 10)->first();
+        $seoTitle = config('techseba_seo.pages.services.title', $seo_setting?->seo_title);
+        $seoDescription = config('techseba_seo.pages.services.description', $seo_setting?->seo_description);
+        $configuredServices = collect(techseba_service_pages())
+            ->map(fn ($service, $slug) => techseba_localized_service($slug))
+            ->filter()
+            ->values();
 
         $categories = Category::where('status', 'enable')->latest()->get();
 
         return view('services', [
             'services_list' => $services,
             'seo_setting' => $seo_setting,
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'configuredServices' => $configuredServices,
             'categories' => $categories,
         ]);
     }
@@ -414,12 +423,38 @@ class HomeController extends Controller
     {
         abort_unless_page_enabled('services');
 
-        $service = Listing::where(['status' => 'enable', 'slug' => $slug])->firstOrFail();
+        $serviceSeo = techseba_localized_service($slug);
+        $lookupSlugs = collect([$slug])
+            ->merge($serviceSeo['aliases'] ?? [])
+            ->merge([$serviceSeo['canonical_slug'] ?? null])
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
-        $showServices = Listing::where('id', '!=', $service->id)->where('status', 'enable')->oldest()->take(5)->get();
+        $service = Listing::where('status', 'enable')
+            ->whereIn('slug', $lookupSlugs)
+            ->first();
+
+        if (!$service && !$serviceSeo) {
+            abort(404);
+        }
+
+        $showServices = Listing::when($service, fn ($query) => $query->where('id', '!=', $service->id))
+            ->where('status', 'enable')
+            ->oldest()
+            ->take(5)
+            ->get();
+
+        $seoTitle = $serviceSeo['seo_title'] ?? $service?->seo_title ?? $service?->title;
+        $seoDescription = $serviceSeo['description'] ?? $service?->seo_description ?? $service?->short_description;
 
         return view('service_detail', [
             'service' => $service,
+            'serviceSeo' => $serviceSeo,
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => route('service', $serviceSeo['canonical_slug'] ?? $service?->slug ?? $slug),
             'showServices' => $showServices
         ]);
     }

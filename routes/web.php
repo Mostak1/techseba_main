@@ -18,6 +18,8 @@ use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\User\UserCvController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
 Route::get('/clear-cache', function () {
+    abort_unless(app()->environment('local'), 404);
+
     $message = '';
 
     try {
@@ -54,6 +56,46 @@ Route::get('/clear-cache', function () {
 
     return response($message);
 });
+
+Route::get('/sitemap.xml', function () {
+    $urls = collect([
+        route('home'),
+        route('services'),
+        route('about-us'),
+        route('contact-us'),
+        route('blogs'),
+        route('faq'),
+    ]);
+
+    if (Route::has('product.shop')) {
+        $urls->push(route('product.shop'));
+    }
+
+    if (Route::has('cart.cart')) {
+        $urls->push(route('cart.cart'));
+    }
+
+    foreach (techseba_service_pages() as $slug => $service) {
+        $urls->push(route('service', $slug));
+    }
+
+    \Modules\Listing\Entities\Listing::where('status', 'enable')
+        ->pluck('slug')
+        ->each(fn ($slug) => $urls->push(route('service', $slug)));
+
+    \Modules\Blog\App\Models\Blog::where('status', 1)
+        ->pluck('slug')
+        ->each(fn ($slug) => $urls->push(route('blog', $slug)));
+
+    \Modules\Project\App\Models\Project::pluck('slug')
+        ->each(fn ($slug) => $urls->push(route('portfolio.show', $slug)));
+
+    $xml = view('sitemap', [
+        'urls' => $urls->filter()->unique()->values(),
+    ])->render();
+
+    return response($xml, 200)->header('Content-Type', 'application/xml');
+})->name('sitemap');
 Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('home');

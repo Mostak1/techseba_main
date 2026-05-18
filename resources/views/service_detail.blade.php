@@ -1,8 +1,15 @@
 @extends('frontend.templates.main_demo_layout')
+@php
+    $serviceTitle = $serviceSeo['title'] ?? $service?->translate?->title ?? $service?->title ?? config('app.name');
+    $serviceShortDescription = $serviceSeo['short_description'] ?? $service?->translate?->short_description ?? $service?->short_description ?? '';
+    $serviceDescription = $serviceSeo['description'] ?? $service?->translate?->description ?? $service?->description ?? '';
+    $serviceSeoTitle = $seoTitle ?? $service?->seo_title ?? $serviceTitle;
+    $serviceSeoDescription = $seoDescription ?? $service?->seo_description ?? $serviceShortDescription;
+@endphp
 @section('title')
-    <title>{{ html_decode($service->title) }}</title>
-    <meta name="title" content="{{ $service->seo_title }}">
-    <meta name="description" content="{{ $service->seo_description }}">
+    <title>{{ $serviceSeoTitle }}</title>
+    <meta name="title" content="{{ $serviceSeoTitle }}">
+    <meta name="description" content="{{ techseba_seo_description($serviceSeoDescription) }}">
     <style>
         @media (min-width: 992px) {
             .optech-service-sidebar {
@@ -15,6 +22,47 @@
     </style>
 @endsection
 
+@push('schema')
+    <script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Service',
+    'name' => $serviceTitle,
+    'description' => techseba_seo_description($serviceSeoDescription),
+    'provider' => [
+        '@type' => 'LocalBusiness',
+        'name' => config('techseba_seo.organization.name'),
+        'url' => config('techseba_seo.organization.url'),
+        'telephone' => config('techseba_seo.organization.telephone'),
+        'email' => config('techseba_seo.organization.email'),
+        'address' => [
+            '@type' => 'PostalAddress',
+            'addressLocality' => 'Dhaka',
+            'addressCountry' => 'BD',
+        ],
+    ],
+    'areaServed' => ['Dhaka', 'Bangladesh'],
+    'url' => $canonicalUrl ?? url()->current(),
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+    </script>
+    @if(!empty($serviceSeo['faqs']))
+        <script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'FAQPage',
+    'mainEntity' => collect($serviceSeo['faqs'])->map(fn ($question) => [
+        '@type' => 'Question',
+        'name' => $question,
+        'acceptedAnswer' => [
+            '@type' => 'Answer',
+            'text' => config('techseba_seo.organization.name') . ' can help with ' . $serviceTitle . ' planning, setup, customization, and support in Dhaka and Bangladesh.',
+        ],
+    ])->values()->all(),
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) !!}
+        </script>
+    @endif
+@endpush
+
 @section('content')
     @php
         $currentLang = session()->get('front_lang');
@@ -23,12 +71,12 @@
     <!-- Page Update -->
     <div class="optech-breadcrumb">
         <div class="container">
-            <h1 class="post__title">{{ __($service->translate->title) }}</h1>
+            <h1 class="post__title">{{ $serviceTitle }}</h1>
             <nav class="breadcrumbs">
                 <ul>
                     <li><a href="{{ route('home') }}">{{ __('translate.Home') }}</a></li>
                     <li><a href="{{ route('services') }}">{{ __('translate.Services') }}</a></li>
-                    <li aria-current="page"> {{ __($service->translate->title) }}</li>
+                    <li aria-current="page"> {{ $serviceTitle }}</li>
                 </ul>
             </nav>
         </div>
@@ -40,14 +88,44 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="optech-service-details-wrap">
-                        <img data-aos="fade-up" data-aos-duration="800" src="{{ asset($service->background_image) }}" alt="" class="optech-service-details-img">
+                        @if($service?->background_image)
+                            <img data-aos="fade-up" data-aos-duration="800" src="{{ asset($service->background_image) }}" alt="{{ $serviceTitle }}" class="optech-service-details-img">
+                        @endif
                         <div class="optech-service-details-item">
                             <h3>{{ __('translate.Overview') }}</h3>
                             {{-- <div class="optech-iconbox-price mb-3">
-                                <h3>{{ __('translate.Starting from') }}: {{ currency($service->price) }}</h3>
+                                <h3>{{ __('translate.Starting from') }}: {{ currency($service?->price ?? 0) }}</h3>
                             </div> --}}
-                             {!! clean($service->translate->description) !!}
+                            @if($service?->translate?->description)
+                                {!! clean($service->translate->description) !!}
+                            @else
+                                <p>{{ $serviceDescription }}</p>
+                                @if(!empty($serviceSeo['sections']))
+                                    <ul>
+                                        @foreach($serviceSeo['sections'] as $section)
+                                            <li>{{ $section }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
+                            @endif
                         </div>
+                        @if(!empty($serviceSeo['faqs']))
+                            <div class="optech-service-details-item">
+                                <h3>{{ __('translate.FAQ') }}</h3>
+                                <div class="optech-accordion-wrap init-wrap">
+                                    @foreach($serviceSeo['faqs'] as $faq)
+                                        <div class="optech-accordion-item">
+                                            <div class="optech-accordion-header init-header">
+                                                <h5>{{ $faq }}</h5>
+                                            </div>
+                                            <div class="optech-accordion-body init-body">
+                                                <p>{{ config('techseba_seo.organization.name') }} can help with {{ $serviceTitle }} planning, setup, customization, and support in Dhaka and Bangladesh.</p>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
                         </div>
                     </div>
@@ -56,7 +134,7 @@
                         <div class="optech-service-menu">
                             <ul>
                                 @foreach($showServices as $sidebarService)
-                                <li><a href="{{ route('service', $sidebarService->slug) }}">{{ __($sidebarService->title) }} <i class="ri-arrow-right-up-line"></i></a></li>
+                                <li><a href="{{ route('service', $sidebarService->slug) }}">{{ $sidebarService->title }} <i class="ri-arrow-right-up-line"></i></a></li>
                                 @endforeach
                             </ul>
                         </div>
@@ -95,7 +173,7 @@
                         </div>
                     </div>
                 </div>
-                @if($service->translate->plans)
+                @if($service?->translate?->plans)
                     <div class="col-12 mg-top-100">
                         <div class="optech-pricing-plans">
                             <div class="row justify-content-center">

@@ -857,5 +857,9 @@
   'Light Background 3' => 'Light Background 3',
   'Heading color is required' => 'Heading color is required',
   'Body color is required' => 'Body color is required',
+  'Google Tag Manager' => 'Google Tag Manager',
+  'Google Tag Manager ID' => 'Google Tag Manager ID',
+  'Google Tag Manager Status' => 'Google Tag Manager Status',
+  'Google Tag Manager ID is required' => 'Google Tag Manager ID is required',
 );
  ?>

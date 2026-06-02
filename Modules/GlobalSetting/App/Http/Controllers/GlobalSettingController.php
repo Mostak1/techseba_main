@@ -222,8 +222,8 @@ class GlobalSettingController extends Controller
             'google_tag_manager_id.required' => trans('translate.Google Tag Manager ID is required')
         ]);
 
-        GlobalSetting::where('key', 'google_tag_manager_id')->update(['value' => $request->google_tag_manager_id]);
-        GlobalSetting::where('key', 'google_tag_manager_status')->update(['value' => $request->status ? 1 : 0]);
+        GlobalSetting::updateOrCreate(['key' => 'google_tag_manager_id'], ['value' => $request->google_tag_manager_id]);
+        GlobalSetting::updateOrCreate(['key' => 'google_tag_manager_status'], ['value' => $request->status ? 1 : 0]);
 
         $this->set_cache_setting();
 

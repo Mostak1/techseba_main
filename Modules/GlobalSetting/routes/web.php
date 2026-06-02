@@ -25,6 +25,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['auth:admin
             Route::put('update-google-captcha', 'update_google_captcha')->name('update-google-captcha');
             Route::put('update-tawk-chat', 'update_tawk_chat')->name('update-tawk-chat');
             Route::put('update-google-analytic', 'update_google_analytic')->name('update-google-analytic');
+            Route::put('update-google-tag-manager', 'update_google_tag_manager')->name('update-google-tag-manager');
             Route::put('update-facebook-pixel', 'update_facebook_pixel')->name('update-facebook-pixel');
             Route::delete('database-clear', 'database_clear')->name('database-clear');
 

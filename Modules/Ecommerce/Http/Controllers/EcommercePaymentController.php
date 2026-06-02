@@ -538,6 +538,7 @@ class EcommercePaymentController extends Controller
         }
 
         Cart::where('user_id', $user->id)->delete();
+        session()->put('just_purchased_order_id', $order->id);
         return $order;
     }
 }

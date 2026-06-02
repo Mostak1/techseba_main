@@ -73,10 +73,18 @@ class CartController extends Controller
                     'alert-type' => 'success'
                 ];
 
+                $productDetails = [
+                    'id' => $product->id,
+                    'name' => $product->translate?->name,
+                    'price' => (float)$product->finalPrice,
+                    'category' => $product->category?->translate?->name,
+                ];
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Product added to cart successfully!',
                     'totalCartItem' => $totalCartItems,
+                    'product' => $productDetails,
                     'notification' => $notification
                 ]);
 

@@ -96,4 +96,42 @@
             window.location.href = currentUrl.toString();
         }
     </script>
+
+    @if (session()->has('just_purchased_order_id'))
+        @php
+            $purchasedOrderId = session()->get('just_purchased_order_id');
+            $purchasedOrder = \Modules\Ecommerce\Entities\Order::with('order_detail.singleProduct')->find($purchasedOrderId);
+            session()->forget('just_purchased_order_id');
+        @endphp
+        
+        @if ($purchasedOrder)
+            <script>
+                // GA4 purchase event push
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    event: "purchase",
+                    ecommerce: {
+                        transaction_id: "{{ $purchasedOrder->order_id }}",
+                        value: {{ (float)$purchasedOrder->total }},
+                        tax: 0.00,
+                        shipping: {{ (float)$purchasedOrder->shipping_charge }},
+                        currency: "BDT",
+                        items: [
+                            @foreach($purchasedOrder->order_detail as $detail)
+                                @if($detail->singleProduct)
+                                {
+                                    item_id: "{{ $detail->product_id }}",
+                                    item_name: @json($detail->singleProduct->translate?->name),
+                                    price: {{ (float)$detail->singleProduct->finalPrice }},
+                                    item_category: @json($detail->singleProduct->category?->translate?->name),
+                                    quantity: {{ (int)$detail->quantity }}
+                                },
+                                @endif
+                            @endforeach
+                        ]
+                    }
+                });
+            </script>
+        @endif
+    @endif
 @endpush

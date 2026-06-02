@@ -163,4 +163,27 @@
         updatePrices();
     });
 </script>
+
+<script>
+    // GA4 begin_checkout event push
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        event: "begin_checkout",
+        ecommerce: {
+            currency: "BDT",
+            value: {{ (float)$sub_total }},
+            items: [
+                @foreach($carts as $cart)
+                {
+                    item_id: "{{ $cart->product_id }}",
+                    item_name: @json($cart->product->translate?->name),
+                    price: {{ (float)$cart->product->finalPrice }},
+                    item_category: @json($cart->product->category?->translate?->name),
+                    quantity: {{ (int)$cart->quantity }}
+                },
+                @endforeach
+            ]
+        }
+    });
+</script>
 @endpush

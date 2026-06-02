@@ -351,5 +351,24 @@
       });
   </script>
 
-
+  <script>
+    // GA4 view_item event push
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        event: "view_item",
+        ecommerce: {
+            currency: "BDT",
+            value: {{ (float)$product->finalPrice }},
+            items: [
+                {
+                    item_id: "{{ $product->id }}",
+                    item_name: @json($product->translate?->name),
+                    price: {{ (float)$product->finalPrice }},
+                    item_category: @json($product->category?->translate?->name),
+                    quantity: 1
+                }
+            ]
+        }
+    });
+  </script>
 @endpush

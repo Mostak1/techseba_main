@@ -862,6 +862,49 @@
                                                             </div>
                                                         </div>
                                                     </form>
+
+                                                    <form action="{{ route('admin.update-google-tag-manager') }}" method="POST" enctype="multipart/form-data" class="mg-top-30">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="crancy-ptabs__separate">
+                                                                    <div class="crancy-ptabs__form-main">
+                                                                        <div class="crancy__item-group">
+                                                                            <h3 class="crancy__item-group__title">{{ __('translate.Google Tag Manager') }}</h3>
+                                                                            <div class="crancy__item-form--group">
+                                                                                <div class="row">
+                                                                                    <div class="col-12">
+                                                                                        <div class="crancy__item-form--group mg-top-form-20">
+                                                                                            <label class="crancy__item-label">{{ __('translate.Visibility Status') }} </label>
+                                                                                            <div class="crancy-ptabs__notify-switch  crancy-ptabs__notify-switch--two">
+                                                                                                <label class="crancy__item-switch">
+                                                                                                <input name="status" {{ ($general_setting->google_tag_manager_status ?? 0) == 1 ? 'checked' : '' }} type="checkbox" >
+                                                                                                <span class="crancy__item-switch--slide crancy__item-switch--round"></span>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                    <div class="col-12">
+                                                                                        <div class="crancy__item-form--group mg-top-form-20">
+                                                                                            <label class="crancy__item-label">{{ __('translate.Google Tag Manager ID') }} </label>
+                                                                                            <input class="crancy__item-input" type="text" name="google_tag_manager_id" value="{{ $general_setting->google_tag_manager_id ?? '' }}">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class=" mg-top-40">
+                                                                            <button class="crancy-btn" type="submit">{{ __('translate.Update') }}</button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
 
                                                 <div class="tab-pane fade" id="id6" role="tabpanel">

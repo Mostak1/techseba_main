@@ -1,11 +1,13 @@
 <head>
+    @if (($general_setting->google_tag_manager_status ?? 0) == 1 && !empty($general_setting->google_tag_manager_id))
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TGH5WHH2');</script>
+    })(window,document,'script','dataLayer','{{ $general_setting->google_tag_manager_id }}');</script>
     <!-- End Google Tag Manager -->
+    @endif
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 

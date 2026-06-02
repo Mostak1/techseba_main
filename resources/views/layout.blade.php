@@ -2,10 +2,12 @@
 <html lang="en">
     @include('frontend.head')
   <body>
+    @if (($general_setting->google_tag_manager_status ?? 0) == 1 && !empty($general_setting->google_tag_manager_id))
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TGH5WHH2"
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $general_setting->google_tag_manager_id }}"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
+    @endif
 
     <!-- Menu Start -->
     <div class="optech-preloader-wrap">

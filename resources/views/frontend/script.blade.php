@@ -136,6 +136,26 @@
                         if (response.success) {
                             $('.cart-count').text(response.totalCartItem);
 
+                            // Push add_to_cart event to GA4 dataLayer
+                            if (typeof window.dataLayer !== 'undefined' && response.product) {
+                                window.dataLayer.push({
+                                    event: "add_to_cart",
+                                    ecommerce: {
+                                        currency: "BDT",
+                                        value: parseFloat(response.product.price) * parseInt(quantity),
+                                        items: [
+                                            {
+                                                item_id: String(response.product.id),
+                                                item_name: response.product.name,
+                                                price: parseFloat(response.product.price),
+                                                item_category: response.product.category || "",
+                                                quantity: parseInt(quantity)
+                                            }
+                                        ]
+                                    }
+                                });
+                            }
+
                             toastr.success("{{ __('translate.Cart Added Successfully') }}");
                         } else {
                             toastr.error("{{ __('translate.Something Went Wrong') }}");

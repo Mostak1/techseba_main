@@ -215,6 +215,23 @@ class GlobalSettingController extends Controller
 
     }
 
+    public function update_google_tag_manager(Request $request){
+        $request->validate([
+            'google_tag_manager_id' => 'required'
+        ], [
+            'google_tag_manager_id.required' => trans('translate.Google Tag Manager ID is required')
+        ]);
+
+        GlobalSetting::where('key', 'google_tag_manager_id')->update(['value' => $request->google_tag_manager_id]);
+        GlobalSetting::where('key', 'google_tag_manager_status')->update(['value' => $request->status ? 1 : 0]);
+
+        $this->set_cache_setting();
+
+        $notify_message = trans('translate.Updated successfully');
+        $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+        return redirect()->back()->with($notify_message);
+    }
+
     public function update_facebook_pixel(FacebookPixelRequest $request){
 
         GlobalSetting::updateOrCreate(['key' => 'pixel_app_id'], ['value' => $request->app_id]);

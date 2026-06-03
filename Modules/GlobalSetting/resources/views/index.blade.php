@@ -1156,5 +1156,29 @@
             reader.readAsDataURL(event.target.files[0]);
         };
 
+        // Auto-activate tab based on URL hash (e.g., #id8 for .env editor)
+        document.addEventListener('DOMContentLoaded', function () {
+            var hash = window.location.hash;
+            if (hash) {
+                var tabLink = document.querySelector('a[href="' + hash + '"][data-bs-toggle="list"]');
+                if (tabLink) {
+                    // Remove active from all
+                    document.querySelectorAll('.list-group-item').forEach(function(el) {
+                        el.classList.remove('active');
+                    });
+                    document.querySelectorAll('.tab-pane').forEach(function(el) {
+                        el.classList.remove('show', 'active');
+                    });
+                    // Activate target
+                    tabLink.classList.add('active');
+                    var target = document.querySelector(hash);
+                    if (target) {
+                        target.classList.add('show', 'active');
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            }
+        });
+
     </script>
 @endpush

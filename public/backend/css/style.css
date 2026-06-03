@@ -8177,7 +8177,7 @@ span.crancy-chatbox__typing {
 
 .crancy-psidebar {
     padding: 25px 15px;
-    overflow: hidden;
+    overflow: visible;
     border: 1px solid #edf2f7;
     border-radius: 0 0 12px 12px;
 }

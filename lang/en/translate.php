@@ -871,5 +871,6 @@
   'File Permissions Error' => 'File Permissions Error',
   'The .env file is not writable. Please check the file permissions.' => 'The .env file is not writable. Please check the file permissions.',
   'File Content' => 'File Content',
+  'Env Editor (.env)' => 'Env Editor (.env)',
 );
  ?>

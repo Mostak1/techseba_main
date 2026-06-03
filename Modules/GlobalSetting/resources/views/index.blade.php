@@ -84,6 +84,15 @@
                                                 <h4 class="crancy-psidebar__title">{{ __('translate.Database Clear') }}</h4>
                                             </a>
 
+                                            <a class="list-group-item" data-bs-toggle="list" href="#id8" role="tab" aria-selected="false">
+                                                <span class="crancy-psidebar__icon">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2ZM13 9V3.5L18.5 9H13Z" fill="currentColor"/>
+                                                    </svg>
+                                                </span>
+                                                <h4 class="crancy-psidebar__title">{{ __('translate.Environment Mail/DB (.env)') }}</h4>
+                                            </a>
+
                                         </div>
 
                                     </div>
@@ -998,6 +1007,55 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
+
+                                                <div class="tab-pane fade" id="id8" role="tabpanel">
+                                                    <form action="{{ route('admin.update-env-setting') }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="crancy-ptabs__separate">
+                                                                    <div class="crancy-ptabs__form-main">
+                                                                        <div class="crancy__item-group">
+                                                                            <h3 class="crancy__item-group__title">{{ __('translate.Environment Mail/DB (.env) Editor') }}</h3>
+                                                                            
+                                                                            <div class="col-12">
+                                                                                <div class="alert alert-warning alert-has-icon">
+                                                                                    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                                                                                    <div class="alert-body">
+                                                                                        <div class="alert-title">{{ __('translate.Warning') }}</div>
+                                                                                        <p>{{ __('translate.Editing the .env file directly can cause the application to crash if configuration values are incorrect or invalid. Proceed with caution.') }}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            @if(!is_writable(base_path('.env')))
+                                                                                <div class="col-12 mg-top-20">
+                                                                                    <div class="alert alert-danger alert-has-icon">
+                                                                                        <div class="alert-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                                                                                        <div class="alert-body">
+                                                                                            <div class="alert-title">{{ __('translate.File Permissions Error') }}</div>
+                                                                                            <p>{{ __('translate.The .env file is not writable. Please check the file permissions.') }}</p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            @endif
+
+                                                                            <div class="crancy__item-form--group mg-top-form-20">
+                                                                                <label class="crancy__item-label">{{ __('translate.File Content') }}</label>
+                                                                                <textarea class="crancy__item-input" name="env_content" rows="20" style="font-family: monospace; font-size: 14px; line-height: 1.5; height: 400px; resize: vertical;" {{ !is_writable(base_path('.env')) ? 'disabled' : '' }}>{{ $env_content }}</textarea>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="mg-top-40">
+                                                                            <button class="crancy-btn" type="submit" {{ !is_writable(base_path('.env')) ? 'disabled' : '' }}>{{ __('translate.Update') }}</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
 
                                             </div>

@@ -70,7 +70,32 @@ class GlobalSettingController extends Controller
      */
     public function general_setting()
     {
-        return view('globalsetting::index');
+        $env_content = '';
+        if (File::exists(base_path('.env'))) {
+            $env_content = File::get(base_path('.env'));
+        }
+        return view('globalsetting::index', compact('env_content'));
+    }
+
+    public function update_env_setting(Request $request)
+    {
+        $request->validate([
+            'env_content' => 'required',
+        ], [
+            'env_content.required' => trans('translate.Content is required')
+        ]);
+
+        try {
+            File::put(base_path('.env'), $request->env_content);
+            Artisan::call('optimize:clear');
+            $notify_message = trans('translate.Updated successfully');
+            $notify_message = array('message' => $notify_message, 'alert-type' => 'success');
+        } catch (\Throwable $e) {
+            $notify_message = trans('translate.Something went wrong');
+            $notify_message = array('message' => $notify_message, 'alert-type' => 'error');
+        }
+
+        return redirect()->back()->with($notify_message);
     }
 
     public function update_general_setting(GeneralSettingRequest $request)

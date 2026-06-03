@@ -28,6 +28,7 @@ Route::group(['as'=> 'admin.', 'prefix' => 'admin', 'middleware' => ['auth:admin
             Route::put('update-google-tag-manager', 'update_google_tag_manager')->name('update-google-tag-manager');
             Route::put('update-facebook-pixel', 'update_facebook_pixel')->name('update-facebook-pixel');
             Route::delete('database-clear', 'database_clear')->name('database-clear');
+            Route::put('update-env-setting', 'update_env_setting')->name('update-env-setting');
 
 
             Route::get('cookie-consent', 'cookie_consent')->name('cookie-consent');

@@ -865,5 +865,11 @@
   'Google Tag Manager ID' => 'Google Tag Manager ID',
   'Google Tag Manager Status' => 'Google Tag Manager Status',
   'Google Tag Manager ID is required' => 'Google Tag Manager ID is required',
+  'Environment Mail/DB (.env)' => 'Environment Mail/DB (.env)',
+  'Environment Mail/DB (.env) Editor' => 'Environment Mail/DB (.env) Editor',
+  'Editing the .env file directly can cause the application to crash if configuration values are incorrect or invalid. Proceed with caution.' => 'Editing the .env file directly can cause the application to crash if configuration values are incorrect or invalid. Proceed with caution.',
+  'File Permissions Error' => 'File Permissions Error',
+  'The .env file is not writable. Please check the file permissions.' => 'The .env file is not writable. Please check the file permissions.',
+  'File Content' => 'File Content',
 );
  ?>

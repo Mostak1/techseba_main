@@ -57,6 +57,38 @@ Route::get('/clear-cache', function () {
     return response($message);
 });
 
+Route::get('/run-scraper-migrations', function () {
+    if (request('secret') !== 'techseba123') {
+        abort(403, 'Unauthorized');
+    }
+
+    $message = '';
+
+    try {
+        $message .= "Running migrations...<br>";
+        Artisan::call('migrate', ['--force' => true]);
+        $message .= '<pre>' . e(Artisan::output()) . '</pre>';
+
+        $message .= "Seeding Scraper Database...<br>";
+        Artisan::call('db:seed', [
+            '--class' => 'Modules\\Scraper\\Database\\Seeders\\ScraperDatabaseSeeder',
+            '--force' => true
+        ]);
+        $message .= '<pre>' . e(Artisan::output()) . '</pre>';
+
+        $message .= "Clearing caches...<br>";
+        Artisan::call('optimize:clear');
+        $message .= '<pre>' . e(Artisan::output()) . '</pre>';
+
+        $message .= "All operations completed successfully!";
+    } catch (\Throwable $e) {
+        $message .= "Error occurred:<br>";
+        $message .= '<pre>' . e($e->getMessage()) . '</pre>';
+    }
+
+    return response($message);
+});
+
 Route::get('/sitemap.xml', function () {
     $urls = collect([
         route('home'),

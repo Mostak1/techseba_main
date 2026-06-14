@@ -52,6 +52,16 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('user.jobs.bookmarks') }}" class="{{ request()->routeIs('user.jobs.bookmarks*') ? 'active' : '' }}">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 3H19C20.1046 3 21 3.89543 21 5V21L12 17L3 21V5C3 3.89543 3.89543 3 5 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    {{ __('translate.Bookmarked Jobs') }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('user.orders') }}" class="{{ request()->routeIs('user.orders*') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

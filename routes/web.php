@@ -90,6 +90,13 @@ Route::get('/sitemap.xml', function () {
     \Modules\Project\App\Models\Project::pluck('slug')
         ->each(fn ($slug) => $urls->push(route('portfolio.show', $slug)));
 
+    if (class_exists(\Modules\Jobs\Entities\JobPost::class)) {
+        $urls->push(route('jobs.index'));
+        \Modules\Jobs\Entities\JobPost::active()->notExpired()->pluck('slug')->each(fn ($slug) => $urls->push(route('jobs.show', $slug)));
+        \Modules\Jobs\Entities\JobCategory::active()->pluck('slug')->each(fn ($slug) => $urls->push(route('jobs.category', $slug)));
+        \Modules\Jobs\Entities\Organization::active()->pluck('slug')->each(fn ($slug) => $urls->push(route('jobs.organization', $slug)));
+    }
+
     $xml = view('sitemap', [
         'urls' => $urls->filter()->unique()->values(),
     ])->render();

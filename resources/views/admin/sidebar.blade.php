@@ -188,6 +188,53 @@
                 </a>
             </li>
 
+            <h4 class="admin-menu__title pt-2">{{ __('translate.Jobs & Recruitment') }}</h4>
+
+            <li class="{{ Route::is('admin.jobs.*') || Route::is('admin.categories.*') || Route::is('admin.organizations.*') || Route::is('admin.attachments.*') ? 'active' : '' }}">
+                <a href="#!" class="collapsed" data-bs-toggle="collapse" data-bs-target="#menu-item__jobs_mgmt">
+                    <span class="menu-bar__text">
+                        <span class="crancy-menu-icon crancy-svg-icon__v1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 7H21M3 7C2.44772 7 2 7.44772 2 8V19C2 19.5523 2.44772 20 3 20H21C21.5523 20 22 19.5523 22 19V8C22 7.44772 21.5523 7 21 7M3 7V6C3 4.89543 3.89543 4 5 4H19C20.1046 4 21 4.89543 21 6V7M9 11H15M10 14H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </span>
+                        <span class="menu-bar__name">{{ __('translate.Manage Jobs') }}</span>
+                    </span>
+                    <span class="crancy__toggle"></span>
+                </a>
+                <!-- Dropdown Menu -->
+                <div class="collapse crancy__dropdown {{ Route::is('admin.jobs.*') || Route::is('admin.categories.*') || Route::is('admin.organizations.*') || Route::is('admin.attachments.*') ? 'show' : '' }}" id="menu-item__jobs_mgmt" data-bs-parent="#CrancyMenu">
+                    <ul class="menu-bar__one-dropdown">
+                        <li><a href="{{ route('admin.jobs.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Job Posts') }}</span></span></a></li>
+                        <li><a href="{{ route('admin.categories.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Job Categories') }}</span></span></a></li>
+                        <li><a href="{{ route('admin.organizations.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Organizations') }}</span></span></a></li>
+                        <li><a href="{{ route('admin.attachments.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Job Attachments') }}</span></span></a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="{{ Route::is('admin.scraper.sources.*') || Route::is('admin.scraper.staging.*') || Route::is('admin.scraper.logs.*') ? 'active' : '' }}">
+                <a href="#!" class="collapsed" data-bs-toggle="collapse" data-bs-target="#menu-item__job_scraper">
+                    <span class="menu-bar__text">
+                        <span class="crancy-menu-icon crancy-svg-icon__v1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 4V20M4 12H20M12 4L8 8M12 4L16 8M12 20L8 16M12 20L16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="menu-bar__name">{{ __('translate.Job Scraper') }}</span>
+                    </span>
+                    <span class="crancy__toggle"></span>
+                </a>
+                <!-- Dropdown Menu -->
+                <div class="collapse crancy__dropdown {{ Route::is('admin.scraper.sources.*') || Route::is('admin.scraper.staging.*') || Route::is('admin.scraper.logs.*') ? 'show' : '' }}" id="menu-item__job_scraper" data-bs-parent="#CrancyMenu">
+                    <ul class="menu-bar__one-dropdown">
+                        <li><a href="{{ route('admin.scraper.sources.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Scraper Sources') }}</span></span></a></li>
+                        <li><a href="{{ route('admin.scraper.staging.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Staging Jobs') }}</span></span></a></li>
+                        <li><a href="{{ route('admin.scraper.logs.index') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Scraper Logs') }}</span></span></a></li>
+                    </ul>
+                </div>
+            </li>
+
             <h4 class="admin-menu__title pt-2">{{ __('translate.CMS & Blogs') }}</h4>
 
 

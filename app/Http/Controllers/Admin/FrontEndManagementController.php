@@ -91,8 +91,15 @@ class FrontEndManagementController extends Controller
         $dataKeys = $key . '.' . $contentType;
         $frontend = $id ? Frontend::findOrFail($id) : new Frontend();
 
+        if ($key === 'it_solutions_pricing_section' && $request->has('pricing_status')) {
+            \Modules\GlobalSetting\App\Models\GlobalSetting::where('key', 'pricing_status')->update([
+                'value' => $request->pricing_status
+            ]);
+            \Cache::forget('setting');
+        }
+
         // Process form data including nested structures
-        $formData = $this->processFormData($request->except(['_token', '_method', 'type', 'lang_code']));
+        $formData = $this->processFormData($request->except(['_token', '_method', 'type', 'lang_code', 'pricing_status']));
 
         // Handle image uploads
         $imageData = $this->handleImageUploads($request, $section[$contentType]['images'] ?? [], $frontend->data_values['images'] ?? []);

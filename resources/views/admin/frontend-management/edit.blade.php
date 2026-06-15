@@ -160,6 +160,17 @@
 
                                         {{-- Content Section --}}
                                         <div class="{{ $lang_code === 'en' && isset($content['images']) && count($content['images']) > 0 ? 'col-md-9 pl-md-4' : 'col-12' }}">
+                                            @if($key === 'it_solutions_pricing_section')
+                                                <div class="crancy__item-form--group mt-3">
+                                                    <label class="crancy__item-label">
+                                                        <span class="label-text">{{ __('translate.Pricing Status') }}</span>
+                                                    </label>
+                                                    <select class="form-select crancy__item-input" name="pricing_status">
+                                                        <option {{ ($general_setting->pricing_status ?? 1) == 1 ? 'selected' : '' }} value="1">{{ __('translate.Show') }}</option>
+                                                        <option {{ ($general_setting->pricing_status ?? 1) == 0 ? 'selected' : '' }} value="0">{{ __('translate.Hide') }}</option>
+                                                    </select>
+                                                </div>
+                                            @endif
                                             @if($content)
                                                 @php
                                                     $renderContent = isset($content['content']) ? $content['content'] : $content;

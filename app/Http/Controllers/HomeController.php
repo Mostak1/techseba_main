@@ -55,10 +55,9 @@ class HomeController extends Controller
             if (in_array($requested_theme, $supported_themes)) {
                 $selected_theme = $requested_theme;
                 Session::put('selected_theme', $selected_theme);
+                Session::put('theme_manually_switched', true);
             }
-        } elseif (!Session::has('selected_theme')) {
-            Session::put('selected_theme', $selected_theme);
-        } else {
+        } elseif (Session::get('theme_manually_switched') === true && Session::has('selected_theme')) {
             $selected_theme = Session::get('selected_theme');
         }
 

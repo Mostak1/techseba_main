@@ -1,19 +1,30 @@
 @if (($general_setting->cookie_consent_status ?? 0) == 1)
     <!-- common-modal start  -->
-    <div class="common-modal cookie_consent_modal d-none bg-white">
-        <button type="button" class="btn-close cookie_consent_close_btn" aria-label="Close"></button>
+    <div class="common-modal cookie_consent_modal d-none">
+        <button type="button" class="cookie_consent_close_btn" aria-label="Close">
+            <svg width="12" height="12" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 1L1 13M1 1L13 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
 
-        <h5>{{ __('translate.Cookies') }}</h5>
+        <div class="cookie_consent_header">
+            <div class="cookie_consent_icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 9.5 20 9 19.5 9C18.5 9 17.5 8 18 6.5C18.5 5 17.5 4 15.5 4.5C13.5 5 13 3 12 2Z" fill="var(--accent)" opacity="0.85"/>
+                    <circle cx="8" cy="10" r="1.5" fill="var(--bg)"/>
+                    <circle cx="12" cy="14" r="1.5" fill="var(--bg)"/>
+                    <circle cx="7" cy="15" r="1.2" fill="var(--bg)"/>
+                    <circle cx="16" cy="12" r="1.2" fill="var(--bg)"/>
+                </svg>
+            </div>
+            <h5>{{ __('translate.Cookies') }}</h5>
+        </div>
+        
         <p>{{ $general_setting->cookie_consent_message }}</p>
 
-
-        <a href="javascript:;"
-           class="td_btn td_style_1 td_type_3 td_radius_30 td_medium td_fs_14 report-modal-btn cookie_consent_accept_btn">
-                                        <span class="td_btn_in td_accent_color">
-                                        <span>{{ __('translate.Accept') }}</span>
-                                        </span>
-        </a>
-
+        <button type="button" class="cookie_consent_accept_btn">
+            {{ __('translate.Accept') }}
+        </button>
     </div>
     <!-- common-modal end  -->
 @endif

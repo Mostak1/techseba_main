@@ -19,6 +19,7 @@
 
 
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- End google font  -->
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/bootstrap.min.css') }}">
@@ -34,6 +35,7 @@
 
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/assets/css/app.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/assets/css/techseba_dark.css') }}">
 
     <link rel="stylesheet" href="{{ asset('global/toastr/toastr.min.css') }}">
 

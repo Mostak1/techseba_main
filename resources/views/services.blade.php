@@ -1,4 +1,3 @@
-
 @extends('master_layout')
 @section('title')
     <title>{{ $seoTitle ?? $seo_setting->seo_title }}</title>
@@ -19,19 +18,15 @@
                     <li aria-current="page"> {{ __('translate.Our Services') }}</li>
                 </ul>
             </nav>
-
         </div>
     </div>
     <!-- End breadcrumb -->
 
-    <div class="section optech-section-padding5">
-        @include('frontend.templates.layouts.process_section')
-    </div>
     @php
         $currentLang = session()->get('front_lang');
         $getServiceContent = getContent('main_demo_service_section.content', true)
     @endphp
-    <!-- End section -->
+    <!-- Services List Section -->
     <div class="section optech-section-padding2 bg-light1">
         <div class="container">
             <div class="optech-section-title center">
@@ -43,7 +38,6 @@
                 @endphp
 
                 @foreach($services_list as $index => $service)
-
                 <div class="col-lg-6" data-aos="fade-up" data-aos-duration="600">
                     <div class="optech-iconbox-wrap style-two">
                         <div class="optech-iconbox-icon">
@@ -52,15 +46,13 @@
                         <div class="optech-iconbox-data">
                             <h5>{{ $service->translate?->title }}</h5>
                             <p>{{ $service->translate?->short_description }}</p>
-                            {{-- <div class="optech-iconbox-price">
-                                <h3>{{ currency($service->price) }}</h3>
-                            </div> --}}
                             <a class="optech-icon-btn" href="{{ route('service', $service->slug) }}"><i class="icon-show ri-arrow-right-line"></i>
                                 <span>{{ __('translate.Learn More') }}</span> <i class="icon-hide ri-arrow-right-line"></i></a>
                         </div>
                     </div>
                 </div>
                 @endforeach
+
                 @foreach(($configuredServices ?? collect()) as $configuredService)
                     @continue(in_array($configuredService['slug'], $existingServiceSlugs, true) || count(array_intersect($configuredService['aliases'] ?? [], $existingServiceSlugs)) > 0)
                     <div class="col-lg-6" data-aos="fade-up" data-aos-duration="600">
@@ -81,4 +73,9 @@
         </div>
     </div>
     <!-- End section -->
+
+    <!-- Process Section at bottom -->
+    <div class="section optech-section-padding5">
+        @include('frontend.templates.layouts.process_section')
+    </div>
 @endsection

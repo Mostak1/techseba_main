@@ -22,7 +22,7 @@
     <div class="section optech-section-padding2">
         <div class="container">
             <div class="row">
-                @if(is_array($packageInformation))
+                @if(($general_setting->pricing_status ?? 1) == 1 && is_array($packageInformation))
                     @foreach($packageInformation as $package)
                         <div class="col-xl-4 col-md-6" data-aos="fade-up" data-aos-duration="{{ 600 + ($loop->index * 200) }}">
                             <div class="optech-pricing-wrap {{ $loop->iteration == 2 ? 'active' : '' }}">

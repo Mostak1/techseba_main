@@ -332,6 +332,7 @@
   </div>
 </section>
 
+@if(($general_setting->pricing_status ?? 1) == 1)
 <!-- PRICING -->
 <section class="section" style="background:var(--bg2);">
   <div class="section-inner">
@@ -359,6 +360,7 @@
     </div>
   </div>
 </section>
+@endif
 
 <!-- CONTACT STRIP -->
 <section class="section cta-section">

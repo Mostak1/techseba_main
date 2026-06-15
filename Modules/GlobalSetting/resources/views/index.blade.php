@@ -163,6 +163,16 @@
                                                                                         </div>
                                                                                     </div>
 
+                                                                                    <div class="col-12">
+                                                                                        <div class="crancy__item-form--group  mg-top-form-20">
+                                                                                            <label class="crancy__item-label">{{ __('translate.Pricing Status') }}</label>
+                                                                                            <select class="form-select crancy__item-input" name="pricing_status">
+                                                                                                <option {{ ($general_setting->pricing_status ?? 1) == 1 ? 'selected' : '' }} value="1">{{ __('translate.Show') }}</option>
+                                                                                                <option {{ ($general_setting->pricing_status ?? 1) == 0 ? 'selected' : '' }} value="0">{{ __('translate.Hide') }}</option>
+                                                                                            </select>
+                                                                                        </div>
+                                                                                    </div>
+
 
                                                                                     <div class="col-12">
                                                                                         <div class="crancy__item-form--group mg-top-form-20">

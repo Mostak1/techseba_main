@@ -227,6 +227,7 @@
     </div>
     <!-- End section -->
 
+    @if(($general_setting->pricing_status ?? 1) == 1)
     <div class="section optech-section-padding2 dark-bg optech-pricing">
         <div class="container">
             <div class="optech-section-title center light-color">
@@ -251,6 +252,7 @@
                                     @foreach($package['features'] as $featureKey => $feature)
                                         <li><i class="ri-check-line"></i>{{ $feature }}</li>
                                     @endforeach
+                                
                                 @endif
                             </ul>
                         </div>
@@ -266,6 +268,7 @@
         </div>
     </div>
     <!-- End section -->
+    @endif
 
     @include('frontend.templates.layouts.teams')
     <!-- End Team section -->

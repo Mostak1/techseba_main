@@ -15,6 +15,7 @@ class GeneralSettingRequest extends FormRequest
         $rules = [
             'app_name' => 'required',
             'contact_message_mail' => 'required',
+            'pricing_status' => 'required|in:0,1',
         ];
 
         return $rules;

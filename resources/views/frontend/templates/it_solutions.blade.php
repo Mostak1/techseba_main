@@ -527,6 +527,7 @@
     @include('frontend.templates.layouts.process_section')
 </div>
 
+@if(($general_setting->pricing_status ?? 1) == 1)
 <div class="section optech-section-padding2">
         <div class="container">
             <div class="optech-section-title center">
@@ -566,6 +567,7 @@
         </div>
     </div>
 <!-- End section -->
+@endif
 
 @include('frontend.templates.layouts.contact_section')
 <!-- End section -->

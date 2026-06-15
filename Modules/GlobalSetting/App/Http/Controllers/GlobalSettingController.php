@@ -108,6 +108,7 @@ class GlobalSettingController extends Controller
         GlobalSetting::where('key', 'timezone')->update(['value' => $request->timezone]);
         GlobalSetting::where('key', 'blog_type')->update(['value' => $request->blog_type]);
         GlobalSetting::where('key', 'portfolio_type')->update(['value' => $request->portfolio_type]);
+        GlobalSetting::where('key', 'pricing_status')->update(['value' => $request->pricing_status]);
 
         $this->set_cache_setting();
 

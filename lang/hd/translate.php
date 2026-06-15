@@ -861,5 +861,7 @@
   'Google Tag Manager ID' => 'Google Tag Manager ID',
   'Google Tag Manager Status' => 'Google Tag Manager Status',
   'Google Tag Manager ID is required' => 'Google Tag Manager ID is required',
+  'Manage Jobs' => 'Manage Jobs',
+  'Job Scraper' => 'Job Scraper',
 );
  ?>

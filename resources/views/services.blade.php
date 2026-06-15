@@ -33,10 +33,6 @@
                 <h2>IT Services in Dhaka, Bangladesh</h2>
             </div>
             <div class="row">
-                @php
-                    $existingServiceSlugs = $services_list->pluck('slug')->all();
-                @endphp
-
                 @foreach($services_list as $index => $service)
                 <div class="col-lg-6" data-aos="fade-up" data-aos-duration="600">
                     <div class="optech-iconbox-wrap style-two">
@@ -51,23 +47,6 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
-
-                @foreach(($configuredServices ?? collect()) as $configuredService)
-                    @continue(in_array($configuredService['slug'], $existingServiceSlugs, true) || count(array_intersect($configuredService['aliases'] ?? [], $existingServiceSlugs)) > 0)
-                    <div class="col-lg-6" data-aos="fade-up" data-aos-duration="600">
-                        <div class="optech-iconbox-wrap style-two">
-                            <div class="optech-iconbox-icon">
-                                <img src="{{ asset($general_setting->favicon) }}" alt="{{ $configuredService['title'] }}">
-                            </div>
-                            <div class="optech-iconbox-data">
-                                <h5>{{ $configuredService['title'] }}</h5>
-                                <p>{{ $configuredService['short_description'] }}</p>
-                                <a class="optech-icon-btn" href="{{ route('service', $configuredService['slug']) }}"><i class="icon-show ri-arrow-right-line"></i>
-                                    <span>{{ __('translate.Learn More') }}</span> <i class="icon-hide ri-arrow-right-line"></i></a>
-                            </div>
-                        </div>
-                    </div>
                 @endforeach
             </div>
         </div>

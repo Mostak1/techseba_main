@@ -263,7 +263,7 @@ class LoginController extends Controller
         \Config::set('services.google.client_secret', $gmail_secret_id->value);
         \Config::set('services.google.redirect', $gmail_redirect_url->value);
 
-        return Socialite::driver('google')->redirect();
+        return Socialite::driver('google')->stateless()->redirect();
 
     }
 
@@ -278,7 +278,7 @@ class LoginController extends Controller
         \Config::set('services.google.client_secret', $gmail_secret_id->value);
         \Config::set('services.google.redirect', $gmail_redirect_url->value);
 
-        $user = Socialite::driver('google')->user();
+        $user = Socialite::driver('google')->stateless()->user();
         $user = $this->create_user($user,'google');
         // Get session ID before login
         $sessionId = session()->getId();
@@ -304,7 +304,7 @@ class LoginController extends Controller
         \Config::set('services.facebook.client_secret', $facebook_secret_id->value);
         \Config::set('services.facebook.redirect', $facebook_redirect_url->value);
 
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver('facebook')->stateless()->redirect();
     }
 
     public function facebook_callback(){
@@ -317,7 +317,7 @@ class LoginController extends Controller
         \Config::set('services.facebook.client_secret', $facebook_secret_id->value);
         \Config::set('services.facebook.redirect', $facebook_redirect_url->value);
 
-        $user = Socialite::driver('facebook')->user();
+        $user = Socialite::driver('facebook')->stateless()->user();
         $user = $this->create_user($user,'facebook');
         // Get session ID before login
         $sessionId = session()->getId();

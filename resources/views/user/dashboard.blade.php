@@ -13,6 +13,18 @@
 @endsection
 
 @section('dashboard-content')
+    @if(!Auth::guard('web')->user()->userCv()->exists())
+        <div class="alert alert-info d-flex align-items-center justify-content-between mb-4" role="alert" style="background-color: var(--light-bg2); border: 1px solid var(--accent-color); color: var(--heading-color); padding: 15px 20px; border-radius: 8px;">
+            <div>
+                <strong style="font-size: 16px;">{{ __('translate.You haven\'t created a Digital CV yet!') }}</strong>
+                <p class="mb-0" style="font-size: 14px; opacity: 0.8;">{{ __('translate.Create your professional Digital CV to apply for jobs and build your online presence.') }}</p>
+            </div>
+            <a href="{{ route('user.cv.edit') }}" class="optech-default-btn btn-sm" style="background: var(--accent-bg); color: var(--white-color); padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 500; min-width: 140px; text-align: center; display: inline-block;">
+                <span class="btn-wraper" style="color: var(--white-color);">{{ __('translate.Create CV Now') }}</span>
+            </a>
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-xxl-3 col-xl-4 col-md-6 mt-3 mt-md-0">
             <div class="dashbord_item">
@@ -112,6 +124,35 @@
                        {{ __('translate.Total Transactions') }}
                     </p>
                 </div>
+            </div>
+        </div>
+        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4">
+            <div class="dashbord_item position-relative">
+                <span class="dashbord_item_icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 3.75H14.5L19 8.25V20.25H7C5.89543 20.25 5 19.3546 5 18.25V5.75C5 4.64543 5.89543 3.75 7 3.75Z"
+                              stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M14.5 3.75V8.25H19" stroke="currentColor" stroke-width="1.5"
+                              stroke-linejoin="round"/>
+                        <path d="M8.75 12H15.25M8.75 15H15.25M8.75 18H12.25" stroke="currentColor"
+                              stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </span>
+
+                <div class="dashbord_item_text">
+                    <h5>
+                        @if(Auth::guard('web')->user()->userCv()->exists())
+                            {{ __('translate.Edit CV') }}
+                        @else
+                            {{ __('translate.Create CV') }}
+                        @endif
+                    </h5>
+                    <p class="d-item-label">
+                        {{ __('translate.Digital CV') }}
+                    </p>
+                </div>
+                <a href="{{ route('user.cv.edit') }}" class="stretched-link"></a>
             </div>
         </div>
     </div>

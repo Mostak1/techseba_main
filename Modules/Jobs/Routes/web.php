@@ -26,7 +26,7 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
 
 // Authenticated User Bookmark Routes
 Route::group(['as' => 'user.jobs.', 'prefix' => 'user/jobs', 'middleware' => ['HtmlSpecialchars', 'MaintenanceMode', 'auth:web']], function () {
-    Route::get('/bookmarks', [Modules\Jobs\Http\Controllers\BookmarkController::class, 'index'])->name('bookmarks.index');
+    Route::get('/bookmarks', [Modules\Jobs\Http\Controllers\BookmarkController::class, 'index'])->name('bookmarks');
     Route::post('/bookmarks', [Modules\Jobs\Http\Controllers\BookmarkController::class, 'store'])->name('bookmarks.store');
     Route::delete('/bookmarks/{id}', [Modules\Jobs\Http\Controllers\BookmarkController::class, 'destroy'])->name('bookmarks.destroy');
 });

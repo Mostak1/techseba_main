@@ -180,6 +180,9 @@
                                 @foreach($service->translate->plans as $index => $plan)
                                     <div class="col-lg-4 col-md-6 mg-top-30">
                                         <div class="optech-pricing-box {{ $index == 1 ? 'active' : '' }}">
+                                            @if($index == 1)
+                                                <span class="pricing-badge">{{ __('translate.Most Popular') }}</span>
+                                            @endif
                                             <div class="optech-pricing-header">
                                                 <h4>{{ $plan['name'] ?? '' }}</h4>
                                                 <p>{{ $plan['description'] ?? '' }}</p>

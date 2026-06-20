@@ -5,6 +5,7 @@ use Modules\Listing\Http\Controllers\ListingController;
 
 Route::group(['as'=> 'admin.', 'prefix' => 'admin/listing', 'middleware' => ['auth:admin']],function (){
 
+    Route::post('listings/reorder', [ListingController::class, 'reorder'])->name('listings.reorder');
     Route::resource('listings', ListingController::class);
 
     Route::get('/get-subcategories/{categoryId}', [ListingController::class, 'getSubcategories'])->name('get-subcategories');

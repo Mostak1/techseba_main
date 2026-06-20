@@ -16,6 +16,9 @@
           @if(page_enabled('about-us'))
             <li><a href="{{ route('about-us') }}">{{ __('translate.About Us') }}</a></li>
           @endif
+          @if(class_exists(\Modules\Jobs\Entities\JobPost::class))
+            <li><a href="{{ route('jobs.index') }}">{{ __('translate.Job Circular') }}</a></li>
+          @endif
           @if(page_enabled('teams'))
             <li><a href="{{ route('teams') }}">{{ __('translate.Our Team') }}</a></li>
           @endif

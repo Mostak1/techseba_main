@@ -38,7 +38,7 @@
                                 <!-- crancy Table -->
                                 <div id="crancy-table__main_wrapper" class=" dt-bootstrap5 no-footer">
 
-                                    <table class="crancy-table__main crancy-table__main-v3  no-footer" id="dataTable">
+                                    <table class="crancy-table__main crancy-table__main-v3  no-footer" id="sortableTable">
                                         <!-- crancy Table Head -->
                                         <thead class="crancy-table__head">
                                             <tr>
@@ -71,10 +71,13 @@
                                         <!-- crancy Table Body -->
                                         <tbody class="crancy-table__body">
                                             @foreach ($listings as $index => $listing)
-                                                <tr class="odd">
+                                                <tr class="odd" data-id="{{ $listing->id }}">
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
-                                                        <h4 class="crancy-table__product-title">{{ ++$index }}</h4>
+                                                        <div class="d-flex align-items-center">
+                                                            <span class="drag-handle" style="cursor: move; margin-right: 12px; color: #aaa;"><i class="fas fa-grip-vertical"></i></span>
+                                                            <h4 class="crancy-table__product-title serial-number">{{ ++$index }}</h4>
+                                                        </div>
                                                     </td>
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
@@ -155,11 +158,64 @@
     </div>
 @endsection
 
+@push('style_section')
+<style>
+    .sortable-ghost {
+        opacity: 0.4;
+        background-color: var(--light-bg2) !important;
+        border: 2px dashed var(--accent-color) !important;
+    }
+    .drag-handle:hover {
+        color: var(--accent-color) !important;
+    }
+</style>
+@endpush
+
 @push('js_section')
+    <!-- SortableJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
         "use strict"
         function itemDeleteConfrimation(id){
             $("#item_delect_confirmation").attr("action",'{{ url("admin/listing/listings/") }}'+"/"+id)
         }
+
+        $(document).ready(function() {
+            const el = document.querySelector('#sortableTable tbody');
+            if (el) {
+                Sortable.create(el, {
+                    handle: '.drag-handle',
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    onEnd: function (evt) {
+                        let order = [];
+                        document.querySelectorAll('#sortableTable tbody tr').forEach(function(row) {
+                            order.push(row.getAttribute('data-id'));
+                        });
+
+                        // Update serial numbers on UI
+                        document.querySelectorAll('#sortableTable tbody tr').forEach(function(row, index) {
+                            row.querySelector('.serial-number').innerText = index + 1;
+                        });
+
+                        // AJAX to update order
+                        $.ajax({
+                            url: "{{ route('admin.listings.reorder') }}",
+                            type: "POST",
+                            data: {
+                                order: order,
+                                _token: "{{ csrf_token() }}"
+                            },
+                            success: function(response) {
+                                toastr.success(response.message);
+                            },
+                            error: function(xhr) {
+                                toastr.error("{{ __('translate.An error occurred') }}");
+                            }
+                        });
+                    }
+                });
+            }
+        });
     </script>
 @endpush

@@ -99,6 +99,15 @@
             @endif
 
 
+            @if(class_exists(\Modules\Jobs\Entities\JobPost::class))
+                <li class="nav-item">
+                    <a href="{{ route('jobs.index') }}" class="nav-link-item">
+                        <span class="menu-item-text">{{ __('translate.Job Circular') }}</span>
+                    </a>
+                </li>
+            @endif
+
+
             @if(page_enabled('portfolio'))
                 @php
                     $portfolioType = Modules\GlobalSetting\App\Models\GlobalSetting::where('key', 'portfolio_type')->first()?->value ?? 'default';

@@ -19,9 +19,21 @@ class ListingController extends Controller
 
     public function index()
     {
-        $listings = Listing::with('translate','category')->oldest()->get();
+        $listings = Listing::with('translate','category')->get();
 
         return view('listing::index', compact('listings'));
+    }
+
+    public function reorder(Request $request)
+    {
+        $order = $request->input('order');
+        if (is_array($order)) {
+            foreach ($order as $index => $id) {
+                Listing::withoutGlobalScope('order')->where('id', $id)->update(['order_id' => $index + 1]);
+            }
+            return response()->json(['status' => 'success', 'message' => trans('translate.Order updated successfully')]);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Invalid order data'], 400);
     }
 
 

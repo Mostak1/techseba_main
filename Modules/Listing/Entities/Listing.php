@@ -10,6 +10,13 @@ class Listing extends Model
 
     protected $fillable = [];
 
+    protected static function booted()
+    {
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('order_id', 'asc')->orderBy('id', 'asc');
+        });
+    }
+
     protected $appends = ['title', 'description', 'short_description'];
 
     protected $hidden = ['front_translate'];

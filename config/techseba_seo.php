@@ -318,5 +318,19 @@ return [
                 ],
             ],
         ],
+        'whatsapp-message-automation' => [
+            'en' => [
+                'title' => 'Message & WhatsApp Reply Automation Service',
+                'seo_title' => 'WhatsApp & Message Automation | Auto Reply Bot | TechSeba',
+                'description' => 'আপনার WhatsApp, Facebook Messenger ও Instagram DM এ automatic reply চালু করুন। TechSeba-র automation service দিয়ে ২৪/৭ customer handle করুন — কোনো staff ছাড়াই।',
+                'short_description' => 'WhatsApp, Facebook Page, Instagram DM — সব জায়গায় instant auto reply। Customer হারাবেন না কখনো।',
+            ],
+            'hd' => [
+                'title' => 'Message & WhatsApp Reply Automation Service',
+                'seo_title' => 'WhatsApp & Message Automation | Auto Reply Bot | TechSeba',
+                'description' => 'আপনার WhatsApp, Facebook Messenger ও Instagram DM এ automatic reply চালু করুন। TechSeba-র automation service দিয়ে ২৪/৭ customer handle করুন — কোনো staff ছাড়াই।',
+                'short_description' => 'WhatsApp, Facebook Page, Instagram DM — সব জায়গায় instant auto reply। Customer হারাবেন না কখনো।',
+            ],
+        ],
     ],
 ];

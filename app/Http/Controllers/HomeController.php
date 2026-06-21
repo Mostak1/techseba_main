@@ -448,6 +448,11 @@ class HomeController extends Controller
         $viewName = 'service_detail';
         if ($service && $service->custom_template && view()->exists($service->custom_template)) {
             $viewName = $service->custom_template;
+        } else {
+            $slugView = 'frontend.services.' . str_replace('-', '_', $slug);
+            if (view()->exists($slugView)) {
+                $viewName = $slugView;
+            }
         }
 
         return view($viewName, [

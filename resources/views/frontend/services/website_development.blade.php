@@ -36,31 +36,31 @@
 
     $offers = [
         [
-            'icon' => 'ri-shopping-cart-2-line', 
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>', 
             'title' => 'E-commerce Website Development', 
             'desc' => 'Complete online stores with modern shopping cart, secure checkout, multiple payment integrations, and easy inventory panels.', 
             'features' => ['Product Category Setup', 'Payment Gateway Integration']
         ],
         [
-            'icon' => 'ri-building-2-line', 
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>', 
             'title' => 'Business Website Development', 
             'desc' => 'Professional websites designed with custom features, WhatsApp chat buttons, and standard SEO-friendly structures.', 
             'features' => ['Clear & Modern Layouts', 'Fast Loading Speeds']
         ],
         [
-            'icon' => 'ri-layout-2-line', 
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>', 
             'title' => 'Landing Page Design', 
             'desc' => 'Conversion-driven layouts focused on promoting services, specific products, and generating high quality leads.', 
             'features' => ['Lead Generation Forms', 'Optimized Call-to-Actions']
         ],
         [
-            'icon' => 'ri-palette-line', 
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>', 
             'title' => 'Portfolio Website', 
             'desc' => 'Showcase your creative skills, client testimonials, and highlight previous projects in a highly professional presentation.', 
             'features' => ['Interactive Galleries', 'Modern Profile Layouts']
         ],
         [
-            'icon' => 'ri-server-line', 
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>', 
             'title' => 'Website Hosting & Setup', 
             'desc' => 'Domain registration, premium high-speed hosting setup, free SSL configuration, and 24/7 technical monitoring.', 
             'features' => ['Secure Server Configuration', 'Free SSL Installation']
@@ -76,42 +76,42 @@
 
     $portfolioTypes = [
         [
-            'icon' => 'ri-stethoscope-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
             'title' => 'Doctor Portfolio',
             'desc' => 'Specialization display, clinic info, appointment booking CTA'
         ],
         [
-            'icon' => 'ri-scales-3-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><line x1="9" y1="22" x2="15" y2="22"></line><line x1="12" y1="18" x2="12" y2="22"></line><path d="M4.03 13.3A6 6 0 0 1 12 18a6 6 0 0 1 7.97-4.7"></path><path d="M12 2v16"></path><path d="M7 6l-3.3 2.7A2 2 0 0 0 3 10.2v1.6a2 2 0 0 0 1.2 1.8L7 15"></path><path d="M17 6l3.3 2.7a2 2 0 0 1 .7 1.5v1.6a2 2 0 0 1-1.2 1.8L17 15"></path></svg>',
             'title' => 'Advocate / Lawyer Portfolio',
             'desc' => 'Practice areas, case success stats, consultation CTA'
         ],
         [
-            'icon' => 'ri-graduation-cap-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
             'title' => 'Teacher / Tutor Portfolio',
             'desc' => 'Subjects taught, certifications, student testimonials'
         ],
         [
-            'icon' => 'ri-tiktok-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>',
             'title' => 'TikToker / Content Creator Portfolio',
             'desc' => 'Social stats counter, media kit download, brand collab CTA'
         ],
         [
-            'icon' => 'ri-vip-crown-2-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
             'title' => 'Popular Person / Celebrity Portfolio',
             'desc' => 'Fan engagement section, event schedule, merch link'
         ],
         [
-            'icon' => 'ri-briefcase-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
             'title' => 'Freelancer Portfolio',
             'desc' => 'Skills, hourly rate display, hire me CTA'
         ],
         [
-            'icon' => 'ri-rocket-2-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .5 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><line x1="9" y1="18" x2="15" y2="18"></line><line x1="10" y1="22" x2="14" y2="22"></line></svg>',
             'title' => 'Startup Founder Portfolio',
             'desc' => 'Vision statement, investor pitch deck download link'
         ],
         [
-            'icon' => 'ri-hand-heart-line',
+            'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
             'title' => 'NGO / Social Worker Portfolio',
             'desc' => 'Mission, impact numbers, donation CTA'
         ],
@@ -307,12 +307,12 @@
         <div class="swd-offers__grid">
             @foreach($offers as $i => $offer)
             <div class="swd-offer-card" data-aos="fade-up" data-aos-delay="{{ $i * 80 }}">
-                <div class="swd-offer-card__icon"><i class="{{ $offer['icon'] }}"></i></div>
+                <div class="swd-offer-card__icon">{!! $offer['icon'] !!}</div>
                 <h4 class="swd-offer-card__title">{{ $offer['title'] }}</h4>
                 <p class="swd-offer-card__desc">{{ $offer['desc'] }}</p>
                 <ul class="swd-offer-card__features">
                     @foreach($offer['features'] as $f)
-                    <li><i class="ri-checkbox-circle-line"></i> {{ $f }}</li>
+                    <li style="display: flex; align-items: center;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;margin-right:8px;color:var(--accent);flex-shrink:0;"><polyline points="20 6 9 17 4 12"></polyline></svg> {{ $f }}</li>
                     @endforeach
                 </ul>
             </div>
@@ -394,7 +394,7 @@
                 {{-- Step 1 --}}
                 <div class="swd-timeline-item">
                     <div class="swd-timeline-icon">
-                        <i class="ri-chat-voice-line"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--accent);"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                     </div>
                     <div class="swd-timeline-step">Step 1</div>
                     <h4 class="swd-timeline-title">Requirement Collection</h4>
@@ -404,7 +404,7 @@
                 {{-- Step 2 --}}
                 <div class="swd-timeline-item">
                     <div class="swd-timeline-icon">
-                        <i class="ri-pencil-ruler-2-line"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--accent);"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                     </div>
                     <div class="swd-timeline-step">Step 2</div>
                     <h4 class="swd-timeline-title">Design Mockup Approval</h4>
@@ -414,7 +414,7 @@
                 {{-- Step 3 --}}
                 <div class="swd-timeline-item">
                     <div class="swd-timeline-icon">
-                        <i class="ri-code-s-slash-line"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--accent);"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
                     </div>
                     <div class="swd-timeline-step">Step 3</div>
                     <h4 class="swd-timeline-title">Development & Testing</h4>
@@ -424,7 +424,7 @@
                 {{-- Step 4 --}}
                 <div class="swd-timeline-item">
                     <div class="swd-timeline-icon">
-                        <i class="ri-rocket-fill"></i>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;color:var(--accent);"><path d="M22 2L11 13"></path><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                     </div>
                     <div class="swd-timeline-step">Step 4</div>
                     <h4 class="swd-timeline-title">Launch & Handover</h4>
@@ -449,7 +449,7 @@
             <div class="swd-portfolio-card" data-aos="fade-up" data-aos-delay="{{ $i * 50 }}">
                 <div class="swd-portfolio-card__top">
                     <div class="swd-portfolio-card__icon">
-                        <i class="{{ $item['icon'] }}"></i>
+                        {!! $item['icon'] !!}
                     </div>
                     <h4 class="swd-portfolio-card__title">{{ $item['title'] }}</h4>
                     <p class="swd-portfolio-card__desc">{{ $item['desc'] }}</p>
@@ -1972,6 +1972,17 @@ tr:last-child td.swd-col-highlight {
 .swd-portfolio-card__btn:hover {
     background: var(--accent2) !important;
     color: #ffffff !important;
+}
+
+/* SVG Icon Helper overrides */
+.swd-offer-card__icon svg,
+.swd-portfolio-card__icon svg,
+.swd-timeline-icon svg {
+    width: 26px;
+    height: 26px;
+    stroke: currentColor;
+    fill: none;
+    display: inline-block;
 }
 
 /* ==========================================

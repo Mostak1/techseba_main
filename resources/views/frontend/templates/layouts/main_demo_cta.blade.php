@@ -1,3 +1,4 @@
+<!-- {{--
 @php
     $currentLang = session()->get('front_lang');
     $ctaContent = getContent('main_demo_cta_section.content', true);
@@ -17,3 +18,4 @@
         </div>
     </div>
 </div>
+--}} -->

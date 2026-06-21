@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Remix Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css">
+    <!-- Lottie Files Player -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     
     <style>
         :root {
@@ -19,6 +21,157 @@
             --muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
             --glow: rgba(@yield('primary-rgb', '37, 99, 235'), 0.15);
+        }
+
+        /* Timeline Styles */
+        .timeline-container {
+            position: relative;
+            padding-left: 32px;
+            border-left: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .timeline-item {
+            position: relative;
+        }
+        .timeline-dot {
+            position: absolute;
+            left: -42px;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 4px solid var(--bg);
+            box-shadow: 0 0 10px var(--glow);
+        }
+        .timeline-date {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .timeline-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .timeline-desc {
+            color: var(--muted);
+            font-size: 14.5px;
+        }
+
+        /* FAQ Accordion Styles */
+        .faq-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .faq-question {
+            padding: 20px 24px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+        .faq-answer {
+            padding: 0 24px 20px;
+            color: var(--muted);
+            font-size: 14.5px;
+            line-height: 1.6;
+            display: none;
+        }
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        .faq-item.active {
+            border-color: rgba(var(--primary-rgb), 0.3);
+            box-shadow: 0 10px 20px var(--glow);
+        }
+        .faq-icon {
+            transition: transform 0.3s;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(var(--primary-rgb), 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        /* Gallery / Project Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        .gallery-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(var(--primary-rgb), 0.3);
+            box-shadow: 0 20px 40px var(--glow);
+        }
+        .gallery-img-wrapper {
+            position: relative;
+            height: 200px;
+            background: rgba(255,255,255,0.02);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gallery-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .gallery-item:hover .gallery-img-wrapper img {
+            transform: scale(1.05);
+        }
+        .gallery-content {
+            padding: 30px;
+        }
+        .gallery-tag {
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        .gallery-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .gallery-desc {
+            color: var(--muted);
+            font-size: 14.5px;
+            line-height: 1.6;
         }
 
         * {
@@ -427,6 +580,16 @@
             window.open(waUrl, '_blank');
             closeModal();
         }
+
+        // FAQ Toggle functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.faq-question').forEach(item => {
+                item.addEventListener('click', () => {
+                    const parent = item.parentElement;
+                    parent.classList.toggle('active');
+                });
+            });
+        });
     </script>
 </body>
 </html>

@@ -99,6 +99,7 @@
             @endif
 
 
+            {{--
             @if(class_exists(\Modules\Jobs\Entities\JobPost::class))
                 <li class="nav-item">
                     <a href="{{ route('jobs.index') }}" class="nav-link-item">
@@ -106,6 +107,7 @@
                     </a>
                 </li>
             @endif
+            --}}
 
 
             @if(page_enabled('portfolio'))

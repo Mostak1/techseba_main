@@ -64,9 +64,11 @@
       @if(page_enabled('services'))
       <li><a href="{{ route('services') }}">Services</a></li>
       @endif
+      {{--
       @if(class_exists(\Modules\Jobs\Entities\JobPost::class))
       <li><a href="{{ route('jobs.index') }}">{{ __('translate.Job Circular') }}</a></li>
       @endif
+      --}}
       @if(page_enabled('blogs'))
       <li><a href="{{ route('blogs') }}">Blog</a></li>
       @endif
@@ -119,9 +121,11 @@
       @if(page_enabled('services'))
       <li><a href="{{ route('services') }}">Services</a></li>
       @endif
+      {{--
       @if(class_exists(\Modules\Jobs\Entities\JobPost::class))
       <li><a href="{{ route('jobs.index') }}">{{ __('translate.Job Circular') }}</a></li>
       @endif
+      --}}
       @if(page_enabled('blogs'))
       <li><a href="{{ route('blogs') }}">Blog</a></li>
       @endif

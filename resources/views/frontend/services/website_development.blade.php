@@ -205,7 +205,7 @@
 {{-- ==================== URGENCY / OFFER BANNER ==================== --}}
 <div class="swd-announcement-bar" id="swdAnnouncementBar">
     <div class="container swd-announcement-container">
-        <span>🎉 এই মাসে Order করলে FREE Domain! — Limited Slots Available</span>
+        <span>🎉 এই মাসে Order করলে FREE Sub-Domain! — Limited Slots Available</span>
         <button class="swd-announcement-close" onclick="document.getElementById('swdAnnouncementBar').style.display='none'">&times;</button>
     </div>
 </div>
@@ -214,31 +214,37 @@
 <section class="swd-hero">
     <div class="swd-hero__mesh"></div>
     <div class="container">
-        <span class="swd-hero__badge">Solutions</span>
-        <h1 class="swd-hero__title">
-            <span>{{ $serviceTitle }}</span><br>
-            <span class="swd-hero__subtitle">আপনার Business কে Online এ নিয়ে আসুন</span>
-        </h1>
-        <p class="swd-hero__desc">{{ $serviceShortDescription ?: 'We create professional, responsive, and high performing websites for businesses, personal brands, and online stores.' }}</p>
-        <div class="swd-hero__actions">
-            <a href="{{ route('contact-us') }}" class="btn-primary">Get Free Quote</a>
-            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="btn-video"><i class="ri-play-circle-fill"></i> Watch Demo</a>
-        </div>
-        
-        <div class="swd-hero__trust">
-            <div class="swd-hero__stars">
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
-                <i class="ri-star-fill"></i>
+        <div class="swd-hero__grid-wrapper">
+            <div class="swd-hero__left-content">
+                <span class="swd-hero__badge">Solutions</span>
+                <h1 class="swd-hero__title">
+                    <span>{{ $serviceTitle }}</span><br>
+                    <span class="swd-hero__subtitle">আপনার Business কে Online এ নিয়ে আসুন</span>
+                </h1>
+                <p class="swd-hero__desc">{{ $serviceShortDescription ?: 'We create professional, responsive, and high performing websites for businesses, personal brands, and online stores.' }}</p>
+                <div class="swd-hero__actions">
+                    <a href="https://wa.me/8801898828248?text=i%20want%20to%20book%20free%20quote%20for%20website%2Flanding%20page." target="_blank" class="btn-primary">Get Free Quote</a>
+                    <a href="https://ecom.techseba.com/" target="_blank" class="btn-video"><i class="ri-play-circle-fill"></i> Watch Demo</a>
+                </div>
+                
+                <div class="swd-hero__trust">
+                    <div class="swd-hero__stars">
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                        <i class="ri-star-fill"></i>
+                    </div>
+                    <span>Trusted by 150+ clients in Bangladesh</span>
+                </div>
             </div>
-            <span>Trusted by 150+ clients in Bangladesh</span>
-        </div>
-        
-        {{-- Showcase Mockup --}}
-        <div class="swd-hero__showcase" data-aos="fade-up" data-aos-duration="800">
-            <img src="{{ asset('uploads/website_development_showcase.png') }}" class="swd-hero__image" alt="Website Showcase Mockup">
+
+            <div class="swd-hero__right-content">
+                {{-- Showcase Mockup --}}
+                <div class="swd-hero__showcase" data-aos="fade-up" data-aos-duration="800">
+                    <img src="{{ asset('uploads/website_development_showcase.png') }}" class="swd-hero__image" alt="Website Showcase Mockup">
+                </div>
+            </div>
         </div>
 
         {{-- Trust Badges Row --}}
@@ -456,7 +462,7 @@
 </section>
 
 {{-- ==================== LIVE PROJECT GALLERY SECTION ==================== --}}
-<section class="swd-section swd-recent-work">
+<!-- <section class="swd-section swd-recent-work">
     <div class="container">
         <div class="swd-section-head">
             <span class="swd-label">Portfolio</span>
@@ -481,105 +487,7 @@
             <a href="{{ route('portfolio') }}" class="btn-ghost">View All Projects</a>
         </div>
     </div>
-</section>
-
-{{-- ==================== PRICING PACKAGES ==================== --}}
-<section class="swd-section swd-pricing" id="swd-pricing">
-    <div class="container">
-        <div class="swd-section-head">
-            <span class="swd-label">Pricing Plans</span>
-            <h2 class="section-title">Pricing Packages</h2>
-            <p class="section-sub">Choose the plan that fits your business needs</p>
-        </div>
-        <div class="swd-pricing__grid">
-            {{-- Starter Package --}}
-            <div class="swd-price-card" data-aos="fade-up" data-aos-delay="0">
-                <div class="swd-price-card__head">
-                    <h3 class="swd-price-card__name">{{ $plans[0]['name'] ?? 'Starter Package' }}</h3>
-                    <p class="swd-price-card__desc">{{ $plans[0]['description'] ?? 'Ideal for landing pages & simple websites.' }}</p>
-                </div>
-                <div class="swd-price-card__price">
-                    @if(!empty($plans[0]['price']))
-                        <span class="swd-price-card__currency">৳</span>
-                        <span class="swd-price-card__amount">{{ is_numeric($plans[0]['price']) ? number_format($plans[0]['price'], 2) : $plans[0]['price'] }}</span>
-                    @else
-                        <span class="swd-price-card__currency">৳</span>
-                        <span class="swd-price-card__amount">10,200.00</span>
-                    @endif
-                    <span class="swd-price-card__period">/ life</span>
-                </div>
-                <ul class="swd-price-card__features">
-                    @if(!empty($plans[0]['features']))
-                        @foreach(explode("\n", $plans[0]['features']) as $feat)
-                            @if(trim($feat)) <li><i class="ri-checkbox-circle-fill"></i> {{ trim($feat) }}</li> @endif
-                        @endforeach
-                    @else
-                        <li><i class="ri-checkbox-circle-fill"></i> Up to 5 pages</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> Mobile responsive layout</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> 1 day support</li>
-                    @endif
-                </ul>
-                <a href="{{ route('contact-us') }}" class="btn-ghost btn-full-width">Select This Plan</a>
-            </div>
-
-            {{-- Standard Package --}}
-            <div class="swd-price-card swd-price-card--featured" data-aos="fade-up" data-aos-delay="100">
-                <div class="swd-price-card__badge">Most Popular</div>
-                <div class="swd-price-card__head">
-                    <h3 class="swd-price-card__name">{{ $plans[1]['name'] ?? 'Standard Package' }}</h3>
-                    <p class="swd-price-card__desc">{{ $plans[1]['description'] ?? 'Best for small to medium scale businesses.' }}</p>
-                </div>
-                <div class="swd-price-card__price">
-                    @if(!empty($plans[1]['price']))
-                        <span class="swd-price-card__currency">৳</span>
-                        <span class="swd-price-card__amount">{{ is_numeric($plans[1]['price']) ? number_format($plans[1]['price'], 2) : $plans[1]['price'] }}</span>
-                    @else
-                        <span class="swd-price-card__currency">৳</span>
-                        <span class="swd-price-card__amount">22,000.00</span>
-                    @endif
-                    <span class="swd-price-card__period">/ life</span>
-                </div>
-                <ul class="swd-price-card__features">
-                    @if(!empty($plans[1]['features']))
-                        @foreach(explode("\n", $plans[1]['features']) as $feat)
-                            @if(trim($feat)) <li><i class="ri-checkbox-circle-fill"></i> {{ trim($feat) }}</li> @endif
-                        @endforeach
-                    @else
-                        <li><i class="ri-checkbox-circle-fill"></i> Up to 15 pages</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> Modern business folder</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> Google Map Integration</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> WhatsApp & social setup</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> 3 days support</li>
-                    @endif
-                </ul>
-                <a href="{{ route('contact-us') }}" class="btn-primary btn-full-width">Select This Plan</a>
-            </div>
-
-            {{-- Custom Package --}}
-            <div class="swd-price-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="swd-price-card__head">
-                    <h3 class="swd-price-card__name">{{ $plans[2]['name'] ?? 'Custom Package' }}</h3>
-                    <p class="swd-price-card__desc">{{ $plans[2]['description'] ?? 'Tailored to unique business functions.' }}</p>
-                </div>
-                <div class="swd-price-card__price">
-                    <span class="swd-price-card__amount">{{ $plans[2]['price'] ?? 'Custom Quote' }}</span>
-                </div>
-                <ul class="swd-price-card__features">
-                    @if(!empty($plans[2]['features']))
-                        @foreach(explode("\n", $plans[2]['features']) as $feat)
-                            @if(trim($feat)) <li><i class="ri-checkbox-circle-fill"></i> {{ trim($feat) }}</li> @endif
-                        @endforeach
-                    @else
-                        <li><i class="ri-checkbox-circle-fill"></i> E-commerce development</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> Advanced database systems</li>
-                        <li><i class="ri-checkbox-circle-fill"></i> 10 days support</li>
-                    @endif
-                </ul>
-                <a href="{{ route('contact-us') }}" class="btn-ghost btn-full-width">Inquire Now</a>
-            </div>
-        </div>
-    </div>
-</section>
+</section> -->
 
 {{-- ==================== QUICK QUOTE FORM SECTION ==================== --}}
 <section class="swd-section swd-quick-quote">
@@ -689,8 +597,8 @@
                     </tr>
                     <tr class="swd-price-row">
                         <td class="swd-feat-name">Price</td>
-                        <td class="swd-price-val">৳10,200</td>
-                        <td class="swd-col-highlight swd-price-val">৳22,000</td>
+                        <td class="swd-price-val">৳1399</td>
+                        <td class="swd-col-highlight swd-price-val">৳4999</td>
                         <td class="swd-price-val">Custom Quote</td>
                     </tr>
                 </tbody>
@@ -759,29 +667,11 @@
         <div class="swd-cta__box" data-aos="zoom-in">
             <h2 class="swd-cta__title">Start Your Next Project With Us</h2>
             <p class="swd-cta__desc">Our professional team is here to construct websites that turn visitors into clients. Ready to start?</p>
-            <a href="{{ route('contact-us') }}" class="btn-primary">Start a Project <i class="ri-arrow-right-line"></i></a>
+            <a href="https://wa.me/8801898828248?text=I%20want%20to%20Create%20a%20Website%2C%20can%20you%20help%20me%3F" target="_blank" class="btn-primary">Start a Project <i class="ri-whatsapp-line"></i></a>
         </div>
     </div>
 </section>
-{{-- ==================== STICKY BOTTOM WHATSAPP BAR ==================== --}}
-<div class="swd-sticky-whatsapp" id="swdStickyWhatsapp">
-    <a href="https://wa.me/8801898828248" target="_blank" class="swd-sticky-whatsapp__btn">
-        <i class="ri-whatsapp-line"></i>
-        <span>WhatsApp এ কথা বলুন → 01898828248</span>
-    </a>
-</div>
 
-{{-- ==================== TIMED LIVE CHAT PROMPT ==================== --}}
-<div class="swd-chat-prompt" id="swdChatPrompt">
-    <button class="swd-chat-prompt__close" onclick="document.getElementById('swdChatPrompt').style.display='none'">&times;</button>
-    <div class="swd-chat-prompt__body">
-        <h4 class="swd-chat-prompt__title">Confused or Need Help? 🤔</h4>
-        <p class="swd-chat-prompt__desc">Talk directly with our development head on WhatsApp to select the right package.</p>
-        <a href="https://wa.me/8801898828248" target="_blank" class="btn-whatsapp">
-            <i class="ri-whatsapp-fill"></i> Chat with Us
-        </a>
-    </div>
-</div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -1168,9 +1058,9 @@
 /* --- Hero --- */
 .swd-hero {
     position: relative;
-    padding: 120px 0 100px;
+    padding: 140px 0 110px;
     background: var(--bg2);
-    text-align: center;
+    text-align: left;
     border-bottom: 1px solid var(--border);
     overflow: hidden;
 }
@@ -1185,6 +1075,13 @@
 .swd-hero .container {
     position: relative;
     z-index: 2;
+}
+.swd-hero__grid-wrapper {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    align-items: center;
+    margin-bottom: 60px;
 }
 .swd-hero__badge {
     display: inline-flex;
@@ -1201,35 +1098,30 @@
     margin-bottom: 24px;
 }
 .swd-hero__title {
-    font-size: clamp(32px, 5.5vw, 56px);
+    font-size: clamp(32px, 4vw, 52px);
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -1px;
     color: var(--text) !important;
     margin-bottom: 20px;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
 }
 .swd-hero__desc {
     color: var(--muted);
-    font-size: 17px;
+    font-size: 16px;
     line-height: 1.7;
-    max-width: 620px;
-    margin: 0 auto 36px;
+    margin-bottom: 36px;
 }
 .swd-hero__actions {
     display: flex;
     gap: 16px;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    margin-bottom: 50px;
+    margin-bottom: 32px;
 }
 
 /* Hero Showcase Image */
 .swd-hero__showcase {
-    max-width: 820px;
-    margin: 0 auto;
+    width: 100%;
     border-radius: 20px;
     padding: 10px;
     background: rgba(20, 29, 53, 0.4);
@@ -1295,8 +1187,15 @@
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    color: var(--accent);
+    color: var(--accent) !important;
     margin-bottom: 24px;
+}
+.swd-offer-card__icon i {
+    font-family: 'remixicon' !important;
+    font-style: normal !important;
+    color: var(--accent) !important;
+    display: inline-block !important;
+    line-height: 1 !important;
 }
 .swd-offer-card__title {
     font-size: 18px;
@@ -1639,7 +1538,7 @@
     margin-top: 24px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     gap: 8px;
     font-size: 14px;
     color: var(--muted);
@@ -2129,9 +2028,19 @@ tr:last-child td.swd-col-highlight {
 @media (max-width: 768px) {
     .swd-hero {
         padding: 90px 0 70px;
+        text-align: center;
+    }
+    .swd-hero__grid-wrapper {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        margin-bottom: 40px;
     }
     .swd-hero__actions {
         margin-bottom: 35px;
+        justify-content: center;
+    }
+    .swd-hero__trust {
+        align-items: center;
     }
     .swd-section {
         padding: 70px 0;

@@ -23,6 +23,7 @@ class ListingRequest extends FormRequest
                 'description'=>'required',
                 'price'=>'required|numeric',
                 'thumb_image'=>'required',
+                'custom_template'=>'nullable|string',
             ];
         }
 
@@ -36,6 +37,7 @@ class ListingRequest extends FormRequest
                     'price'=>'required|numeric',
                     'sub_category_id'=>'nullable',
                     'thumb_image'=>'sometimes|required',
+                    'custom_template'=>'nullable|string',
                 ];
             }else{
                 $rules = [

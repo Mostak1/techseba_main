@@ -97,6 +97,16 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-12">
+                                                    <div class="crancy__item-form--group mg-top-form-20">
+                                                        <label class="crancy__item-label">{{ __('translate.Custom Template (Optional)') }} </label>
+                                                        <input class="crancy__item-input" type="text" name="custom_template" id="custom_template" value="{{ old('custom_template') }}" placeholder="e.g. frontend.services.custom_pos">
+                                                        <small class="text-muted" style="display: block; margin-top: 5px; color: #666;">
+                                                            Leave empty to use the default dynamic layout (<code>service_detail.blade.php</code>). To use a static blade layout, enter the blade view path (e.g. <code>frontend.services.pos_system</code>).
+                                                        </small>
+                                                    </div>
+                                                </div>
+
 
 
                                                 <div class="col-12">

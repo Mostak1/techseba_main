@@ -72,6 +72,7 @@ class ListingController extends Controller
         $listing->price = $request->price;
         $listing->seo_title = $request->seo_title ? $request->seo_title : $request->title;
         $listing->seo_description = $request->seo_description ? $request->seo_description : $request->title;
+        $listing->custom_template = $request->custom_template;
         $listing->save();
 
 
@@ -155,6 +156,7 @@ class ListingController extends Controller
             $listing->seo_title = $request->seo_title ? $request->seo_title : $request->title;
             $listing->seo_description = $request->seo_description ? $request->seo_description : $request->title;
             $listing->price = $request->price;
+            $listing->custom_template = $request->custom_template;
             $listing->save();
 
         }

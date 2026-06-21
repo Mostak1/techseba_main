@@ -445,7 +445,12 @@ class HomeController extends Controller
         $seoTitle = $serviceSeo['seo_title'] ?? $service?->seo_title ?? $service?->title;
         $seoDescription = $serviceSeo['description'] ?? $service?->seo_description ?? $service?->short_description;
 
-        return view('service_detail', [
+        $viewName = 'service_detail';
+        if ($service && $service->custom_template && view()->exists($service->custom_template)) {
+            $viewName = $service->custom_template;
+        }
+
+        return view($viewName, [
             'service' => $service,
             'serviceSeo' => $serviceSeo,
             'seoTitle' => $seoTitle,

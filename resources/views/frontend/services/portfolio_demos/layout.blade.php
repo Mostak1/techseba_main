@@ -13,14 +13,14 @@
     
     <style>
         :root {
-            --primary: @yield('primary-color', '#2563eb');
-            --primary-rgb: @yield('primary-rgb', '37, 99, 235');
-            --bg: @yield('bg-color', '#0f172a');
-            --card: @yield('card-color', '#1e293b');
+            --primary: {{ $__env->yieldContent('primary-color', '#2563eb') }};
+            --primary-rgb: {{ $__env->yieldContent('primary-rgb', '37, 99, 235') }};
+            --bg: {{ $__env->yieldContent('bg-color', '#0f172a') }};
+            --card: {{ $__env->yieldContent('card-color', '#1e293b') }};
             --text: #f8fafc;
             --muted: #94a3b8;
             --border: rgba(255, 255, 255, 0.08);
-            --glow: rgba(@yield('primary-rgb', '37, 99, 235'), 0.15);
+            --glow: rgba({{ $__env->yieldContent('primary-rgb', '37, 99, 235') }}, 0.15);
         }
 
         /* Timeline Styles */
@@ -514,7 +514,7 @@
     <!-- TechSeba Demo Banner -->
     <div class="techseba-bar">
         <span>This is a live portfolio website template demo.</span>
-        <a href="https://wa.me/8801898828248?text=I%20want%20to%20create%20a%20website%20similar%20to%20the%20@yield('demo_slug')%20demo." target="_blank">
+        <a href="https://wa.me/8801898828248?text=I%20want%20to%20create%20a%20website%20similar%20to%20the%20{{ urlencode($__env->yieldContent('demo_slug')) }}%20demo." target="_blank">
             <i class="ri-whatsapp-line"></i> Order Website Like This
         </a>
     </div>
@@ -523,11 +523,11 @@
     <header>
         <div class="container nav-wrapper">
             <a href="#" class="logo">
-                <i class="@yield('logo-icon', 'ri-heart-line')"></i> @yield('logo-text', 'Portfolio')<span>.</span>
+                <i class="{{ $__env->yieldContent('logo-icon', 'ri-heart-line') }}"></i> {{ $__env->yieldContent('logo-text', 'Portfolio') }}<span>.</span>
             </a>
             <ul class="nav-links">
                 @yield('nav-items')
-                <li><a href="javascript:void(0)" onclick="openModal()" class="btn-cta">@yield('cta-text', 'Contact')</a></li>
+                <li><a href="javascript:void(0)" onclick="openModal()" class="btn-cta">{{ $__env->yieldContent('cta-text', 'Contact') }}</a></li>
             </ul>
         </div>
     </header>
@@ -537,7 +537,7 @@
     <!-- Footer -->
     <footer>
         <div class="container">
-            <p>&copy; 2026 @yield('logo-text'). All rights reserved. Created by TechSeba Team.</p>
+            <p>&copy; 2026 {{ $__env->yieldContent('logo-text', 'Portfolio') }}. All rights reserved. Created by TechSeba Team.</p>
         </div>
     </footer>
 
@@ -576,7 +576,7 @@
             e.preventDefault();
             const name = document.getElementById('modalName').value;
             const msg = document.getElementById('modalMsg').value;
-            const waUrl = `https://wa.me/8801898828248?text=Hi%20TechSeba%2C%20my%20name%20is%20${encodeURIComponent(name)}.%20I%20visited%20your%20@yield('demo_slug')%20demo%20and%20want%20to%20submit%20this%20request%3A%20${encodeURIComponent(msg)}`;
+            const waUrl = `https://wa.me/8801898828248?text=Hi%20TechSeba%2C%20my%20name%20is%20${encodeURIComponent(name)}.%20I%20visited%20your%20{{ urlencode($__env->yieldContent('demo_slug')) }}%20demo%20and%20want%20to%20submit%20this%20request%3A%20${encodeURIComponent(msg)}`;
             window.open(waUrl, '_blank');
             closeModal();
         }

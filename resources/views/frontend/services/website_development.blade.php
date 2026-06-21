@@ -76,41 +76,49 @@
 
     $portfolioTypes = [
         [
+            'slug' => 'doctor',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>',
             'title' => 'Doctor Portfolio',
             'desc' => 'Specialization display, clinic info, appointment booking CTA'
         ],
         [
+            'slug' => 'lawyer',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><line x1="9" y1="22" x2="15" y2="22"></line><line x1="12" y1="18" x2="12" y2="22"></line><path d="M4.03 13.3A6 6 0 0 1 12 18a6 6 0 0 1 7.97-4.7"></path><path d="M12 2v16"></path><path d="M7 6l-3.3 2.7A2 2 0 0 0 3 10.2v1.6a2 2 0 0 0 1.2 1.8L7 15"></path><path d="M17 6l3.3 2.7a2 2 0 0 1 .7 1.5v1.6a2 2 0 0 1-1.2 1.8L17 15"></path></svg>',
             'title' => 'Advocate / Lawyer Portfolio',
             'desc' => 'Practice areas, case success stats, consultation CTA'
         ],
         [
+            'slug' => 'teacher',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
             'title' => 'Teacher / Tutor Portfolio',
             'desc' => 'Subjects taught, certifications, student testimonials'
         ],
         [
+            'slug' => 'creator',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>',
             'title' => 'TikToker / Content Creator Portfolio',
             'desc' => 'Social stats counter, media kit download, brand collab CTA'
         ],
         [
+            'slug' => 'celebrity',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>',
             'title' => 'Popular Person / Celebrity Portfolio',
             'desc' => 'Fan engagement section, event schedule, merch link'
         ],
         [
+            'slug' => 'freelancer',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
             'title' => 'Freelancer Portfolio',
             'desc' => 'Skills, hourly rate display, hire me CTA'
         ],
         [
+            'slug' => 'founder',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .5 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><line x1="9" y1="18" x2="15" y2="18"></line><line x1="10" y1="22" x2="14" y2="22"></line></svg>',
             'title' => 'Startup Founder Portfolio',
             'desc' => 'Vision statement, investor pitch deck download link'
         ],
         [
+            'slug' => 'ngo',
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:24px;height:24px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>',
             'title' => 'NGO / Social Worker Portfolio',
             'desc' => 'Mission, impact numbers, donation CTA'
@@ -454,7 +462,10 @@
                     <h4 class="swd-portfolio-card__title">{{ $item['title'] }}</h4>
                     <p class="swd-portfolio-card__desc">{{ $item['desc'] }}</p>
                 </div>
-                <a href="{{ route('contact-us') }}" class="swd-portfolio-card__btn">View Sample</a>
+                <div class="swd-portfolio-card__actions" style="display: flex; gap: 8px; margin-top: auto; width: 100%;">
+                    <a href="{{ route('portfolio.demo', $item['slug']) }}" target="_blank" class="swd-portfolio-card__btn" style="flex: 1; padding: 9px 4px; text-align: center; font-size: 11px;">View Sample</a>
+                    <a href="https://wa.me/8801898828248?text=I%20want%20to%20create%20a%20{{ urlencode($item['title']) }}%20website%2C%20i%20need%20your%20help." target="_blank" class="swd-portfolio-card__btn" style="flex: 1; padding: 9px 4px; text-align: center; font-size: 11px; background: var(--accent2) !important; color: #ffffff !important; border-color: var(--accent2) !important;">Order Now</a>
+                </div>
             </div>
             @endforeach
         </div>

@@ -159,6 +159,13 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
 
     Route::get('/portfolio', [HomeController::class, 'portfolio'])->name('portfolio');
     Route::get('/portfolio/{slug}', [HomeController::class, 'portfolioShow'])->name('portfolio.show');
+    Route::get('/demo/portfolio/{type}', function ($type) {
+        $validTypes = ['doctor', 'lawyer', 'teacher', 'creator', 'celebrity', 'freelancer', 'founder', 'ngo'];
+        if (!in_array($type, $validTypes)) {
+            abort(404);
+        }
+        return view("frontend.services.portfolio_demos.{$type}");
+    })->name('portfolio.demo');
 
     Route::get('/privacy-policy', [HomeController::class, 'privacy_policy'])->name('privacy-policy');
     Route::get('/terms-conditions', [HomeController::class, 'terms_conditions'])->name('terms-conditions');

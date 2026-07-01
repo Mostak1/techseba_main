@@ -136,7 +136,7 @@
 </section>
 
 {{-- ==================== FEATURES SECTION ==================== --}}
-<section class="wa-section bg-light-sec wa-features" id="features">
+<section class="wa-section wa-features" id="features">
     <div class="container">
         <div class="wa-section-head text-center">
             <span class="wa-label">FEATURES</span>
@@ -221,7 +221,7 @@
 </section>
 
 {{-- ==================== WHO IS THIS FOR SECTION ==================== --}}
-<section class="wa-section bg-light-sec wa-who-for" id="who-for">
+<section class="wa-section wa-who-for" id="who-for">
     <div class="container">
         <div class="wa-section-head text-center">
             <span class="wa-label">TARGET AUDIENCE</span>
@@ -306,7 +306,7 @@
 </section>
 
 {{-- ==================== HOW IT WORKS ==================== --}}
-<section class="wa-section bg-light-sec wa-timeline" id="workflow">
+<section class="wa-section wa-timeline" id="workflow">
     <div class="container">
         <div class="wa-section-head text-center">
             <span class="wa-label">HOW IT WORKS</span>
@@ -359,7 +359,7 @@
 </section>
 
 {{-- ==================== PRICING SECTION ==================== --}}
-<section class="wa-section bg-light-sec wa-pricing" id="pricing">
+<section class="wa-section wa-pricing" id="pricing">
     <div class="container">
         <div class="wa-section-head text-center">
             <span class="wa-label">PRICING PLANS</span>
@@ -435,7 +435,7 @@
 </section>
 
 {{-- ==================== FAQ SECTION ==================== --}}
-<section class="wa-section bg-light-sec wa-faq" id="faq">
+<section class="wa-section wa-faq" id="faq">
     <div class="container">
         <div class="wa-section-head text-center">
             <span class="wa-label">FAQ</span>
@@ -607,6 +607,7 @@
 @endsection
 
 @push('style_section')
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
 <style>
     /* ==========================================
        WA - MESSAGE & WHATSAPP REPLY AUTOMATION
@@ -615,14 +616,14 @@
         --wa-brand: #25D366;
         --wa-brand-dark: #128C7E;
         --wa-brand-light: #dcf8c6;
-        --bg-light-sec: #f8f9ff;
-        --bg-card-white: #ffffff;
-        --text-dark-heading: #0f172a;
-        --text-dark-body: #475569;
+        --bg-light-sec: transparent;
+        --bg-card-white: var(--light-bg1, #1e293b);
+        --text-dark-heading: var(--heading-color, #ffffff);
+        --text-dark-body: var(--body-color, #94a3b8);
         --text-dark-muted: #64748b;
-        --border-light: rgba(0, 0, 0, 0.06);
-        --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.03);
-        --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.07);
+        --border-light: rgba(255, 255, 255, 0.06);
+        --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.2);
+        --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
     }
 
     /* Light Theme Section Overrides to ensure dark text on light backgrounds */

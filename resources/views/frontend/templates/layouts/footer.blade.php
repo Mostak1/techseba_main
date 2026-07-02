@@ -2,7 +2,9 @@
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-brand">
-        <a class="logo" href="{{ route('home') }}">Tech<span>Seba</span></a>
+        <a class="logo" href="{{ route('home') }}">
+          <img src="{{ asset($general_setting->logo) }}" alt="Logo" style="max-height: 40px;">
+        </a>
         <p>{{ $footer->about_us }}</p>
         <div class="footer-social">
           <a class="social-btn" href="https://www.facebook.com/techseba.it" target="_blank">f</a>

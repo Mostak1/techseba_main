@@ -58,7 +58,9 @@
 <!-- NAVBAR -->
 <nav class="custom-navbar">
   <div class="nav-inner">
-    <a class="logo" href="{{ route('home') }}">Tech<span>Seba</span></a>
+    <a class="logo" href="{{ route('home') }}">
+      <img src="{{ asset($general_setting->logo) }}" alt="Logo" style="max-height: 40px;">
+    </a>
     <ul class="nav-links">
       <li><a href="{{ route('home') }}">Home</a></li>
       @if(page_enabled('services'))

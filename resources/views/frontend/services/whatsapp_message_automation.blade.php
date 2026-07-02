@@ -618,8 +618,8 @@
         --wa-brand-light: #dcf8c6;
         --bg-light-sec: transparent;
         --bg-card-white: var(--light-bg1, #1e293b);
-        --text-dark-heading: var(--heading-color, #ffffff);
-        --text-dark-body: var(--body-color, #94a3b8);
+        --text-dark-heading: #ffffff;
+        --text-dark-body: #d1d5db;
         --text-dark-muted: #64748b;
         --border-light: rgba(255, 255, 255, 0.06);
         --shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.2);

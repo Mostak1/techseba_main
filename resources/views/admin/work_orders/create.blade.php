@@ -46,11 +46,21 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
                                             <div class="crancy__item-form--group">
                                                 <label class="crancy__item-label">Total Budget</label>
                                                 <input type="number" step="0.01" name="total_budget" class="crancy__item-input" value="{{ old('total_budget', $workOrder->total_budget) }}" placeholder="e.g., 5000.00" required>
                                                 @error('total_budget')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="crancy__item-form--group">
+                                                <label class="crancy__item-label">Discount</label>
+                                                <input type="number" step="0.01" name="discount" class="crancy__item-input" value="{{ old('discount', $workOrder->discount) }}" placeholder="e.g., 500.00">
+                                                @error('discount')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>

@@ -15,6 +15,7 @@ class WorkOrder extends Model
         'title',
         'description',
         'total_budget',
+        'discount',
         'due_amount',
         'status',
     ];
@@ -39,7 +40,7 @@ class WorkOrder extends Model
     public function updateDueAmount()
     {
         $totalPaid = $this->paid_amount;
-        $this->due_amount = max(0, $this->total_budget - $totalPaid);
+        $this->due_amount = max(0, $this->total_budget - $this->discount - $totalPaid);
         $this->save();
     }
 }

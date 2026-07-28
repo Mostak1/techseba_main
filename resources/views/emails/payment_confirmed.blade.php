@@ -20,7 +20,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         .header {
-            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            background: linear-gradient(135deg, #0b2c72, #7628d8);
             padding: 40px 20px;
             text-align: center;
             color: #ffffff;
@@ -54,8 +54,8 @@
             font-weight: 600;
         }
         .total-box {
-            background: #f0fdf4;
-            border: 1px solid #bbf7d0;
+            background: #fdf2f8;
+            border: 1px solid #fbcfe8;
             border-radius: 6px;
             padding: 15px;
             margin: 20px 0;
@@ -63,7 +63,7 @@
         }
         .total-box p {
             margin: 5px 0;
-            color: #166534;
+            color: #1e293b;
         }
         .footer {
             background-color: #f8fafc;
@@ -76,7 +76,7 @@
         .btn {
             display: inline-block;
             padding: 12px 24px;
-            background-color: #4f46e5;
+            background-color: #0b2c72;
             color: #ffffff !important;
             text-decoration: none;
             border-radius: 6px;
@@ -119,7 +119,10 @@
 
             <div class="total-box">
                 <p><strong>Total Budget:</strong> {{ currency($payment->workOrder->total_budget, 2) }}</p>
-                <p><strong>Remaining Due Balance:</strong> {{ currency($payment->workOrder->due_amount, 2) }}</p>
+                @if($payment->workOrder->discount > 0)
+                    <p style="color: #7628d8;"><strong>Discount:</strong> -{{ currency($payment->workOrder->discount, 2) }}</p>
+                @endif
+                <p style="color: #dc2626;"><strong>Remaining Due Balance:</strong> {{ currency($payment->workOrder->due_amount, 2) }}</p>
             </div>
 
             <p style="text-align: center;">

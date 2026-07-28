@@ -60,10 +60,14 @@
                                 </div>
 
                                 <!-- Payments Summary -->
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 20px;">
+                                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; background-color: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-top: 20px;">
                                     <div style="text-align: center; border-right: 1px solid #e2e8f0;">
                                         <p style="margin: 0 0 5px 0; color: #64748b; font-size: 13px;">Total Budget</p>
                                         <strong style="font-size: 18px; color: #1e293b;">{{ currency($workOrder->total_budget, 2) }}</strong>
+                                    </div>
+                                    <div style="text-align: center; border-right: 1px solid #e2e8f0;">
+                                        <p style="margin: 0 0 5px 0; color: #64748b; font-size: 13px;">Discount</p>
+                                        <strong style="font-size: 18px; color: #7628d8;">{{ currency($workOrder->discount, 2) }}</strong>
                                     </div>
                                     <div style="text-align: center; border-right: 1px solid #e2e8f0;">
                                         <p style="margin: 0 0 5px 0; color: #64748b; font-size: 13px;">Total Paid</p>
@@ -212,8 +216,14 @@
                     </div>
                 </div>
             </div>
-            <div style="margin-top: 25px;">
+            <div style="margin-top: 25px; display: flex; gap: 10px;">
                 <a href="{{ route('admin.work-orders.index') }}" class="btn btn-secondary" style="padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 14px;">Back to Work Orders</a>
+                <a href="{{ route('admin.work-orders.print', $workOrder->id) }}" target="_blank" class="btn btn-primary" style="background-color: #4f46e5; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 8px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 17H19C20.1 17 21 16.1 21 15V11C21 9.9 20.1 9 19 9H5C3.9 9 3 9.9 3 11V15C3 16.1 3.9 17 5 17H7M17 9V5C17 3.9 16.1 3 15 3H9C7.9 3 7 3.9 7 5V9M7 13H17V21H7V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Print / Save PDF
+                </a>
             </div>
         </div>
     </section>

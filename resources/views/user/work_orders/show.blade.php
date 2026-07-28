@@ -55,6 +55,11 @@
                     </div>
 
                     <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px;">
+                        <span style="color: #64748b;">Discount:</span>
+                        <strong style="color: #7628d8;">{{ currency($workOrder->discount, 2) }}</strong>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px;">
                         <span style="color: #64748b;">Total Paid:</span>
                         <strong style="color: #16a34a;">{{ currency($workOrder->paid_amount, 2) }}</strong>
                     </div>
@@ -108,8 +113,14 @@
             </table>
         </div>
         
-        <div style="margin-top: 30px;">
+        <div style="margin-top: 30px; display: flex; gap: 10px;">
             <a href="{{ route('user.work_orders.index') }}" class="btn btn-secondary" style="background-color: #64748b; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px;">Back to Work Orders</a>
+            <a href="{{ route('user.work_orders.print', $workOrder->id) }}" target="_blank" class="btn btn-primary" style="background: linear-gradient(135deg, #4f46e5, #6366f1); color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17 17H19C20.1 17 21 16.1 21 15V11C21 9.9 20.1 9 19 9H5C3.9 9 3 9.9 3 11V15C3 16.1 3.9 17 5 17H7M17 9V5C17 3.9 16.1 3 15 3H9C7.9 3 7 3.9 7 5V9M7 13H17V21H7V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Print / Save PDF
+            </a>
         </div>
     </div>
 @endsection

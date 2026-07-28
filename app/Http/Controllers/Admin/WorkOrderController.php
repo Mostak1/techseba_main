@@ -42,8 +42,11 @@ class WorkOrderController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'total_budget' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
             'status' => 'required|string|in:pending,ongoing,completed,cancelled',
         ]);
+
+        $discount = $request->discount ?? 0;
 
         // Generate unique order number
         $orderNumber = 'WO-' . strtoupper(uniqid());
@@ -54,7 +57,8 @@ class WorkOrderController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'total_budget' => $request->total_budget,
-            'due_amount' => $request->total_budget, // initially due is full budget
+            'discount' => $discount,
+            'due_amount' => $request->total_budget - $discount, // initially due is budget - discount
             'status' => $request->status,
         ]);
 
@@ -88,14 +92,18 @@ class WorkOrderController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'total_budget' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
             'status' => 'required|string|in:pending,ongoing,completed,cancelled',
         ]);
+
+        $discount = $request->discount ?? 0;
 
         $workOrder->update([
             'user_id' => $request->user_id,
             'title' => $request->title,
             'description' => $request->description,
             'total_budget' => $request->total_budget,
+            'discount' => $discount,
             'status' => $request->status,
         ]);
 
@@ -218,5 +226,11 @@ class WorkOrderController extends Controller
                 'email' => $user->email,
             ]
         ]);
+    }
+
+    public function print($id)
+    {
+        $workOrder = WorkOrder::with(['user', 'payments'])->findOrFail($id);
+        return view('admin.work_orders.print', compact('workOrder'));
     }
 }

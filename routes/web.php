@@ -209,6 +209,7 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
 
             Route::get('/work-orders', [UserWorkOrderController::class, 'index'])->name('work_orders.index');
             Route::get('/work-orders/{id}', [UserWorkOrderController::class, 'show'])->name('work_orders.show');
+            Route::get('/work-orders/{id}/print', [UserWorkOrderController::class, 'print'])->name('work_orders.print');
 
             Route::get('/cv', [UserCvController::class, 'edit'])->name('cv.edit');
             Route::post('/cv', [UserCvController::class, 'update'])->name('cv.update');
@@ -254,6 +255,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
         Route::resource('work-orders', AdminWorkOrderController::class);
+        Route::get('work-orders/{id}/print', [AdminWorkOrderController::class, 'print'])->name('work-orders.print');
         Route::post('work-orders/quick-user', [AdminWorkOrderController::class, 'quickCreateUser'])->name('work-orders.quick-user');
         Route::post('work-orders/{work_order_id}/payments', [AdminWorkOrderController::class, 'storePayment'])->name('work-orders.payments.store');
         Route::post('work-order-payments/{id}/confirm', [AdminWorkOrderController::class, 'confirmPayment'])->name('work-order-payments.confirm');

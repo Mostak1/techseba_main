@@ -29,4 +29,12 @@ class WorkOrderController extends Controller
 
         return view('user.work_orders.show', compact('workOrder'));
     }
+
+    public function print($id)
+    {
+        $user = Auth::guard('web')->user();
+        $workOrder = WorkOrder::where('user_id', $user->id)->with('payments')->findOrFail($id);
+
+        return view('admin.work_orders.print', compact('workOrder'));
+    }
 }

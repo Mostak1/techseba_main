@@ -155,6 +155,25 @@
                 <a href="{{ route('user.cv.edit') }}" class="stretched-link"></a>
             </div>
         </div>
+
+        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4">
+            <div class="dashbord_item position-relative">
+                <span class="dashbord_item_icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
+                         xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+
+                <div class="dashbord_item_text">
+                    <h5>{{ $work_orders_count }}</h5>
+                    <p class="d-item-label">
+                        Work Orders
+                    </p>
+                </div>
+                <a href="{{ route('user.work_orders.index') }}" class="stretched-link"></a>
+            </div>
+        </div>
     </div>
     <div class="dashbord_head">
         <h5>{{ __('translate.Recent Order Lists') }}</h5>

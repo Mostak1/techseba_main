@@ -247,7 +247,7 @@
       <div class="info-line"><strong>Company:</strong> TechSeba Inc.</div>
       <div class="info-line"><strong>Email:</strong> info@techseba.com</div>
       <div class="info-line"><strong>Website:</strong> www.techseba.com</div>
-      <div class="info-line"><strong>Support:</strong> +880 1700 000000</div>
+      <div class="info-line"><strong>Support:</strong> +8801898828248</div>
     </div>
   </div>
 

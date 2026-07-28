@@ -28,7 +28,10 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="crancy__item-form--group">
-                                                <label class="crancy__item-label">Client / Customer</label>
+                                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                                    <label class="crancy__item-label" style="margin: 0;">Client / Customer</label>
+                                                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addClientModal" style="color: #4f46e5; font-size: 13px; font-weight: 600;">+ Add New Client</a>
+                                                </div>
                                                 <select name="user_id" class="crancy__item-input" required>
                                                     <option value="">Select Customer</option>
                                                     @foreach($users as $user)
@@ -101,4 +104,88 @@
             </div>
         </div>
     </section>
+
+    <!-- Add Client Modal -->
+    <div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="addClientModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 8px;">
+                <div class="modal-header" style="border-bottom: 1px solid #edf2f7; padding: 15px 20px;">
+                    <h5 class="modal-title" id="addClientModalLabel" style="font-weight: 600; color: #1e293b;">Add New Client</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border: none; background: transparent; font-size: 20px;">&times;</button>
+                </div>
+                <form id="quickClientForm">
+                    @csrf
+                    <div class="modal-body" style="padding: 20px;">
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Full Name</label>
+                            <input type="text" id="modal_client_name" class="crancy__item-input" placeholder="e.g. John Doe" required>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Email Address</label>
+                            <input type="email" id="modal_client_email" class="crancy__item-input" placeholder="e.g. john@example.com" required>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Password</label>
+                            <input type="text" id="modal_client_password" class="crancy__item-input" value="techseba123" required>
+                            <small style="color: #64748b;">Prefilled with default password. Client can change this later.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #edf2f7; padding: 15px 20px;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="padding: 8px 16px; border-radius: 6px;">Close</button>
+                        <button type="submit" class="crancy-btn" style="background-color: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Add Client</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('js_section')
+<script>
+    $(document).ready(function() {
+        $('#quickClientForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            let name = $('#modal_client_name').val();
+            let email = $('#modal_client_email').val();
+            let password = $('#modal_client_password').val();
+            let token = $('input[name="_token"]').val();
+            
+            $.ajax({
+                url: "{{ route('admin.work-orders.quick-user') }}",
+                type: "POST",
+                data: {
+                    _token: token,
+                    name: name,
+                    email: email,
+                    password: password
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Append new option
+                        let newOption = new Option(response.user.name + ' (' + response.user.email + ')', response.user.id, true, true);
+                        $('select[name="user_id"]').append(newOption).trigger('change');
+                        
+                        // Reset form & close modal
+                        $('#quickClientForm')[0].reset();
+                        $('#modal_client_password').val('techseba123');
+                        $('#addClientModal').modal('hide');
+                        
+                        toastr.success('New client added successfully!');
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 422) {
+                        let errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, val) {
+                            toastr.error(val[0]);
+                        });
+                    } else {
+                        toastr.error('Something went wrong. Please try again.');
+                    }
+                }
+            });
+        });
+    });
+</script>
+@endpush

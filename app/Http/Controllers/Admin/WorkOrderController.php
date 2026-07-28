@@ -190,4 +190,33 @@ class WorkOrderController extends Controller
         $notify = ['message' => 'Payment record deleted successfully', 'alert-type' => 'success'];
         return redirect()->back()->with($notify);
     }
+
+    public function quickCreateUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:4',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => \Illuminate\Support\Str::slug($request->name).'-'.date('Ymdhis'),
+            'status' => 'enable',
+            'is_banned' => 'no',
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'email_verified_at' => now(),
+            'verification_token' => null,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+            ]
+        ]);
+    }
 }

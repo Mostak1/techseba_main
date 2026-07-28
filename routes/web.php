@@ -254,6 +254,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
         Route::resource('work-orders', AdminWorkOrderController::class);
+        Route::post('work-orders/quick-user', [AdminWorkOrderController::class, 'quickCreateUser'])->name('work-orders.quick-user');
         Route::post('work-orders/{work_order_id}/payments', [AdminWorkOrderController::class, 'storePayment'])->name('work-orders.payments.store');
         Route::post('work-order-payments/{id}/confirm', [AdminWorkOrderController::class, 'confirmPayment'])->name('work-order-payments.confirm');
         Route::delete('work-order-payments/{id}', [AdminWorkOrderController::class, 'destroyPayment'])->name('work-order-payments.destroy');

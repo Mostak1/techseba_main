@@ -245,10 +245,14 @@
     </div>
     <div class="info-box">
       <h3>PROVIDER INFORMATION</h3>
-      <div class="info-line"><strong>Company:</strong> TechSeba Inc.</div>
-      <div class="info-line"><strong>Email:</strong> info@techseba.com</div>
+      <div class="info-line"><strong>TechSeba</strong></div>
+      <div class="info-line">Room #01 (4th Floor)</div>
+      <div class="info-line">Star Hotel & Restaurant Building</div>
+      <div class="info-line">49, Johnson Road, Kotowali</div>
+      <div class="info-line">Dhaka-1100, Bangladesh</div>
       <div class="info-line"><strong>Website:</strong> www.techseba.com</div>
       <div class="info-line"><strong>Support:</strong> +8801898828248</div>
+      <div class="info-line"><strong>Email:</strong> info@techseba.com</div>
     </div>
   </div>
 
@@ -312,7 +316,7 @@
   </div>
 
   <div class="footer">
-    <span>TechSeba • One Click Solution • techseba.com</span>
+    <span>Room #01 (4th Floor), Star Hotel & Restaurant Building, 49 Johnson Road, Kotowali, Dhaka-1100</span>
     <span class="page-no">Page 1 of 1</span>
   </div>
 </section>

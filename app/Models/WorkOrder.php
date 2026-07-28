@@ -30,6 +30,11 @@ class WorkOrder extends Model
         return $this->hasMany(WorkOrderPayment::class);
     }
 
+    public function bills()
+    {
+        return $this->hasMany(WorkOrderBill::class);
+    }
+
     // Helper to calculate total paid amount
     public function getPaidAmountAttribute()
     {

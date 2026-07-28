@@ -112,6 +112,56 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Recurring Bills Section -->
+        <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-top: 30px;">
+            <h4 style="font-size: 16px; font-weight: 600; margin-bottom: 15px; color: #1e293b; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">Recurring & Extra Bills</h4>
+            <div class="table-responsive">
+                <table class="table" style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                    <thead>
+                    <tr style="border-bottom: 2px solid #edf2f7; text-align: left; background-color: #f8fafc;">
+                        <th style="padding: 10px;">Bill Number</th>
+                        <th style="padding: 10px;">Title</th>
+                        <th style="padding: 10px;">Type</th>
+                        <th style="padding: 10px;">Amount</th>
+                        <th style="padding: 10px;">Due Date</th>
+                        <th style="padding: 10px;">Status</th>
+                        <th style="padding: 10px;">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @forelse($workOrder->bills as $bill)
+                        <tr style="border-bottom: 1px solid #edf2f7;">
+                            <td style="padding: 10px;"><strong>{{ $bill->bill_number }}</strong></td>
+                            <td style="padding: 10px;">{{ $bill->title }}</td>
+                            <td style="padding: 10px; text-transform: capitalize;">{{ str_replace('_', ' ', $bill->bill_type) }}</td>
+                            <td style="padding: 10px; font-weight: 600;">{{ currency($bill->amount, 2) }}</td>
+                            <td style="padding: 10px;">{{ $bill->due_date->format('M d, Y') }}</td>
+                            <td style="padding: 10px;">
+                                @if($bill->status == 'paid')
+                                    <span class="badge" style="background-color: #d1fae5; color: #065f46; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Paid</span>
+                                @else
+                                    <span class="badge" style="background-color: #fee2e2; color: #991b1b; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Unpaid</span>
+                                @endif
+                            </td>
+                            <td style="padding: 10px;">
+                                <a href="{{ route('user.work_orders.bills.print', $bill->id) }}" target="_blank" class="btn btn-sm btn-outline-primary" style="border: 1px solid #4f46e5; color: #4f46e5; background: transparent; padding: 4px 8px; border-radius: 4px; text-decoration: none; font-size: 12px; display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M17 17H19C20.1 17 21 16.1 21 15V11C21 9.9 20.1 9 19 9H5C3.9 9 3 9.9 3 11V15C3 16.1 3.9 17 5 17H7M17 9V5C17 3.9 16.1 3 15 3H9C7.9 3 7 3.9 7 5V9M7 13H17V21H7V13Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    Print Bill
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center" style="padding: 20px; color: #64748b;">No bills generated yet.</td>
+                        </tr>
+                    @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
         
         <div style="margin-top: 30px; display: flex; gap: 10px;">
             <a href="{{ route('user.work_orders.index') }}" class="btn btn-secondary" style="background-color: #64748b; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none; font-size: 14px;">Back to Work Orders</a>

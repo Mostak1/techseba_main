@@ -134,6 +134,71 @@
                                     </table>
                                 </div>
                             </div>
+
+                            <!-- Billing & Invoices list -->
+                            <div class="crancy-product-card mg-top-30" style="padding: 25px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #edf2f7; padding-bottom: 10px;">
+                                    <h4 class="crancy-product-card__title" style="margin: 0;">Recurring & Extra Bills</h4>
+                                    <button type="button" class="crancy-btn" data-bs-toggle="modal" data-bs-target="#addBillModal" style="background-color: #4f46e5; color: white; padding: 6px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; border: none; cursor: pointer;">
+                                        + Generate Bill
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table" style="width: 100%; border-collapse: collapse;">
+                                        <thead>
+                                        <tr style="border-bottom: 2px solid #edf2f7; text-align: left;">
+                                            <th style="padding: 10px;">Bill Number</th>
+                                            <th style="padding: 10px;">Title / Type</th>
+                                            <th style="padding: 10px;">Amount</th>
+                                            <th style="padding: 10px;">Due Date</th>
+                                            <th style="padding: 10px;">Status</th>
+                                            <th style="padding: 10px;">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @forelse($workOrder->bills as $bill)
+                                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                                <td style="padding: 10px;">
+                                                    <a href="{{ route('admin.work-orders.bills.print', $bill->id) }}" target="_blank" style="color: #4f46e5; font-weight: 600;">
+                                                        {{ $bill->bill_number }}
+                                                    </a>
+                                                </td>
+                                                <td style="padding: 10px;">
+                                                    <strong>{{ $bill->title }}</strong><br>
+                                                    <small class="text-muted" style="text-transform: capitalize;">{{ str_replace('_', ' ', $bill->bill_type) }}</small>
+                                                </td>
+                                                <td style="padding: 10px; font-weight: 600;">{{ currency($bill->amount, 2) }}</td>
+                                                <td style="padding: 10px;">{{ $bill->due_date->format('M d, Y') }}</td>
+                                                <td style="padding: 10px;">
+                                                    @if($bill->status == 'paid')
+                                                        <span class="badge bg-success" style="background-color: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Paid</span>
+                                                    @else
+                                                        <span class="badge bg-danger" style="background-color: #ef4444; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Unpaid</span>
+                                                    @endif
+                                                </td>
+                                                <td style="padding: 10px;">
+                                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                                        @if($bill->status == 'unpaid')
+                                                            <button type="button" class="btn btn-sm btn-success pay-bill-btn" data-id="{{ $bill->id }}" data-bs-toggle="modal" data-bs-target="#payBillModal" style="background-color: #10b981; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">Mark Paid</button>
+                                                        @endif
+                                                        <a href="{{ route('admin.work-orders.bills.print', $bill->id) }}" target="_blank" class="btn btn-sm btn-info" style="background-color: #0ea5e9; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; text-decoration: none;">Print</a>
+                                                        <form action="{{ route('admin.work-orders.bills.destroy', $bill->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this bill invoice?')" style="display: inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-sm btn-danger" style="background-color: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px;">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="6" class="text-center" style="padding: 20px; color: #64748b;">No bills generated yet.</td>
+                                            </tr>
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,4 +292,106 @@
             </div>
         </div>
     </section>
+
+    <!-- Add Bill Modal -->
+    <div class="modal fade" id="addBillModal" tabindex="-1" aria-labelledby="addBillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 8px;">
+                <div class="modal-header" style="border-bottom: 1px solid #edf2f7; padding: 15px 20px;">
+                    <h5 class="modal-title" id="addBillModalLabel" style="font-weight: 600; color: #1e293b;">Generate New Bill</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border: none; background: transparent; font-size: 20px;">&times;</button>
+                </div>
+                <form action="{{ route('admin.work-orders.bills.store', $workOrder->id) }}" method="POST">
+                    @csrf
+                    <div class="modal-body" style="padding: 20px;">
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Bill Type</label>
+                            <select name="bill_type" class="crancy__item-input" style="height: 45px; padding: 8px;" required>
+                                <option value="monthly">Monthly Bill</option>
+                                <option value="half_yearly">Half-Yearly Bill</option>
+                                <option value="yearly">Yearly Bill</option>
+                                <option value="setup">Setup Cost</option>
+                                <option value="custom">Custom Invoice</option>
+                            </select>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Bill Title</label>
+                            <input type="text" name="title" class="crancy__item-input" placeholder="e.g. Hosting & Support Renewal 2026" required>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Amount (BDT)</label>
+                            <input type="number" step="0.01" name="amount" class="crancy__item-input" placeholder="e.g. 5000.00" required>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Due Date</label>
+                            <input type="date" name="due_date" class="crancy__item-input" value="{{ date('Y-m-d') }}" required>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Notes (Optional)</label>
+                            <textarea name="notes" class="crancy__item-input" rows="2" style="height: auto; padding: 8px;" placeholder="Optional details for the invoice..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #edf2f7; padding: 15px 20px;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="padding: 8px 16px; border-radius: 6px;">Close</button>
+                        <button type="submit" class="crancy-btn" style="background-color: #4f46e5; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Generate Bill</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pay Bill Modal -->
+    <div class="modal fade" id="payBillModal" tabindex="-1" aria-labelledby="payBillModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 8px;">
+                <div class="modal-header" style="border-bottom: 1px solid #edf2f7; padding: 15px 20px;">
+                    <h5 class="modal-title" id="payBillModalLabel" style="font-weight: 600; color: #1e293b;">Record Bill Payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="border: none; background: transparent; font-size: 20px;">&times;</button>
+                </div>
+                <form id="payBillForm" method="POST">
+                    @csrf
+                    <div class="modal-body" style="padding: 20px;">
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Payment Method</label>
+                            <select name="payment_method" class="crancy__item-input" style="height: 45px; padding: 8px;" required>
+                                <option value="bKash">bKash</option>
+                                <option value="Nagad">Nagad</option>
+                                <option value="Rocket">Rocket</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                                <option value="Cash">Cash</option>
+                            </select>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Transaction ID (Optional)</label>
+                            <input type="text" name="transaction_id" class="crancy__item-input" placeholder="e.g. TRX12345678">
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Payment Date</label>
+                            <input type="date" name="payment_date" class="crancy__item-input" value="{{ date('Y-m-d') }}" required>
+                        </div>
+                        <div class="crancy__item-form--group" style="margin-bottom: 15px;">
+                            <label class="crancy__item-label">Notes (Optional)</label>
+                            <textarea name="notes" class="crancy__item-input" rows="2" style="height: auto; padding: 8px;" placeholder="Optional payment remarks..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #edf2f7; padding: 15px 20px;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="padding: 8px 16px; border-radius: 6px;">Close</button>
+                        <button type="submit" class="crancy-btn" style="background-color: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 500;">Record Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
+
+@push('js_section')
+<script>
+    $(document).ready(function() {
+        $('.pay-bill-btn').on('click', function() {
+            let billId = $(this).data('id');
+            let actionUrl = "/admin/work-orders/bills/" + billId + "/pay";
+            $('#payBillForm').attr('action', actionUrl);
+        });
+    });
+</script>
+@endpush

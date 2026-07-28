@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder;
+use App\Models\WorkOrderBill;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,7 +26,9 @@ class WorkOrderController extends Controller
     public function show($id)
     {
         $user = Auth::guard('web')->user();
-        $workOrder = WorkOrder::where('user_id', $user->id)->with('payments')->findOrFail($id);
+        $workOrder = WorkOrder::where('user_id', $user->id)->with(['payments', 'bills' => function($q) {
+            $q->latest();
+        }])->findOrFail($id);
 
         return view('user.work_orders.show', compact('workOrder'));
     }
@@ -36,5 +39,15 @@ class WorkOrderController extends Controller
         $workOrder = WorkOrder::where('user_id', $user->id)->with('payments')->findOrFail($id);
 
         return view('admin.work_orders.print', compact('workOrder'));
+    }
+
+    public function printBill($bill_id)
+    {
+        $user = Auth::guard('web')->user();
+        $bill = WorkOrderBill::with('workOrder.user')->whereHas('workOrder', function($q) use ($user) {
+            $q->where('user_id', $user->id);
+        })->findOrFail($bill_id);
+
+        return view('admin.work_orders.print_bill', compact('bill'));
     }
 }

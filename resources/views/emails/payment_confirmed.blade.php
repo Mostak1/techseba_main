@@ -125,6 +125,13 @@
                 <p style="color: #dc2626;"><strong>Remaining Due Balance:</strong> {{ currency($payment->workOrder->due_amount, 2) }}</p>
             </div>
 
+            <div style="background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 6px; padding: 15px; margin: 20px 0; text-align: left;">
+                <p style="margin: 0 0 8px 0; font-weight: bold; color: #0b2c72; font-size: 15px;">Your Customer Panel Login Credentials:</p>
+                <p style="margin: 4px 0; font-size: 14px; color: #334155;"><strong>Login URL:</strong> <a href="https://techseba.com/user/login" style="color: #0b2c72; text-decoration: underline;">techseba.com/user/login</a></p>
+                <p style="margin: 4px 0; font-size: 14px; color: #334155;"><strong>Email:</strong> {{ $payment->workOrder->user->email }}</p>
+                <p style="margin: 4px 0; font-size: 14px; color: #334155;"><strong>Password:</strong> your chosen password (default: <em>techseba123</em> for newly created accounts)</p>
+            </div>
+
             <p style="text-align: center;">
                 <a href="https://techseba.com/user/login" class="btn">View Customer Panel</a>
             </p>

@@ -60,6 +60,19 @@
                 </div>
             </li>
 
+            <li class="{{ Route::is('admin.work-orders.*') ? 'active' : '' }}">
+                <a class="collapsed" href="{{ route('admin.work-orders.index') }}">
+                    <span class="menu-bar__text">
+                        <span class="crancy-menu-icon crancy-svg-icon__v1">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="menu-bar__name">Work Orders</span>
+                    </span>
+                </a>
+            </li>
+
 
 
             <li class="{{ Route::is('admin.product.index') || Route::is('admin.product.create') || Route::is('admin.product.edit') || Route::is('admin.brand.*') || Route::is('admin.category.*') || Route::is('admin.sub-category.*') ? 'active' : '' }}" >

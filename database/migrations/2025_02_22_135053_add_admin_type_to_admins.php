@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->string('admin_type')->default('super_admin');
-        });
+        if (!Schema::hasColumn('admins', 'admin_type')) {
+            Schema::table('admins', function (Blueprint $table) {
+                $table->string('admin_type')->default('super_admin');
+            });
+        }
     }
 
     /**

@@ -126,7 +126,7 @@
             </div>
 
             <p style="text-align: center;">
-                <a href="{{ route('user.dashboard') }}" class="btn">View Customer Panel</a>
+                <a href="https://techseba.com/user/login" class="btn">View Customer Panel</a>
             </p>
 
             <p>If you have any questions or require further assistance, please feel free to reach out to us.</p>

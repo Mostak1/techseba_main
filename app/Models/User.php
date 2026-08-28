@@ -68,4 +68,9 @@ class User extends Authenticatable
         return $this->hasOne(UserCv::class);
     }
 
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class);
+    }
+
 }

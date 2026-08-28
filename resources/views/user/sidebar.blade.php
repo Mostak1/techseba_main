@@ -91,6 +91,17 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('user.work_orders.index') }}" class="{{ request()->routeIs('user.work_orders.*') ? 'active' : '' }}">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    Work Orders
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('user.transactions') }}" class="{{ request()->routeIs('user.transactions') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

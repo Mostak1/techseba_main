@@ -33,11 +33,14 @@ class ProfileController extends Controller
             ->latest()
             ->sum('total');
 
+        $work_orders_count = \App\Models\WorkOrder::where('user_id', $user->id)->count();
+
         return view('user.dashboard', [
             'pending_orders' => $pending_orders,
             'complete_orders' => $complete_orders,
             'total' => $total,
             'orders' => $orders,
+            'work_orders_count' => $work_orders_count,
         ]);
 
     }

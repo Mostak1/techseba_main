@@ -35,5 +35,6 @@ class EmailHelper{
         config(['mail.from.address' => $email_setting->email]);
         config(['mail.from.name' => $email_setting->sender_name]);
 
+        \Illuminate\Support\Facades\Mail::purge();
     }
 }

@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (!Schema::hasColumn('admins', 'admin_type')) {
-            Schema::table('admins', function (Blueprint $table) {
-                $table->string('admin_type')->default('super_admin');
-            });
-        }
+        Schema::table('work_orders', function (Blueprint $table) {
+            $table->decimal('discount', 15, 2)->default(0.00)->after('total_budget');
+        });
     }
 
     /**
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('admins', function (Blueprint $table) {
-            $table->dropColumn('admin_type');
+        Schema::table('work_orders', function (Blueprint $table) {
+            $table->dropColumn('discount');
         });
     }
 };

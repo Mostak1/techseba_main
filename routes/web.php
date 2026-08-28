@@ -17,6 +17,8 @@ use App\Http\Controllers\PublicCvController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\User\UserCvController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
+use App\Http\Controllers\User\WorkOrderController as UserWorkOrderController;
+use App\Http\Controllers\Admin\WorkOrderController as AdminWorkOrderController;
 Route::get('/clear-cache', function () {
     abort_unless(app()->environment('local'), 404);
 
@@ -205,6 +207,11 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
 
             Route::get('/dashboard', [UserProfileController::class, 'dashboard'])->name('dashboard');
 
+            Route::get('/work-orders', [UserWorkOrderController::class, 'index'])->name('work_orders.index');
+            Route::get('/work-orders/{id}', [UserWorkOrderController::class, 'show'])->name('work_orders.show');
+            Route::get('/work-orders/{id}/print', [UserWorkOrderController::class, 'print'])->name('work_orders.print');
+            Route::get('/work-orders/bills/{bill_id}/print', [UserWorkOrderController::class, 'printBill'])->name('work_orders.bills.print');
+
             Route::get('/cv', [UserCvController::class, 'edit'])->name('cv.edit');
             Route::post('/cv', [UserCvController::class, 'update'])->name('cv.update');
             Route::get('/cv/preview', [UserCvController::class, 'preview'])->name('cv.preview');
@@ -247,6 +254,18 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
 
         Route::get('/', [DashboardController::class, 'dashboard']);
         Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
+
+        Route::resource('work-orders', AdminWorkOrderController::class);
+        Route::get('work-orders/{id}/print', [AdminWorkOrderController::class, 'print'])->name('work-orders.print');
+        Route::post('work-orders/quick-user', [AdminWorkOrderController::class, 'quickCreateUser'])->name('work-orders.quick-user');
+        Route::post('work-orders/{work_order_id}/payments', [AdminWorkOrderController::class, 'storePayment'])->name('work-orders.payments.store');
+        Route::post('work-order-payments/{id}/confirm', [AdminWorkOrderController::class, 'confirmPayment'])->name('work-order-payments.confirm');
+        Route::delete('work-order-payments/{id}', [AdminWorkOrderController::class, 'destroyPayment'])->name('work-order-payments.destroy');
+
+        Route::post('work-orders/{work_order_id}/bills', [AdminWorkOrderController::class, 'storeBill'])->name('work-orders.bills.store');
+        Route::post('work-orders/bills/{bill_id}/pay', [AdminWorkOrderController::class, 'payBill'])->name('work-orders.bills.pay');
+        Route::delete('work-orders/bills/{bill_id}', [AdminWorkOrderController::class, 'destroyBill'])->name('work-orders.bills.destroy');
+        Route::get('work-orders/bills/{bill_id}/print', [AdminWorkOrderController::class, 'printBill'])->name('work-orders.bills.print');
 
         Route::controller(ProfileController::class)->group(function () {
             Route::get('edit-profile', 'edit_profile')->name('edit-profile');

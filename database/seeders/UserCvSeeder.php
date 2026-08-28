@@ -52,6 +52,16 @@ class UserCvSeeder extends Seeder
         ]
     );
 
+    $applicationPortfolio = PortfolioTemplate::updateOrCreate(
+        ['slug' => 'application'],
+        [
+            'name' => 'Application Portfolio',
+            'preview_image' => null,
+            'view_path' => 'frontend.cv.portfolio_application',
+            'is_active' => true,
+        ]
+    );
+
     // 2. Find or create user from PDF data
     $user = User::where('email', 'mostakidb@gmail.com')
         ->orWhere('email', 'mdmostaka@gmail.com')
@@ -82,7 +92,7 @@ class UserCvSeeder extends Seeder
         ['user_id' => $user->id],
         [
             'template_id' => $template->id,
-            'portfolio_template_id' => $portfolioTemplate->id,
+            'portfolio_template_id' => $applicationPortfolio->id,
 
             'full_name' => 'Md. Mostak Ahmed',
             'father_name' => 'Md. Abdul Motin Sarker',
@@ -108,6 +118,34 @@ class UserCvSeeder extends Seeder
             'career_summary' => 'Experienced software developer with practical experience in Laravel, React.js, PHP, CodeIgniter, JavaScript, MySQL and web application development. Currently working as a Team Leader of Software Developer at American Wellness Centre. Completed internship as a Software Developer at Genuity System Ltd. and previously worked as a Customer Service Officer at Bank Asia Agent Banking.',
 
             'total_experience' => 3.5,
+
+            // Application Questionnaire Fields
+            'technical_challenge' => "At American Wellness Centre, I was tasked with integrating a new lab management module into our existing mature ERP system built on Laravel. The challenge was that the existing codebase had tightly coupled controllers with over 500 lines each, and the database schema was already serving multiple interconnected modules (pharmacy, appointments, billing).\n\nI needed to implement a scalable lab test ordering and result-tracking system that could handle concurrent requests from multiple departments without degrading performance. My approach was:\n\n1. **Modular Architecture**: I used the nwidart/laravel-modules package to isolate the Lab module completely, avoiding any direct modifications to the core codebase. This ensured zero risk of breaking existing functionality.\n\n2. **Service Layer Pattern**: Instead of adding logic to controllers, I introduced a dedicated LabService class that encapsulated all business rules. This kept the controller thin and testable.\n\n3. **Database Strategy**: Rather than modifying existing tables, I created new normalized tables with foreign key relationships to the existing patient and billing tables. I used database transactions to ensure data consistency across modules.\n\n4. **Performance Optimization**: I implemented eager loading for nested relationships, added composite indexes on frequently queried columns, and used Redis caching for lab test catalogs that rarely change.\n\nThe result was a fully functional lab module that processed 200+ test orders daily without any performance degradation to the existing system. The modular approach meant other developers could work on their modules independently without merge conflicts.",
+
+            'built_from_scratch' => "Yes — I built a custom CV/Portfolio builder platform from scratch (the very system this application is built on: TechSeba). I chose to build instead of using existing solutions for several specific reasons:\n\n1. **Unique Requirements**: I needed a system where users could have both a traditional CV (printable/PDF) and a modern interactive portfolio website from a single data source. Existing solutions like WordPress themes or standalone CV builders couldn't do both seamlessly.\n\n2. **Template Engine**: I built a custom template system where CV templates are Blade views registered in the database, making it trivial to add new designs without touching any business logic. Users can switch templates instantly.\n\n3. **Source File Extraction**: I implemented a PDF/image text extraction pipeline that uses OCR to parse uploaded CVs and auto-populate form fields — a feature no affordable existing tool offered with the level of customization I needed.\n\n4. **Multi-tenant Architecture**: Each user gets their own public URL (e.g., domain.com/username) that serves their portfolio, while the backend admin can manage all users, templates, and settings.\n\nBuilding from scratch gave me full control over the data model, performance characteristics, and user experience. The trade-off was development time, but the result is a system perfectly tailored to my vision that I can extend infinitely.",
+
+            'proficiency_ratings' => [
+                'php' => 4,
+                'php_description' => 'Over 3.5 years of daily PHP development. Proficient with OOP, design patterns (Repository, Service, Strategy), PSR standards, Composer package management, and writing clean testable code. I have built multiple production applications from scratch using vanilla PHP and PHP frameworks.',
+                'javascript' => 4,
+                'javascript_description' => 'Strong experience with both vanilla JavaScript and React.js. Built interactive SPAs including an event management system with Firebase authentication. Comfortable with ES6+, async/await, DOM manipulation, and component-based architecture. Currently expanding into Vue.js.',
+                'sql' => 4,
+                'sql_description' => 'Proficient with MySQL — complex joins, subqueries, indexing strategies, query optimization using EXPLAIN, database normalization, and migration management through Laravel. I design database schemas for production applications handling thousands of daily transactions.',
+                'redis' => 2,
+                'redis_description' => 'Familiar with Redis for caching (cache driver in Laravel) and have used it for storing session data and caching frequently accessed database queries. Interested in learning more about Redis queues, pub/sub, and advanced data structures.',
+                'css' => 4,
+                'css_description' => 'Strong CSS skills including Flexbox, CSS Grid, responsive design, CSS custom properties, animations/transitions, and media queries. I have built multiple production portfolio and CV templates with pixel-perfect designs. Comfortable with both vanilla CSS and Bootstrap.',
+                'other_languages' => 2,
+                'other_languages_description' => 'Basic exposure to Node.js through small utility scripts and API testing. Familiar with the Node.js ecosystem (npm, Express concepts). Have not worked with Golang or Ruby professionally, but eager to learn.',
+                'elasticsearch' => 1,
+                'elasticsearch_description' => 'Theoretical understanding of Elasticsearch concepts (inverted indexes, full-text search, analyzers) but no hands-on production experience yet. I have used Laravel Scout with database driver for basic search functionality.',
+                'laravel' => 5,
+                'laravel_description' => 'Laravel is my primary framework with 3+ years of daily usage. Expert in Eloquent ORM, middleware, service providers, events/listeners, queues, Blade templating, form requests, policies, API resources, and modular architecture with nwidart/laravel-modules. I have built and maintain multiple production Laravel applications including ERP systems, e-learning platforms, and this CV builder platform.',
+            ],
+
+            'sparks_joy' => "🎸 Playing acoustic guitar in the evening after a long coding session is my reset button. There is something about switching from logical thinking to creative expression that recharges me completely.\n\n📚 I am also passionate about teaching and mentoring. I regularly help junior developers in local communities understand web development concepts. Watching someone's face light up when they finally understand how an API works — that sparks genuine joy.\n\n🌊 Growing up in Lalmonirhat near the river, I developed a deep love for nature. Whenever I visit home, I spend time by the river. It reminds me that the best solutions, like rivers, find the path of least resistance.\n\n🎵 Favorite song: \"Tumi Robe Nirobe\" by Rabindranath Tagore — it is a reminder that meaningful things persist quietly, much like well-written code.",
+
+            'landing_page_url' => null,
 
             'declaration' => 'I hereby declare that the information provided in this CV is true and correct to the best of my knowledge and belief.',
             'declaration_date' => now(),

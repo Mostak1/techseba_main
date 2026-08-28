@@ -36,6 +36,7 @@
         'skills' => 'Skills',
         'language' => 'Language',
         'references' => 'References',
+        'questions' => 'Questions',
         'declaration' => 'Declaration',
         'settings' => 'Settings',
     ];
@@ -337,6 +338,101 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ===== Proficiency Ratings ===== */
+        .proficiency-ratings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .proficiency-card {
+            border: 1px solid #dbe3ef;
+            border-radius: 10px;
+            padding: 18px;
+            background: #f8fafc;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+
+        .proficiency-card:hover {
+            border-color: #0a165e;
+            box-shadow: 0 2px 12px rgba(10, 22, 94, .08);
+        }
+
+        .proficiency-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .proficiency-card-header strong {
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        .star-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .star-label {
+            cursor: pointer;
+            display: inline-flex;
+        }
+
+        .star-label input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            min-height: 0;
+        }
+
+        .star-label i {
+            font-size: 22px;
+            color: #f59e0b;
+            transition: transform .15s ease;
+        }
+
+        .star-label:hover i {
+            transform: scale(1.2);
+        }
+
+        .rating-value {
+            margin-left: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .proficiency-card textarea {
+            width: 100%;
+            min-height: 72px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            background: #ffffff;
+            color: #0f172a;
+            padding: 10px 12px;
+            font-size: 13px;
+            line-height: 1.4;
+            outline: none;
+            resize: vertical;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .proficiency-card textarea:focus {
+            border-color: #0a165e;
+            box-shadow: 0 0 0 3px rgba(10, 22, 94, .10);
+        }
+
+        @media (max-width: 991px) {
+            .proficiency-ratings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 @endpush
 
@@ -625,6 +721,80 @@
                     </div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'declaration', 'next' => $nextTab('declaration'), 'cv' => $cv])
+            </section>
+
+            {{-- ==================== APPLICATION QUESTIONS TAB ==================== --}}
+            <section class="cv-tab-panel {{ $activeTab === 'questions' ? 'active' : '' }}" data-tab-panel="questions">
+                <h5 class="cv-section-title">Application Questions</h5>
+                <p style="color: #64748b; font-size: 13px; margin: -8px 0 20px;">Answer the following questions to complete your application profile.</p>
+
+                <div class="cv-grid">
+                    {{-- Technical Challenge --}}
+                    <div class="cv-field cv-full">
+                        <label>🔧 Technical Challenge <small style="color:#64748b; font-weight:400;">(Describe a scalable solution you implemented in a mature codebase)</small></label>
+                        <textarea name="technical_challenge" rows="8" placeholder="Describe a technical challenge where you had to implement a scalable solution within an existing, mature codebase. How did you balance the need for high performance against the risk of creating technical debt or breaking existing functionality?">{{ old('technical_challenge', $cv->technical_challenge ?? '') }}</textarea>
+                    </div>
+
+                    {{-- Built from Scratch --}}
+                    <div class="cv-field cv-full">
+                        <label>🏗️ Built from Scratch <small style="color:#64748b; font-weight:400;">(Have you ever built a framework, library, or tool from scratch?)</small></label>
+                        <textarea name="built_from_scratch" rows="8" placeholder="Have you ever built a framework, library, or tool from scratch instead of using an existing one? If so, why did you choose to build one instead of using an existing one?">{{ old('built_from_scratch', $cv->built_from_scratch ?? '') }}</textarea>
+                    </div>
+
+                    {{-- Proficiency Ratings --}}
+                    <div class="cv-field cv-full">
+                        <label style="font-size: 16px; margin-bottom: 16px;">📊 Proficiency Ratings <small style="color:#64748b; font-weight:400;">(Rate 1-5 and describe your experience)</small></label>
+
+                        @php
+                            $proficiencyAreas = [
+                                'php' => ['label' => 'PHP', 'icon' => 'fab fa-php'],
+                                'javascript' => ['label' => 'Javascript (React, AngularJS or VueJS)', 'icon' => 'fab fa-js'],
+                                'sql' => ['label' => 'SQL', 'icon' => 'fas fa-database'],
+                                'redis' => ['label' => 'Redis and Queues', 'icon' => 'fas fa-server'],
+                                'css' => ['label' => 'CSS', 'icon' => 'fab fa-css3-alt'],
+                                'other_languages' => ['label' => 'Other Languages (NodeJS, Golang, Ruby)', 'icon' => 'fas fa-code'],
+                                'elasticsearch' => ['label' => 'ElasticSearch', 'icon' => 'fas fa-search'],
+                                'laravel' => ['label' => 'Laravel or other PHP Frameworks', 'icon' => 'fab fa-laravel'],
+                            ];
+                            $currentRatings = old('proficiency_ratings', $cv->proficiency_ratings ?? []);
+                        @endphp
+
+                        <div class="proficiency-ratings-grid">
+                            @foreach($proficiencyAreas as $key => $area)
+                                <div class="proficiency-card">
+                                    <div class="proficiency-card-header">
+                                        <i class="{{ $area['icon'] }}" style="font-size: 20px; color: #0a165e;"></i>
+                                        <strong>{{ $area['label'] }}</strong>
+                                    </div>
+                                    <div class="star-rating" data-rating-for="{{ $key }}">
+                                        @for($i = 1; $i <= 5; $i++)
+                                            <label class="star-label">
+                                                <input type="radio" name="proficiency_ratings[{{ $key }}]" value="{{ $i }}" @checked(($currentRatings[$key] ?? 0) == $i)>
+                                                <i class="{{ ($currentRatings[$key] ?? 0) >= $i ? 'fas' : 'far' }} fa-star"></i>
+                                            </label>
+                                        @endfor
+                                        <span class="rating-value">{{ $currentRatings[$key] ?? 0 }}/5</span>
+                                    </div>
+                                    <textarea name="proficiency_ratings[{{ $key }}_description]" rows="3" placeholder="Describe your experience with {{ $area['label'] }}...">{{ $currentRatings[$key . '_description'] ?? '' }}</textarea>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Sparks Joy --}}
+                    <div class="cv-field cv-full">
+                        <label>✨ What Sparks Joy? <small style="color:#64748b; font-weight:400;">(Share something that sparks joy in your life)</small></label>
+                        <textarea name="sparks_joy" rows="6" placeholder="Feel free to share something that sparks joy in your life. ✨ It can be a photo or a favorite song. If you want to make a whole film and share it, this is the right place. Go crazy!">{{ old('sparks_joy', $cv->sparks_joy ?? '') }}</textarea>
+                    </div>
+
+                    {{-- Landing Page URL --}}
+                    <div class="cv-field cv-full">
+                        <label>🔗 MailerLite Landing Page URL <small style="color:#64748b; font-weight:400;">(Create and publish a landing page in MailerLite)</small></label>
+                        <input type="url" name="landing_page_url" value="{{ old('landing_page_url', $cv->landing_page_url ?? '') }}" placeholder="https://your-landing-page.mailerlite.com/...">
+                        <small style="color: #94a3b8; display: block; margin-top: 6px;">📋 Create a landing page in MailerLite, make sure it's published, and paste the URL here.</small>
+                    </div>
+                </div>
+                @include('user.cv.partials.actions', ['tab' => 'questions', 'next' => $nextTab('questions'), 'cv' => $cv])
             </section>
 
             <section class="cv-tab-panel {{ $activeTab === 'settings' ? 'active' : '' }}" data-tab-panel="settings">
@@ -945,6 +1115,24 @@
                     document.querySelector('textarea[name="career_objective"]').value = objMatch[1].split('\n\n')[0].trim();
                 }
             }
+        })();
+
+        // --- Star Rating Interactivity ---
+        (function() {
+            document.querySelectorAll('.star-rating').forEach(function(container) {
+                var labels = container.querySelectorAll('.star-label');
+                labels.forEach(function(label, idx) {
+                    label.addEventListener('click', function() {
+                        var value = idx + 1;
+                        labels.forEach(function(l, i) {
+                            var icon = l.querySelector('i');
+                            icon.className = i < value ? 'fas fa-star' : 'far fa-star';
+                        });
+                        var valueSpan = container.querySelector('.rating-value');
+                        if (valueSpan) valueSpan.textContent = value + '/5';
+                    });
+                });
+            });
         })();
     </script>
 @endpush

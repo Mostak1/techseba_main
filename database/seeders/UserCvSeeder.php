@@ -145,7 +145,7 @@ class UserCvSeeder extends Seeder
 
             'sparks_joy' => "🎸 Playing acoustic guitar in the evening after a long coding session is my reset button. There is something about switching from logical thinking to creative expression that recharges me completely.\n\n📚 I am also passionate about teaching and mentoring. I regularly help junior developers in local communities understand web development concepts. Watching someone's face light up when they finally understand how an API works — that sparks genuine joy.\n\n🌊 Growing up in Lalmonirhat near the river, I developed a deep love for nature. Whenever I visit home, I spend time by the river. It reminds me that the best solutions, like rivers, find the path of least resistance.\n\n🎵 Favorite song: \"Tumi Robe Nirobe\" by Rabindranath Tagore — it is a reminder that meaningful things persist quietly, much like well-written code.",
 
-            'landing_page_url' => null,
+            'landing_page_url' => 'https://subscribepage.io/mostak-portfolio',
 
             'declaration' => 'I hereby declare that the information provided in this CV is true and correct to the best of my knowledge and belief.',
             'declaration_date' => now(),

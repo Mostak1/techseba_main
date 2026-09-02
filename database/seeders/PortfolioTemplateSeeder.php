@@ -28,5 +28,15 @@ class PortfolioTemplateSeeder extends Seeder
                 'is_active' => true,
             ]
         );
+
+        PortfolioTemplate::updateOrCreate(
+            ['slug' => 'application'],
+            [
+                'name' => 'Application Portfolio',
+                'preview_image' => null,
+                'view_path' => 'frontend.cv.portfolio_application',
+                'is_active' => true,
+            ]
+        );
     }
 }

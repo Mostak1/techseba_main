@@ -504,11 +504,14 @@
                         </form>
 
                         <div style="display: flex; gap: 8px;">
-                            <a href="{{ route('user.cv.sample-spreadsheet') }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
-                                <i class="fas fa-download"></i> Sample Sheet
+                            <a href="{{ route('user.cv.sample-spreadsheet', ['format' => 'csv']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
+                                <i class="fas fa-file-csv"></i> Sample CSV Template
+                            </a>
+                            <a href="{{ route('user.cv.sample-spreadsheet', ['format' => 'json']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
+                                <i class="fas fa-file-code"></i> Sample JSON Template
                             </a>
                             <a href="{{ route('user.cv.export-spreadsheet') }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; background: #166534; color: #ffffff; border-color: #166534; white-space: nowrap;">
-                                <i class="fas fa-file-export"></i> Export My Data Sheet
+                                <i class="fas fa-file-export"></i> Export My Data
                             </a>
                         </div>
                     </div>

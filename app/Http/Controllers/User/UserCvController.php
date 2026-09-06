@@ -232,8 +232,17 @@ class UserCvController extends Controller
         }, $filename, ['Content-Type' => 'application/json']);
     }
 
-    public function downloadSampleSpreadsheet()
+    public function downloadSampleSpreadsheet(Request $request)
     {
+        $format = strtolower($request->query('format', 'csv'));
+
+        if ($format === 'csv') {
+            $csvPath = public_path('samples/sample-portfolio-template.csv');
+            if (File::exists($csvPath)) {
+                return response()->download($csvPath, 'sample-portfolio-template.csv', ['Content-Type' => 'text/csv']);
+            }
+        }
+
         $sampleData = [
             'full_name' => 'Md. Mostak Ahmed',
             'email' => 'mostakidb@gmail.com',

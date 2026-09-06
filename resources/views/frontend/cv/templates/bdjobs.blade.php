@@ -445,6 +445,24 @@
                         @endforeach
                     </div>
                 </div>
+    @if($cv->projects->isNotEmpty())
+        <section class="section">
+            <h2 class="section-title">Projects & Software Engineering Case Studies</h2>
+            @foreach($cv->projects as $project)
+                <div style="margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #ccc;">
+                    <div style="font-weight: 700; font-size: 13px; color: #000;">{{ $loop->iteration }}. {{ $project->title }} @if($project->role)<span style="font-weight: normal; color: #555;">({{ $project->role }})</span>@endif</div>
+                    @if($project->link)
+                        <div style="font-size: 11px; color: #0056b3; margin-top: 2px;"><strong>Demo Link:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a></div>
+                    @endif
+                    @if($project->demo_user || $project->demo_password)
+                        <div style="font-size: 11px; color: #155724; background-color: #d4edda; border: 1px dashed #c3e6cb; padding: 3px 8px; border-radius: 4px; margin: 4px 0; display: inline-block;">
+                            @if($project->demo_user)<span style="margin-right: 12px;"><strong>Demo User:</strong> <code>{{ $project->demo_user }}</code></span>@endif
+                            @if($project->demo_password)<span><strong>Demo Password:</strong> <code>{{ $project->demo_password }}</code></span>@endif
+                        </div>
+                    @endif
+                    @if($project->technologies)<div style="font-size: 11px; color: #333; margin-top: 2px;"><strong>Technologies:</strong> {{ $project->technologies }}</div>@endif
+                    @if($project->description)<p style="margin-top: 3px; font-size: 11px; color: #444;">{{ $project->description }}</p>@endif
+                </div>
             @endforeach
         </section>
     @endif

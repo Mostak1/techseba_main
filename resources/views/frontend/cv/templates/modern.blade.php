@@ -870,7 +870,13 @@
                             <span class="exp-company">{{ $loop->iteration }}. {{ $project->title }}</span>
                         </div>
                         @if($project->link)
-                            <div class="muted" style="font-size: 9px;"><i class="fa fa-link"></i> {{ $project->link }}</div>
+                            <div class="muted" style="font-size: 9px;"><i class="fa fa-link"></i> <strong>Demo Link:</strong> {{ $project->link }}</div>
+                        @endif
+                        @if($project->demo_user || $project->demo_password)
+                            <div style="font-size: 8.5px; color: #166534; background: #f0fdf4; border: 1px dashed #86efac; padding: 2px 5px; border-radius: 3px; margin: 2px 0;">
+                                @if($project->demo_user) <span><strong>User:</strong> {{ $project->demo_user }}</span> @endif
+                                @if($project->demo_password) <span style="margin-left: 8px;"><strong>Password:</strong> {{ $project->demo_password }}</span> @endif
+                            </div>
                         @endif
                         <div style="margin-top: 3px; text-align: justify;">{{ $project->description }}</div>
                     </div>

@@ -30,6 +30,12 @@ return new class extends Migration
             if (!Schema::hasColumn('cv_projects', 'image')) {
                 $table->string('image')->nullable()->after('solution');
             }
+            if (!Schema::hasColumn('cv_projects', 'demo_user')) {
+                $table->string('demo_user')->nullable()->after('image');
+            }
+            if (!Schema::hasColumn('cv_projects', 'demo_password')) {
+                $table->string('demo_password')->nullable()->after('demo_user');
+            }
         });
     }
 
@@ -39,7 +45,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('cv_projects', function (Blueprint $table) {
-            $table->dropColumn(['github_url', 'technologies', 'role', 'problem', 'solution', 'image']);
+            $table->dropColumn(['github_url', 'technologies', 'role', 'problem', 'solution', 'image', 'demo_user', 'demo_password']);
         });
     }
 };

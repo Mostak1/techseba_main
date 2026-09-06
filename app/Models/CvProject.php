@@ -16,6 +16,8 @@ class CvProject extends Model
         'problem',
         'solution',
         'image',
+        'demo_user',
+        'demo_password',
         'description',
         'sort_order',
     ];

@@ -1488,6 +1488,20 @@
                                 </div>
                             @endif
 
+                            @if($proj->demo_user || $proj->demo_password)
+                                <div class="demo-access-box" style="margin-bottom: 1rem; padding: 0.75rem 1rem; background: #f0fdf4; border: 1px dashed #86efac; border-radius: var(--radius-md); font-size: 0.85rem; color: #166534;">
+                                    <div style="font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                                        <i class="fa-solid fa-key" style="color: #16a34a;"></i> Demo Access Credentials:
+                                    </div>
+                                    @if($proj->demo_user)
+                                        <div><strong>Demo User:</strong> <code style="background: #dcfce7; padding: 2px 6px; border-radius: 4px; color: #14532d;">{{ $proj->demo_user }}</code></div>
+                                    @endif
+                                    @if($proj->demo_password)
+                                        <div style="margin-top: 2px;"><strong>Demo Password:</strong> <code style="background: #dcfce7; padding: 2px 6px; border-radius: 4px; color: #14532d;">{{ $proj->demo_password }}</code></div>
+                                    @endif
+                                </div>
+                            @endif
+
                             <div class="project-tech-stack">
                                 @if($proj->technologies)
                                     @foreach(explode(',', $proj->technologies) as $tech)

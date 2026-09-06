@@ -36,7 +36,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 10mm 12mm 10mm 12mm;
+            margin: 6mm 8mm 6mm 8mm;
         }
 
         * {
@@ -51,13 +51,13 @@
             background: #f1f5f9;
             color: #0f172a;
             font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 11px;
-            line-height: 1.45;
+            font-size: 9.5px;
+            line-height: 1.35;
         }
 
         .no-print-area {
             max-width: 210mm;
-            margin: 15px auto 0;
+            margin: 10px auto 0;
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -65,30 +65,29 @@
         }
 
         .btn {
-            padding: 8px 18px;
-            border-radius: 6px;
+            padding: 6px 14px;
+            border-radius: 5px;
             text-decoration: none;
             font-weight: 700;
             color: #ffffff;
             background: #1e3a8a;
             border: none;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.12);
         }
 
         .btn-secondary { background: #475569; }
 
         .cv-container {
             width: 210mm;
-            min-height: 297mm;
-            margin: 15px auto 30px;
-            padding: 12mm 14mm;
+            margin: 10px auto 20px;
+            padding: 8mm 10mm;
             background: #ffffff;
-            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
             border-radius: 4px;
         }
 
@@ -97,95 +96,93 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            border-bottom: 3px solid #1e3a8a;
-            padding-bottom: 14px;
-            margin-bottom: 16px;
+            border-bottom: 2px solid #1e3a8a;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
         }
 
         .cv-header-info {
             flex: 1;
-            padding-right: 15px;
+            padding-right: 12px;
         }
 
         .cv-name {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: #1e3a8a;
-            margin: 0 0 4px 0;
+            margin: 0 0 2px 0;
             letter-spacing: -0.3px;
             text-transform: uppercase;
         }
 
         .cv-role {
-            font-size: 13.5px;
+            font-size: 11.5px;
             font-weight: 700;
             color: #0284c7;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
         }
 
         .contact-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 6px 14px;
-            font-size: 10.5px;
+            gap: 4px 12px;
+            font-size: 9.5px;
             color: #334155;
         }
 
         .contact-item {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .contact-item i {
             color: #1e3a8a;
-            width: 14px;
+            width: 12px;
             text-align: center;
         }
 
         .cv-photo {
-            width: 110px;
-            height: 130px;
-            border-radius: 6px;
+            width: 90px;
+            height: 105px;
+            border-radius: 4px;
             border: 2px solid #cbd5e1;
             object-fit: cover;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
         /* Sections */
         .cv-section {
-            margin-bottom: 16px;
-            page-break-inside: avoid;
-            break-inside: avoid;
+            margin-bottom: 10px;
         }
 
         .section-title-wrap {
             display: flex;
             align-items: center;
-            gap: 8px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 4px;
-            margin-bottom: 10px;
+            gap: 6px;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 3px;
+            margin-bottom: 6px;
         }
 
         .section-icon {
-            width: 22px;
-            height: 22px;
+            width: 18px;
+            height: 18px;
             background: #1e3a8a;
             color: #ffffff;
-            border-radius: 4px;
+            border-radius: 3px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 9.5px;
         }
 
         .section-title {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 800;
             color: #1e3a8a;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.4px;
             margin: 0;
         }
 
@@ -193,15 +190,14 @@
             color: #334155;
             text-align: justify;
             margin: 0;
+            font-size: 9.5px;
         }
 
         /* Items (Experience & Projects) */
         .item-card {
-            margin-bottom: 12px;
-            padding-bottom: 10px;
+            margin-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px dashed #e2e8f0;
-            page-break-inside: avoid;
-            break-inside: avoid;
         }
 
         .item-card:last-child {
@@ -214,84 +210,85 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .item-title {
-            font-size: 12px;
+            font-size: 10.5px;
             font-weight: 700;
             color: #0f172a;
         }
 
         .item-sub {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: #0284c7;
         }
 
         .item-date {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             color: #475569;
             background: #f1f5f9;
-            padding: 2px 6px;
-            border-radius: 4px;
+            padding: 1px 5px;
+            border-radius: 3px;
             white-space: nowrap;
         }
 
         .tech-badges {
-            margin: 4px 0 6px;
+            margin: 2px 0 4px;
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 3px;
         }
 
         .tech-badge {
             background: #eff6ff;
             color: #1e40af;
             border: 1px solid #bfdbfe;
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-size: 9.5px;
+            padding: 0px 5px;
+            border-radius: 2px;
+            font-size: 8.5px;
             font-weight: 600;
         }
 
         .demo-cred-box {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
-            border-left: 3px solid #16a34a;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin: 4px 0 6px;
-            font-size: 10px;
+            border-left: 2.5px solid #16a34a;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin: 2px 0 4px;
+            font-size: 8.5px;
             color: #15803d;
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 8px;
         }
 
         .bullet-list {
-            margin: 4px 0 0 16px;
+            margin: 2px 0 0 14px;
             padding: 0;
             color: #334155;
+            font-size: 9.5px;
         }
 
         .bullet-list li {
-            margin-bottom: 3px;
+            margin-bottom: 1.5px;
         }
 
         /* Skills Grid */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
+            gap: 5px;
         }
 
         .skill-chip {
             background: #f8fafc;
             border: 1px solid #cbd5e1;
-            padding: 4px 8px;
-            border-radius: 4px;
+            padding: 3px 6px;
+            border-radius: 3px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -300,10 +297,11 @@
         .skill-chip span {
             font-weight: 600;
             color: #1e293b;
+            font-size: 9px;
         }
 
         .skill-level {
-            font-size: 9px;
+            font-size: 8.5px;
             color: #0284c7;
             font-weight: 700;
         }
@@ -312,21 +310,21 @@
         .cv-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 6px;
-            font-size: 10.5px;
+            margin-top: 4px;
+            font-size: 9px;
         }
 
         .cv-table th {
             background: #1e3a8a;
             color: #ffffff;
             text-align: left;
-            padding: 6px 8px;
+            padding: 4px 6px;
             font-weight: 700;
         }
 
         .cv-table td {
             border: 1px solid #cbd5e1;
-            padding: 5px 8px;
+            padding: 3.5px 6px;
             color: #1e293b;
         }
 
@@ -337,8 +335,8 @@
         .badge-result {
             background: #e0f2fe;
             color: #0369a1;
-            padding: 2px 6px;
-            border-radius: 3px;
+            padding: 1px 4px;
+            border-radius: 2px;
             font-weight: 700;
         }
 
@@ -346,41 +344,47 @@
         .grid-2col {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 10px;
         }
 
         .ref-card {
-            border-left: 3px solid #1e3a8a;
+            border-left: 2.5px solid #1e3a8a;
             background: #f8fafc;
-            padding: 8px 10px;
-            border-radius: 0 4px 4px 0;
-            font-size: 10.5px;
+            padding: 5px 8px;
+            border-radius: 0 3px 3px 0;
+            font-size: 9px;
         }
 
         .sig-area {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-top: 25px;
+            margin-top: 15px;
         }
 
         .sig-box {
             text-align: center;
-            width: 160px;
+            width: 140px;
         }
 
         .sig-line {
             border-top: 1px solid #475569;
-            padding-top: 4px;
+            padding-top: 3px;
             font-weight: 700;
+            font-size: 9.5px;
         }
 
         .sig-img {
-            max-height: 45px;
-            margin-bottom: 4px;
+            max-height: 35px;
+            margin-bottom: 2px;
         }
 
-        /* Print Media Styles */
+        .page-break {
+            page-break-before: always;
+            break-before: page;
+        }
+
+        /* Print Media Styles for EXACT 2 A4 PAGES */
         @media print {
             html, body {
                 background: #ffffff !important;
@@ -396,7 +400,6 @@
 
             .cv-container {
                 width: 100% !important;
-                min-height: auto !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 box-shadow: none !important;
@@ -404,9 +407,9 @@
                 border-radius: 0 !important;
             }
 
-            .cv-section, .item-card, tr, .ref-card {
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
+            .page-break {
+                page-break-before: always !important;
+                break-before: page !important;
             }
         }
     </style>
@@ -423,6 +426,8 @@
 @endif
 
 <div class="cv-container">
+    <!-- PAGE 1 CONTENT -->
+
     <!-- Header -->
     <header class="cv-header">
         <div class="cv-header-info">
@@ -456,15 +461,15 @@
         @endif
     </header>
 
-    <!-- Career Objective & Summary -->
+    <!-- Executive Summary & Objective -->
     @if($cv->career_objective || $cv->career_summary)
     <div class="cv-section">
         <div class="section-title-wrap">
             <div class="section-icon"><i class="fa-solid fa-user-tie"></i></div>
-            <h2 class="section-title">Executive Summary & Career Objective</h2>
+            <h2 class="section-title">Executive Summary & Objective</h2>
         </div>
         @if($cv->career_summary)
-            <p class="section-text" style="margin-bottom: 6px;">{{ $cv->career_summary }}</p>
+            <p class="section-text" style="margin-bottom: 3px;">{{ $cv->career_summary }}</p>
         @endif
         @if($cv->career_objective)
             <p class="section-text"><strong>Objective:</strong> {{ $cv->career_objective }}</p>
@@ -482,7 +487,7 @@
         <div class="skills-grid">
             @foreach($cv->skills as $skill)
             <div class="skill-chip">
-                <span><i class="fa-solid fa-check" style="color: #16a34a; margin-right: 4px; font-size: 9px;"></i> {{ $skill->skill_name }}</span>
+                <span><i class="fa-solid fa-check" style="color: #16a34a; margin-right: 3px; font-size: 8px;"></i> {{ $skill->skill_name }}</span>
                 @if($skill->skill_level)
                     <span class="skill-level">{{ $skill->skill_level }}</span>
                 @endif
@@ -492,12 +497,12 @@
     </div>
     @endif
 
-    <!-- Commercial Projects / Case Studies -->
+    <!-- Featured Commercial Projects -->
     @if($cv->projects->isNotEmpty())
     <div class="cv-section">
         <div class="section-title-wrap">
             <div class="section-icon"><i class="fa-solid fa-laptop-code"></i></div>
-            <h2 class="section-title">Featured Software Projects & Live Demos</h2>
+            <h2 class="section-title">Featured Commercial Projects & Live Demos</h2>
         </div>
 
         @foreach($cv->projects as $project)
@@ -520,34 +525,29 @@
             @if($project->link || $project->demo_user || $project->demo_password)
                 <div class="demo-cred-box">
                     @if($project->link)
-                        <span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Demo Link:</strong> {{ $project->link }}</span>
+                        <span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Demo:</strong> {{ $project->link }}</span>
                     @endif
                     @if($project->demo_user)
                         <span><i class="fa-solid fa-user-check"></i> <strong>User:</strong> {{ $project->demo_user }}</span>
                     @endif
                     @if($project->demo_password)
-                        <span><i class="fa-solid fa-key"></i> <strong>Password:</strong> {{ $project->demo_password }}</span>
+                        <span><i class="fa-solid fa-key"></i> <strong>Pass:</strong> {{ $project->demo_password }}</span>
                     @endif
                 </div>
             @endif
 
-            {{-- Muted for clean print view
-            @if($project->problem)
-                <p class="section-text" style="font-size: 10.5px; margin-top: 2px;"><strong>Problem Solved:</strong> {{ $project->problem }}</p>
-            @endif
-
-            @if($project->solution)
-                <p class="section-text" style="font-size: 10.5px; margin-top: 2px;"><strong>Technical Solution:</strong> {{ $project->solution }}</p>
-            @endif
-            --}}
-
             @if($project->description)
-                <p class="section-text" style="font-size: 10.5px; margin-top: 2px;">{{ $project->description }}</p>
+                <p class="section-text" style="font-size: 9px; margin-top: 1px;">{{ $project->description }}</p>
             @endif
         </div>
         @endforeach
     </div>
     @endif
+
+    <!-- PAGE BREAK FOR EXACT 2-PAGE PRINT -->
+    <div class="page-break"></div>
+
+    <!-- PAGE 2 CONTENT -->
 
     <!-- Professional Experience -->
     @if($cv->employments->isNotEmpty())
@@ -576,7 +576,7 @@
             @endif
 
             @if($emp->achievements)
-                <p style="margin: 4px 0 2px; font-weight: 700; color: #1e3a8a;">Key Achievements:</p>
+                <p style="margin: 2px 0 1px; font-weight: 700; color: #1e3a8a; font-size: 9px;">Key Achievements:</p>
                 <ul class="bullet-list">
                     @foreach(explode("\n", $emp->achievements) as $line)
                         @if(trim($line))<li>{{ trim($line, "*- ") }}</li>@endif
@@ -636,7 +636,7 @@
                     <th style="width: 35%;">Course / Certification</th>
                     <th style="width: 35%;">Institute / Academy</th>
                     <th style="width: 15%;">Year</th>
-                    <th style="width: 15%;">Duration / Details</th>
+                    <th style="width: 15%;">Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -653,51 +653,47 @@
     </div>
     @endif
 
-    <!-- Language Proficiency -->
-    @if($cv->languages->isNotEmpty())
-    <div class="cv-section">
-        <div class="section-title-wrap">
-            <div class="section-icon"><i class="fa-solid fa-language"></i></div>
-            <h2 class="section-title">Language Proficiency</h2>
+    <!-- Languages & Personal Information (Side by Side Grid) -->
+    <div class="grid-2col" style="margin-bottom: 10px;">
+        @if($cv->languages->isNotEmpty())
+        <div>
+            <div class="section-title-wrap">
+                <div class="section-icon"><i class="fa-solid fa-language"></i></div>
+                <h2 class="section-title">Language Proficiency</h2>
+            </div>
+            <table class="cv-table">
+                <thead>
+                    <tr>
+                        <th>Language</th>
+                        <th>Reading</th>
+                        <th>Writing</th>
+                        <th>Speaking</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($cv->languages as $lang)
+                    <tr>
+                        <td><strong>{{ $lang->language_name }}</strong></td>
+                        <td>{{ $lang->reading_level }}</td>
+                        <td>{{ $lang->writing_level }}</td>
+                        <td>{{ $lang->speaking_level }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        <table class="cv-table">
-            <thead>
-                <tr>
-                    <th>Language</th>
-                    <th>Reading</th>
-                    <th>Writing</th>
-                    <th>Speaking</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($cv->languages as $lang)
-                <tr>
-                    <td><strong>{{ $lang->language_name }}</strong></td>
-                    <td>{{ $lang->reading_level }}</td>
-                    <td>{{ $lang->writing_level }}</td>
-                    <td>{{ $lang->speaking_level }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @endif
+        @endif
 
-    <!-- Personal Details -->
-    <div class="cv-section">
-        <div class="section-title-wrap">
-            <div class="section-icon"><i class="fa-solid fa-id-card"></i></div>
-            <h2 class="section-title">Personal Information</h2>
-        </div>
-        <div class="grid-2col" style="font-size: 10.5px;">
-            <div>
+        <div>
+            <div class="section-title-wrap">
+                <div class="section-icon"><i class="fa-solid fa-id-card"></i></div>
+                <h2 class="section-title">Personal Information</h2>
+            </div>
+            <div class="ref-card" style="font-size: 9px; line-height: 1.4; border-left-color: #0284c7;">
                 <div><strong>Date of Birth:</strong> {{ $formatFullDate($cv->date_of_birth) }}</div>
                 <div><strong>Nationality:</strong> {{ $cv->nationality }}</div>
                 <div><strong>Gender:</strong> {{ $cv->gender }}</div>
-            </div>
-            <div>
                 <div><strong>Marital Status:</strong> {{ $cv->marital_status }}</div>
-                <div><strong>Religion:</strong> {{ $cv->religion }}</div>
                 @if($cv->permanent_address)
                     <div><strong>Permanent Address:</strong> {{ $cv->permanent_address }}</div>
                 @endif
@@ -705,7 +701,7 @@
         </div>
     </div>
 
-    <!-- References & Declaration -->
+    <!-- References -->
     @if($cv->references->isNotEmpty())
     <div class="cv-section">
         <div class="section-title-wrap">
@@ -715,12 +711,11 @@
         <div class="grid-2col">
             @foreach($cv->references as $ref)
             <div class="ref-card">
-                <div style="font-weight: 700; color: #1e3a8a; font-size: 11.5px; margin-bottom: 2px;">{{ $ref->name }}</div>
+                <div style="font-weight: 700; color: #1e3a8a; font-size: 10px; margin-bottom: 1px;">{{ $ref->name }}</div>
                 <div><strong>Designation:</strong> {{ $ref->designation }}</div>
                 <div><strong>Organization:</strong> {{ $ref->organization }}</div>
                 @if($ref->phone)<div><strong>Phone:</strong> {{ $ref->phone }}</div>@endif
                 @if($ref->email)<div><strong>Email:</strong> {{ $ref->email }}</div>@endif
-                @if($ref->relationship)<div><strong>Relation:</strong> {{ $ref->relationship }}</div>@endif
             </div>
             @endforeach
         </div>
@@ -733,7 +728,7 @@
             <div class="section-icon"><i class="fa-solid fa-file-signature"></i></div>
             <h2 class="section-title">Declaration</h2>
         </div>
-        <p class="section-text">{{ $cv->declaration ?: 'I hereby declare that all details provided above are authentic and complete to the best of my knowledge.' }}</p>
+        <p class="section-text" style="font-size: 8.5px;">{{ $cv->declaration ?: 'I hereby declare that all details provided above are authentic and complete to the best of my knowledge.' }}</p>
 
         <div class="sig-area">
             <div class="sig-box">
@@ -741,10 +736,10 @@
                     <img src="{{ $signatureSrc }}" class="sig-img" alt="Signature">
                 @endif
                 <div class="sig-line">{{ $cv->full_name }}</div>
-                <div style="font-size: 9.5px; color: #64748b;">Signature</div>
+                <div style="font-size: 8.5px; color: #64748b;">Signature</div>
             </div>
             <div class="sig-box">
-                <div style="margin-bottom: 24px; font-weight: 600;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
+                <div style="margin-bottom: 18px; font-weight: 600; font-size: 9px;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
                 <div class="sig-line">Date</div>
             </div>
         </div>

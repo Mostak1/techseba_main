@@ -113,9 +113,9 @@ class UserCvSeeder extends Seeder
             'github_url' => 'https://github.com/Mostak1',
             'linkedin_url' => 'https://linkedin.com/in/mostaksarker',
 
-            'career_objective' => 'To architect and deliver high-performance, secure, and scalable enterprise Laravel applications while driving infrastructure excellence on Rocky Linux servers and enabling server-side data analytics & tracking integration.',
+            'career_objective' => 'To architect and deliver high-performance, secure, and scalable enterprise web applications in a Senior Full-Stack / Lead Engineer role, driving backend architecture, API design, DevOps automation, and server-side analytics.',
 
-            'career_summary' => 'Senior Full-Stack Laravel Developer / DevOps & Tracking Integration Engineer experienced in developing enterprise-grade applications (Carenet ERP, TechSeba POS & ERP, MessMeal, Fluento) and managing production infrastructure on Rocky Linux. Combines backend and frontend product engineering with Virtualmin multi-domain hosting, automated Let\'s Encrypt SSL provisioning, secure REST APIs, ERP/POS business logic, CI/CD, and end-to-end marketing event tracking through Meta Pixel, Meta Conversions API (CAPI) and Google Tag Manager (GTM).',
+            'career_summary' => 'Senior Full-Stack Laravel Developer & Team Lead with 4.5+ years of experience engineering high-performance enterprise ERP, POS, Healthcare, and multi-tenant SaaS platforms. Expert in Laravel architecture, RESTful API design, Vue.js, MySQL schema optimization, Rocky Linux DevOps, and server-side tracking analytics (Meta CAPI / GTM). Proven track record leading development teams, driving system scalability, and automating production deployments.',
 
             'total_experience' => 4.5,
 
@@ -355,49 +355,43 @@ class UserCvSeeder extends Seeder
         ],
     ]);
 
-    // 9. Technical & Infrastructure Skills (From Master Profile)
+    // 9. Technical Skills (US Recruiter-Friendly Categories)
     $cv->skills()->createMany([
         [
-            'skill_name' => 'Backend Engineering: PHP 8.2+, Laravel 12/11, Eloquent ORM, REST APIs, Passport OAuth2, Queues & Artisan',
-            'skill_type' => 'Technical Skills',
-            'skill_level' => 'Expert',
+            'skill_name' => 'Backend Development',
+            'skill_type' => 'Backend',
+            'skill_level' => 'PHP 8.2+, Laravel (v10, v11, v12), REST APIs, Eloquent ORM, Queue Systems, OAuth2 / Passport, Microservices',
             'sort_order' => 1,
         ],
         [
-            'skill_name' => 'Frontend & UI: Vue.js (v2.7 & Vue 3 Composition API), Vuex, Vue Router, Inertia.js, React.js, Tailwind CSS (v3/v4), Alpine.js',
-            'skill_type' => 'Technical Skills',
-            'skill_level' => 'Expert',
+            'skill_name' => 'Frontend Engineering',
+            'skill_type' => 'Frontend',
+            'skill_level' => 'Vue.js (Vue 3 / Composition API), React.js, Inertia.js, JavaScript (ES6+), Tailwind CSS, Bootstrap 5, Vite, PWAs',
             'sort_order' => 2,
         ],
         [
-            'skill_name' => 'Database Engineering: MySQL/MariaDB schema design, BCMath 4-decimal precision, transactions, indexing, aggregate SQL optimization',
-            'skill_type' => 'Technical Skills',
-            'skill_level' => 'Expert',
+            'skill_name' => 'Database & Architecture',
+            'skill_type' => 'Database',
+            'skill_level' => 'MySQL, MariaDB, Relational Schema Design, Query Optimization, Composite Indexing, Transactions, BCMath Accounting',
             'sort_order' => 3,
         ],
         [
-            'skill_name' => 'Linux & DevOps: Rocky Linux administration, Virtualmin multi-domain hosting, Let\'s Encrypt SSL automation, Nginx/PHP-FPM, Docker, GitHub Actions CI/CD',
-            'skill_type' => 'Technical Skills',
-            'skill_level' => 'Expert',
+            'skill_name' => 'DevOps & Systems',
+            'skill_type' => 'DevOps',
+            'skill_level' => 'Linux, Rocky Linux, Virtualmin, Nginx, Docker, GitHub Actions CI/CD, Let\'s Encrypt SSL Automation',
             'sort_order' => 4,
         ],
         [
-            'skill_name' => 'Analytics & Tracking: Google Tag Manager (GTM), Meta Pixel, Meta Conversions API (CAPI), TikTok Events API, GA4 Measurement Protocol',
-            'skill_type' => 'Technical Skills',
-            'skill_level' => 'Expert',
+            'skill_name' => 'Analytics & Tracking',
+            'skill_type' => 'Analytics',
+            'skill_level' => 'Google Tag Manager (GTM), Meta Conversions API (CAPI), GA4 Measurement Protocol, TikTok Events API',
             'sort_order' => 5,
         ],
         [
-            'skill_name' => 'Third-Party Integrations: Stripe, PayPal, Razorpay, QuickBooks Online, WooCommerce, Twilio, Infobip, AWS S3, ZKTeco Biometrics',
-            'skill_type' => 'Technical Skills',
-            'skill_level' => 'Good',
+            'skill_name' => 'Integrations & APIs',
+            'skill_type' => 'Integrations',
+            'skill_level' => 'Stripe, PayPal, Razorpay, WooCommerce, ZKTeco Biometrics, LIS Analyzer Ingestion Pipelines, AWS S3',
             'sort_order' => 6,
-        ],
-        [
-            'skill_name' => 'English Language: Professional proficiency in spoken, reading, and written technical English.',
-            'skill_type' => 'Language Skills',
-            'skill_level' => 'Good',
-            'sort_order' => 7,
         ],
     ]);
 

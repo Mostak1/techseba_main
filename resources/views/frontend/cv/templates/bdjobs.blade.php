@@ -13,6 +13,8 @@
     $formatDate = function ($date) {
         return $date ? \Illuminate\Support\Carbon::parse($date)->format('d M Y') : '';
     };
+
+    $username = $username ?? ($cv->user->username ?? 'mostak');
 @endphp
 <!DOCTYPE html>
 <html lang="en">

@@ -22,6 +22,7 @@
         ? public_path('frontend/assets/css/fontawesome.css')
         : asset('frontend/assets/css/fontawesome.css');
 
+    $username = $username ?? ($cv->user->username ?? 'mostak');
     $primaryRole = $cv->employments->first()->designation ?? 'Senior Full-Stack Laravel Developer & DevOps Engineer';
 @endphp
 <!DOCTYPE html>

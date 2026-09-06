@@ -214,7 +214,12 @@ class PublicCvController extends Controller
 
     private function viewData($cv, array $options): array
     {
-        return array_merge(['cv' => $cv], $options);
+        $username = $options['username'] ?? ($cv->user->username ?? 'mostak');
+
+        return array_merge([
+            'cv' => $cv,
+            'username' => $username,
+        ], $options);
     }
 
     private function viewPath($cv): string

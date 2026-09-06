@@ -485,6 +485,35 @@
                         @endif
                     </div>
                 </div>
+
+                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 1px dashed #86efac; border-radius: 8px;">
+                    <h5 style="margin: 0 0 8px; color: #166534; font-size: 16px; font-weight: 700;">
+                        <i class="fas fa-file-excel" style="color: #16a34a; margin-right: 6px;"></i> Import / Export CV Data Sheet (Excel / CSV / JSON)
+                    </h5>
+                    <p style="font-size: 13px; color: #15803d; margin-bottom: 15px; line-height: 1.5;">
+                        Quickly update your entire CV profile, experience, skills, and projects (including <strong>Demo Links, Demo Users, and Demo Passwords</strong>) using Excel, CSV, or JSON spreadsheet files.
+                    </p>
+
+                    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+                        <form action="{{ route('user.cv.import-spreadsheet') }}" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1;">
+                            @csrf
+                            <input type="file" name="spreadsheet_file" accept=".xlsx,.xls,.csv,.json,.txt" required style="font-size: 13px; background: #fff; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1; min-width: 220px;">
+                            <button type="submit" class="cv-small-btn" style="background: #16a34a; border-color: #16a34a; white-space: nowrap;">
+                                <i class="fas fa-file-import"></i> Upload & Update Data Sheet
+                            </button>
+                        </form>
+
+                        <div style="display: flex; gap: 8px;">
+                            <a href="{{ route('user.cv.sample-spreadsheet') }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
+                                <i class="fas fa-download"></i> Sample Sheet
+                            </a>
+                            <a href="{{ route('user.cv.export-spreadsheet') }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; background: #166534; color: #ffffff; border-color: #166534; white-space: nowrap;">
+                                <i class="fas fa-file-export"></i> Export My Data Sheet
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="cv-actions">
                     @if($cv)
                         <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>

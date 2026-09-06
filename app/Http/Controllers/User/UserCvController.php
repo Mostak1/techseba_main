@@ -8,7 +8,9 @@ use App\Models\CvTemplate;
 use App\Models\PortfolioTemplate;
 use App\Models\UserCv;
 use App\Services\CvSourceExtractor;
+use App\Services\SpreadsheetCvImporter;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -178,6 +180,90 @@ class UserCvController extends Controller
             ->setOptions($this->pdfOptions(), true)
             ->setPaper('a4', 'portrait')
             ->download($filename);
+    }
+
+    public function importSpreadsheet(Request $request, SpreadsheetCvImporter $importer)
+    {
+        $request->validate([
+            'spreadsheet_file' => 'required|file|mimes:csv,xlsx,xls,json,txt|max:10240',
+        ]);
+
+        $user = Auth::guard('web')->user();
+        $cv = UserCv::firstOrCreate(['user_id' => $user->id]);
+
+        $result = $importer->import($request->file('spreadsheet_file'), $cv);
+
+        return redirect()
+            ->route('user.cv.edit', ['tab' => 'upload'])
+            ->with([
+                'message' => $result['message'],
+                'alert-type' => $result['status'] === 'success' ? 'success' : 'error',
+            ]);
+    }
+
+    public function exportSpreadsheet()
+    {
+        $cv = $this->ownerCv();
+
+        $exportData = [
+            'full_name' => $cv->full_name,
+            'email' => $cv->email,
+            'mobile' => $cv->mobile,
+            'website_url' => $cv->website_url,
+            'github_url' => $cv->github_url,
+            'linkedin_url' => $cv->linkedin_url,
+            'career_objective' => $cv->career_objective,
+            'career_summary' => $cv->career_summary,
+            'technical_challenge' => $cv->technical_challenge,
+            'built_from_scratch' => $cv->built_from_scratch,
+            'sparks_joy' => $cv->sparks_joy,
+            'proficiency_ratings' => $cv->proficiency_ratings,
+            'employments' => $cv->employments->toArray(),
+            'projects' => $cv->projects->toArray(),
+            'academics' => $cv->academics->toArray(),
+            'trainings' => $cv->trainings->toArray(),
+            'skills' => $cv->skills->toArray(),
+        ];
+
+        $filename = Str::slug($cv->full_name ?: 'my-portfolio').'-data-sheet.json';
+
+        return response()->streamDownload(function () use ($exportData) {
+            echo json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }, $filename, ['Content-Type' => 'application/json']);
+    }
+
+    public function downloadSampleSpreadsheet()
+    {
+        $sampleData = [
+            'full_name' => 'Md. Mostak Ahmed',
+            'email' => 'mostakidb@gmail.com',
+            'mobile' => '+8801752243665',
+            'website_url' => 'https://mostaksarker.com',
+            'github_url' => 'https://github.com/Mostak1',
+            'linkedin_url' => 'https://linkedin.com/in/mostaksarker',
+            'career_objective' => 'To architect enterprise Laravel web applications...',
+            'career_summary' => 'Senior Full-Stack Laravel Developer / DevOps Engineer...',
+            'technical_challenge' => 'Modular architecture and real-time cash register audit...',
+            'built_from_scratch' => 'MessMeal multi-tenant PWA and Fluento EdTech platform...',
+            'sparks_joy' => 'Linux server administration and acoustic guitar...',
+            'projects' => [
+                [
+                    'title' => 'Carenet ERP — Healthcare Platform',
+                    'link' => 'https://mostak.awcbd.org',
+                    'demo_user' => 'demoadmin',
+                    'demo_password' => '123456',
+                    'role' => 'Senior Full-Stack Developer',
+                    'technologies' => 'Laravel 10, MySQL, Redis, Passport, Docker',
+                    'problem' => 'Fragmented clinical and lab workflows...',
+                    'solution' => 'Architected modular system with nwidart/laravel-modules...',
+                    'description' => 'Enterprise healthcare platform unifying clinical care...'
+                ]
+            ]
+        ];
+
+        return response()->streamDownload(function () use ($sampleData) {
+            echo json_encode($sampleData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }, 'sample-portfolio-spreadsheet.json', ['Content-Type' => 'application/json']);
     }
 
     private function ownerCv(): UserCv

@@ -214,6 +214,9 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
 
             Route::get('/cv', [UserCvController::class, 'edit'])->name('cv.edit');
             Route::post('/cv', [UserCvController::class, 'update'])->name('cv.update');
+            Route::post('/cv/import-spreadsheet', [UserCvController::class, 'importSpreadsheet'])->name('cv.import-spreadsheet');
+            Route::get('/cv/export-spreadsheet', [UserCvController::class, 'exportSpreadsheet'])->name('cv.export-spreadsheet');
+            Route::get('/cv/sample-spreadsheet', [UserCvController::class, 'downloadSampleSpreadsheet'])->name('cv.sample-spreadsheet');
             Route::get('/cv/preview', [UserCvController::class, 'preview'])->name('cv.preview');
             Route::get('/cv/portfolio-preview', [UserCvController::class, 'portfolioPreview'])->name('cv.portfolio-preview');
             Route::get('/cv/print', [UserCvController::class, 'print'])->name('cv.print');

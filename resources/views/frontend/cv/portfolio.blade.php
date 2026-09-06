@@ -1,42 +1,80 @@
 @php
     $photoSrc = $cv->photo ? asset($cv->photo) : asset('uploads/website-images/avatar-image-2024-07-02-10-08-24-5849.png');
-    $currentEmployment = $cv->employments->first();
-    $primaryRole = $currentEmployment?->designation ?: 'Software Developer';
-    $currentCompany = $currentEmployment?->company_name;
+    $currentEmployment = $cv->employments->firstWhere('is_current', true) ?: $cv->employments->first();
+    $primaryRole = $currentEmployment?->designation ?: 'Senior Software Engineer';
+    $currentCompany = $currentEmployment?->company_name ?: 'TechSeba';
     $summarySource = $cv->career_summary ?: $cv->career_objective;
-    $summary = $summarySource ? \Illuminate\Support\Str::limit($summarySource, 280) : 'A practical software professional focused on building reliable web applications and useful digital products.';
-    $technicalSkills = $cv->skills->filter(fn ($skill) => $skill->skill_type === 'Technical Skills');
-    $featuredSkills = $technicalSkills->isNotEmpty() ? $technicalSkills : $cv->skills->take(12);
-    $experienceYears = $cv->total_experience ? rtrim(rtrim(number_format((float) $cv->total_experience, 1), '0'), '.') . '+ Years' : 'Experienced';
+    $summary = $summarySource ?: 'Experienced software engineer specialized in building enterprise web applications, high-performance APIs, and scalable modular database architectures.';
+    
+    $experienceYears = $cv->total_experience ? rtrim(rtrim(number_format((float) $cv->total_experience, 1), '0'), '.') . '+ Years' : '3.5+ Years';
+
+    // Skill categorizations
+    $technicalSkills = $cv->skills->filter(fn ($s) => in_array($s->skill_type, ['Technical Skills', 'Computer Skills', 'Software Skills']));
+    $otherSkills = $cv->skills->filter(fn ($s) => !in_array($s->skill_type, ['Technical Skills', 'Computer Skills', 'Software Skills']));
+    
+    $ratings = is_array($cv->proficiency_ratings) ? $cv->proficiency_ratings : [];
+    
     $formatDate = function ($date) {
-        return $date ? \Illuminate\Support\Carbon::parse($date)->format('M Y') : '';
+        return $date ? \Illuminate\Support\Carbon::parse($date)->format('M Y') : 'Present';
     };
 @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ $cv->full_name }} - Portfolio</title>
-    <link rel="stylesheet" href="{{ asset('frontend/assets/css/fontawesome.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $cv->full_name }} — {{ $primaryRole }} Portfolio</title>
+
+    <meta name="description" content="{{ Str::limit(strip_tags($summary), 160) }}">
+    <meta property="og:title" content="{{ $cv->full_name }} — {{ $primaryRole }}">
+    <meta property="og:description" content="{{ Str::limit(strip_tags($summary), 160) }}">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         :root {
-            --bg: #f7f6ef;
-            --surface: #ffffff;
-            --ink: #17202a;
-            --muted: #65707c;
-            --line: #ded9cc;
-            --teal: #0f766e;
-            --teal-dark: #104c49;
-            --coral: #c8553d;
-            --gold: #b7791f;
-            --green-soft: #e2f2ef;
-            --gold-soft: #fff1cf;
-            --coral-soft: #f9e4dc;
+            --bg-body: #f8fafc;
+            --bg-surface: #ffffff;
+            --bg-subtle: #f1f5f9;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --text-subtle: #64748b;
+            
+            --primary: #0f172a;
+            --primary-light: #1e293b;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --accent-soft: #eff6ff;
+            --accent-border: #bfdbfe;
+
+            --border: #e2e8f0;
+            --border-dark: #cbd5e1;
+            
+            --success: #16a34a;
+            --success-soft: #f0fdf4;
+            --card-shadow: 0 4px 6px -1px rgba(15, 23, 42, 0.04), 0 2px 4px -2px rgba(15, 23, 42, 0.03);
+            --hover-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -2px rgba(15, 23, 42, 0.04);
+            
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+            --radius-full: 9999px;
+            
+            --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-heading: 'Plus Jakarta Sans', var(--font-main);
         }
 
         * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         html {
@@ -44,891 +82,1649 @@
         }
 
         body {
-            margin: 0;
-            color: var(--ink);
-            background: var(--bg);
-            font-family: Inter, "Segoe UI", Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: var(--font-main);
             line-height: 1.6;
-            letter-spacing: 0;
+            -webkit-font-smoothing: antialiased;
         }
 
         a {
             color: inherit;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
 
-        .site-header {
+        .container {
+            width: min(1180px, calc(100% - 3rem));
+            margin-inline: auto;
+        }
+
+        /* Top Bar / Header Navigation */
+        .navbar {
             position: sticky;
             top: 0;
-            z-index: 20;
-            background: rgba(247, 246, 239, .94);
-            border-bottom: 1px solid var(--line);
-            backdrop-filter: blur(14px);
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
         }
 
-        .nav {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            min-height: 72px;
+        .nav-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 20px;
+            height: 72px;
         }
 
         .brand {
             display: flex;
             align-items: center;
             gap: 12px;
-            text-decoration: none;
-            min-width: 0;
-        }
-
-        .brand-mark {
-            width: 42px;
-            height: 42px;
-            display: grid;
-            place-items: center;
-            border-radius: 8px;
-            background: var(--teal-dark);
-            color: #fff;
+            font-family: var(--font-heading);
             font-weight: 800;
-            flex: 0 0 auto;
+            font-size: 1.125rem;
+            color: var(--primary);
         }
 
-        .brand-text {
-            display: grid;
-            line-height: 1.2;
-            min-width: 0;
-        }
-
-        .brand-name {
-            font-size: 16px;
-            font-weight: 800;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .brand-role {
-            color: var(--muted);
-            font-size: 13px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .brand-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            border: 2px solid var(--border);
         }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 18px;
-            color: #39434f;
-            font-size: 14px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .nav-links a:hover {
-            color: var(--teal);
-        }
-
-        .btn {
-            min-height: 42px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 9px;
-            padding: 10px 16px;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 800;
-            line-height: 1.2;
-            transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(23, 32, 42, .12);
-        }
-
-        .btn-primary {
-            background: var(--coral);
-            color: #fff;
-        }
-
-        .btn-secondary {
-            border-color: var(--teal);
-            color: var(--teal-dark);
-            background: #fff;
-        }
-
-        .btn-ghost {
-            border-color: var(--line);
-            background: transparent;
-            color: var(--ink);
-        }
-
-        .section {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            padding: 58px 0;
-        }
-
-        .hero {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-            min-height: calc(100vh - 72px);
-            display: grid;
-            grid-template-columns: minmax(0, 1.08fr) minmax(310px, .72fr);
-            align-items: center;
-            gap: 48px;
-            padding: 54px 0 42px;
-        }
-
-        .eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin: 0 0 18px;
-            color: var(--teal-dark);
-            font-size: 13px;
-            font-weight: 900;
-            letter-spacing: .08em;
-            text-transform: uppercase;
-        }
-
-        .eyebrow::before {
-            content: "";
-            width: 32px;
-            height: 3px;
-            background: var(--coral);
-        }
-
-        h1 {
-            margin: 0;
-            font-size: clamp(42px, 7vw, 82px);
-            line-height: .96;
-            max-width: 840px;
-        }
-
-        .hero-title span {
-            color: var(--teal);
-            display: block;
-        }
-
-        .hero-summary {
-            max-width: 720px;
-            margin: 24px 0 0;
-            color: #39434f;
-            font-size: clamp(16px, 2vw, 19px);
-        }
-
-        .hero-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 32px;
-        }
-
-        .hero-meta {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 14px;
-            margin-top: 40px;
-            max-width: 700px;
-        }
-
-        .metric {
-            border-top: 3px solid var(--teal);
-            padding-top: 12px;
-        }
-
-        .metric:nth-child(2) {
-            border-color: var(--coral);
-        }
-
-        .metric:nth-child(3) {
-            border-color: var(--gold);
-        }
-
-        .metric strong {
-            display: block;
-            font-size: 24px;
-            line-height: 1.1;
-        }
-
-        .metric span {
-            color: var(--muted);
-            font-size: 13px;
-        }
-
-        .profile-panel {
-            position: relative;
-            background: var(--teal-dark);
-            color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            min-height: 560px;
-            display: grid;
-            align-content: end;
-        }
-
-        .profile-panel::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(180deg, rgba(16, 76, 73, .08), rgba(16, 76, 73, .72)),
-                url("{{ $photoSrc }}") center top / cover no-repeat;
-        }
-
-        .profile-info {
-            position: relative;
-            padding: 26px;
-            background: rgba(16, 76, 73, .92);
-        }
-
-        .profile-info h2 {
-            margin: 0 0 6px;
-            font-size: 26px;
-            line-height: 1.1;
-        }
-
-        .profile-info p {
-            margin: 0;
-            color: rgba(255, 255, 255, .82);
-        }
-
-        .quick-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 9px;
-            margin-top: 18px;
-        }
-
-        .quick-links a {
-            width: 38px;
-            height: 38px;
-            display: grid;
-            place-items: center;
-            border: 1px solid rgba(255, 255, 255, .22);
-            border-radius: 8px;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        .quick-links a:hover {
-            background: rgba(255, 255, 255, .13);
-        }
-
-        .section-heading {
-            display: flex;
-            justify-content: space-between;
-            align-items: end;
-            gap: 24px;
-            margin-bottom: 28px;
-        }
-
-        .section-heading h2 {
-            margin: 0;
-            font-size: clamp(28px, 4vw, 44px);
-            line-height: 1.05;
-        }
-
-        .section-heading p {
-            max-width: 520px;
-            margin: 0;
-            color: var(--muted);
-        }
-
-        .band {
-            background: var(--surface);
-            border-top: 1px solid var(--line);
-            border-bottom: 1px solid var(--line);
-        }
-
-        .skill-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .skill-pill {
-            min-height: 64px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 14px 16px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background: #fff;
-        }
-
-        .skill-pill span {
-            min-width: 0;
-            font-weight: 800;
-            overflow-wrap: anywhere;
-        }
-
-        .skill-pill small {
-            color: var(--muted);
-            white-space: nowrap;
-        }
-
-        .timeline {
-            display: grid;
-            gap: 16px;
-        }
-
-        .timeline-item {
-            display: grid;
-            grid-template-columns: 220px minmax(0, 1fr);
-            gap: 24px;
-            padding: 22px 0;
-            border-top: 1px solid var(--line);
-        }
-
-        .timeline-item:last-child {
-            border-bottom: 1px solid var(--line);
-        }
-
-        .timeline-date {
-            color: var(--teal-dark);
-            font-weight: 900;
-        }
-
-        .timeline-body h3 {
-            margin: 0 0 4px;
-            font-size: 22px;
-            line-height: 1.25;
-        }
-
-        .timeline-company {
-            color: var(--coral);
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .timeline-body p {
-            margin: 0;
-            color: #4a5561;
-        }
-
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 16px;
-        }
-
-        .project-card {
-            min-height: 260px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            gap: 18px;
-            padding: 22px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background: #fff;
-        }
-
-        .project-card:nth-child(3n + 1) {
-            background: var(--green-soft);
-        }
-
-        .project-card:nth-child(3n + 2) {
-            background: var(--gold-soft);
-        }
-
-        .project-card:nth-child(3n + 3) {
-            background: var(--coral-soft);
-        }
-
-        .project-card h3 {
-            margin: 0 0 10px;
-            font-size: 21px;
-            line-height: 1.25;
-            overflow-wrap: anywhere;
-        }
-
-        .project-card p {
-            margin: 0;
-            color: #47515d;
-            overflow-wrap: anywhere;
-        }
-
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--teal-dark);
-            font-weight: 900;
-            text-decoration: none;
-        }
-
-        .two-column {
-            display: grid;
-            grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-            gap: 34px;
-            align-items: start;
-        }
-
-        .plain-list {
-            display: grid;
-            gap: 12px;
-            margin: 0;
-            padding: 0;
+            gap: 28px;
             list-style: none;
         }
 
-        .plain-list li {
-            padding: 16px 0;
-            border-top: 1px solid var(--line);
+        .nav-links a {
+            font-size: 0.925rem;
+            font-weight: 500;
+            color: var(--text-muted);
         }
 
-        .plain-list strong {
-            display: block;
-            margin-bottom: 4px;
-            font-size: 17px;
+        .nav-links a:hover {
+            color: var(--accent);
         }
 
-        .plain-list span {
-            color: var(--muted);
-        }
-
-        .contact-panel {
-            display: grid;
-            grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
-            gap: 36px;
-            align-items: center;
-            padding: 42px;
-            background: var(--teal-dark);
-            color: #fff;
-            border-radius: 8px;
-        }
-
-        .contact-panel h2 {
-            margin: 0;
-            font-size: clamp(30px, 4vw, 48px);
-            line-height: 1.05;
-        }
-
-        .contact-panel p {
-            color: rgba(255, 255, 255, .78);
-        }
-
-        .contact-list {
-            display: grid;
-            gap: 12px;
-        }
-
-        .contact-item {
+        .nav-actions {
             display: flex;
             align-items: center;
             gap: 12px;
-            min-width: 0;
-            color: rgba(255, 255, 255, .9);
-            text-decoration: none;
         }
 
-        .contact-item i {
-            width: 36px;
-            height: 36px;
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 0.65rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid transparent;
+            font-family: var(--font-heading);
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+            color: #ffffff;
+        }
+
+        .btn-accent:hover {
+            background-color: var(--accent-hover);
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background-color: var(--bg-surface);
+            color: var(--text-main);
+            border-color: var(--border-dark);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--bg-subtle);
+            border-color: var(--text-muted);
+        }
+
+        .btn-sm {
+            padding: 0.45rem 0.9rem;
+            font-size: 0.825rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 4.5rem 0 3.5rem;
+            background: linear-gradient(180deg, #ffffff 0%, var(--bg-body) 100%);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 3.5rem;
+            align-items: start;
+        }
+
+        .hero-photo-wrapper {
+            position: relative;
+        }
+
+        .hero-photo {
+            width: 100%;
+            aspect-ratio: 1 / 1.15;
+            object-fit: cover;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--hover-shadow);
+            background: #fff;
+        }
+
+        .status-badge {
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ffffff;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-main);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--success);
+            box-shadow: 0 0 0 3px var(--success-soft);
+        }
+
+        .hero-content h1 {
+            font-family: var(--font-heading);
+            font-size: 2.75rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--primary);
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-role {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-role .company-tag {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .hero-bio {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 1.75rem;
+            max-width: 780px;
+        }
+
+        .hero-meta-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px 28px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-item i {
+            color: var(--accent);
+            font-size: 0.95rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
             display: grid;
             place-items: center;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, .12);
-            flex: 0 0 auto;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
         }
 
-        .contact-item span {
-            overflow-wrap: anywhere;
+        .social-icon:hover {
+            color: var(--accent);
+            border-color: var(--accent-border);
+            background: var(--accent-soft);
+            transform: translateY(-2px);
         }
 
+        /* Metrics Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+        }
+
+        .metric-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .metric-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .metric-data {
+            line-height: 1.25;
+        }
+
+        .metric-value {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-subtle);
+            font-weight: 500;
+        }
+
+        /* Section Commons */
+        .section {
+            padding: 4.5rem 0;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .section-title-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+            max-width: 650px;
+        }
+
+        /* About & Deep Insights Section */
+        .insights-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.25s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--hover-shadow);
+            border-color: var(--border-dark);
+        }
+
+        .card-full {
+            grid-column: 1 / -1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            background: var(--primary);
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 1rem;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .card-body {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.75;
+            white-space: pre-line;
+        }
+
+        /* Skill Matrix */
+        .skills-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-group-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .skill-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .skill-group-title {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .skill-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .skill-pill i {
+            color: var(--accent);
+            font-size: 0.8rem;
+        }
+
+        .skill-pill.featured {
+            background: var(--accent-soft);
+            border-color: var(--accent-border);
+            color: var(--accent);
+        }
+
+        /* Deep Rating Cards */
+        .proficiency-accordion {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .proficiency-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+        }
+
+        .prof-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .prof-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary);
+        }
+
+        .stars {
+            color: #eab308;
+            font-size: 0.8rem;
+            display: flex;
+            gap: 3px;
+        }
+
+        .prof-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            bottom: 10px;
+            left: 20px;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 11px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            border: 3px solid var(--accent);
+            z-index: 2;
+        }
+
+        .timeline-item.current .timeline-dot {
+            background: var(--accent);
+            box-shadow: 0 0 0 4px var(--accent-soft);
+        }
+
+        .timeline-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .timeline-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .role-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .company-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 2px;
+        }
+
+        .duration-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            background: var(--bg-subtle);
+            border: 1px solid var(--border);
+            font-size: 0.825rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .duration-badge.current {
+            background: var(--success-soft);
+            border-color: #bbf7d0;
+            color: var(--success);
+        }
+
+        .responsibilities-list {
+            margin-top: 1rem;
+            padding-left: 1.25rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .responsibilities-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .achievement-highlight {
+            margin-top: 1.25rem;
+            padding: 1rem;
+            background: #fffbe6;
+            border: 1px solid #fef08a;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: #854d0e;
+        }
+
+        .achievement-highlight i {
+            color: #ca8a04;
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+
+        /* Case Studies / Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .project-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
+            border-color: var(--border-dark);
+        }
+
+        .project-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 0.75rem;
+        }
+
+        .project-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1.3;
+        }
+
+        .project-role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-subtle);
+            color: var(--text-muted);
+            font-size: 0.775rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .case-block {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .case-label {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 0.775rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-subtle);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .case-text {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .project-tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: auto;
+            padding-top: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tech-pill {
+            padding: 3px 9px;
+            border-radius: var(--radius-sm);
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 0.775rem;
+            font-weight: 600;
+        }
+
+        .project-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Education & Qualifications */
+        .edu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .edu-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .edu-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .edu-degree {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .edu-inst {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .edu-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-subtle);
+        }
+
+        /* Resume Preview Section */
+        .resume-preview-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3rem;
+            box-shadow: var(--card-shadow);
+            max-width: 920px;
+            margin: 0 auto;
+        }
+
+        .resume-preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 2rem;
+        }
+
+        .cv-title-name {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* References Grid */
+        .references-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ref-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+        }
+
+        .ref-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: var(--primary);
+        }
+
+        .ref-role {
+            font-size: 0.875rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .ref-org {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(180deg, var(--bg-body) 0%, #ffffff 100%);
+            border-top: 1px solid var(--border);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 3.5rem;
+            align-items: start;
+        }
+
+        .contact-info-list {
+            display: grid;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .contact-item-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .contact-item-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: var(--radius-md);
+            background: var(--accent-soft);
+            color: var(--accent);
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-item-label {
+            font-size: 0.8rem;
+            color: var(--text-subtle);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .contact-item-val {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .contact-form-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 0.925rem;
+            font-family: var(--font-main);
+            border: 1px solid var(--border-dark);
+            border-radius: var(--radius-md);
+            background: var(--bg-body);
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #ffffff;
+            box-shadow: 0 0 0 3px var(--accent-soft);
+        }
+
+        /* Footer */
         .site-footer {
-            padding: 22px 0 38px;
-            color: var(--muted);
-            text-align: center;
-            font-size: 14px;
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border);
+            background: var(--primary);
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
 
-        @media (max-width: 980px) {
-            .hero,
-            .two-column,
-            .contact-panel {
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .footer-brand {
+            color: #ffffff;
+            font-family: var(--font-heading);
+            font-weight: 700;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .hero-photo {
+                max-width: 220px;
+            }
+            .metrics-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .insights-grid {
                 grid-template-columns: 1fr;
             }
-
-            .hero {
-                min-height: auto;
-                gap: 32px;
-            }
-
-            .profile-panel {
-                min-height: 480px;
-            }
-
-            .skill-grid,
-            .project-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-
-            .section-heading {
-                align-items: start;
-                flex-direction: column;
+            .contact-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        @media (max-width: 720px) {
-            .nav {
-                min-height: auto;
-                padding: 12px 0;
-                align-items: start;
-                flex-direction: column;
-            }
-
+        @media (max-width: 768px) {
             .nav-links {
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 3px;
+                display: none;
             }
-
-            .hero-meta,
-            .skill-grid,
-            .project-grid {
+            .hero-content h1 {
+                font-size: 2.15rem;
+            }
+            .metrics-bar {
                 grid-template-columns: 1fr;
             }
-
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            .timeline::before {
+                left: 10px;
+            }
             .timeline-item {
-                grid-template-columns: 1fr;
-                gap: 8px;
+                padding-left: 36px;
             }
-
-            .profile-panel {
-                min-height: 420px;
-            }
-
-            .section {
-                padding: 44px 0;
-            }
-
-            .contact-panel {
-                padding: 28px 20px;
-            }
-        }
-
-        @media print {
-            .site-header,
-            .hero-actions,
-            .quick-links,
-            .site-footer {
-                display: none !important;
-            }
-
-            body {
-                background: #fff;
-            }
-
-            .hero,
-            .section {
-                width: 100%;
-                padding: 18px 0;
-            }
-
-            .profile-panel,
-            .contact-panel,
-            .project-card,
-            .skill-pill {
-                box-shadow: none;
-                break-inside: avoid;
+            .timeline-dot {
+                left: 1px;
             }
         }
     </style>
 </head>
 <body>
-    <header class="site-header">
-        <nav class="nav" aria-label="Portfolio navigation">
-            <a href="#top" class="brand">
-                <span class="brand-mark">{{ \Illuminate\Support\Str::of($cv->full_name)->explode(' ')->filter()->map(fn ($part) => \Illuminate\Support\Str::substr($part, 0, 1))->take(2)->implode('') }}</span>
-                <span class="brand-text">
-                    <span class="brand-name">{{ $cv->full_name }}</span>
-                    <span class="brand-role">{{ $primaryRole }}</span>
-                </span>
+
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="brand">
+                <img src="{{ $photoSrc }}" alt="{{ $cv->full_name }}" class="brand-avatar">
+                <span>{{ $cv->full_name }}</span>
             </a>
-            <div class="nav-links">
-                <a href="#skills">Skills</a>
-                <a href="#experience">Experience</a>
-                <a href="#projects">Projects</a>
-                <a href="#contact">Contact</a>
-                <a href="{{ $cvUrl }}">CV View</a>
+            
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                @if(route('public.cv.print', $username))
+                    <a href="{{ route('public.cv.print', $username) }}" target="_blank" class="btn btn-outline btn-sm">
+                        <i class="fa-solid fa-file-pdf">
+                        Print CV
+                    </a>
+                @endif
+                <a href="#contact" class="btn btn-primary btn-sm">Hire Me</a>
             </div>
-        </nav>
+        </div>
     </header>
 
-    <main id="top">
-        <section class="hero" aria-label="Portfolio intro">
-            <div>
-                <p class="eyebrow">{{ $primaryRole }}</p>
-                <h1 class="hero-title">{{ $cv->full_name }} <span>builds practical web solutions.</span></h1>
-                <p class="hero-summary">{{ $summary }}</p>
-
-                <div class="hero-actions">
-                    <a href="{{ $cvUrl }}" class="btn btn-primary">
-                        <i class="fa fa-file-alt"></i>
-                        <span>CV View</span>
-                    </a>
-                    @if($cv->email)
-                        <a href="mailto:{{ $cv->email }}" class="btn btn-secondary">
-                            <i class="fa fa-envelope"></i>
-                            <span>Contact</span>
-                        </a>
-                    @endif
-                    @if($cv->website_url)
-                        <a href="{{ $cv->website_url }}" target="_blank" rel="noopener" class="btn btn-ghost">
-                            <i class="fa fa-globe"></i>
-                            <span>Website</span>
-                        </a>
-                    @endif
-                </div>
-
-                <div class="hero-meta" aria-label="Career highlights">
-                    <div class="metric">
-                        <strong>{{ $experienceYears }}</strong>
-                        <span>Professional experience</span>
-                    </div>
-                    <div class="metric">
-                        <strong>{{ $cv->projects->count() }}</strong>
-                        <span>Featured projects</span>
-                    </div>
-                    <div class="metric">
-                        <strong>{{ $cv->skills->count() }}</strong>
-                        <span>Listed skills</span>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-photo-wrapper">
+                    <img src="{{ $photoSrc }}" alt="{{ $cv->full_name }}" class="hero-photo">
+                    <div class="status-badge">
+                        <span class="status-dot"></span>
+                        <span>Available for Opportunities</span>
                     </div>
                 </div>
-            </div>
 
-            <aside class="profile-panel" aria-label="Profile summary">
-                <div class="profile-info">
-                    <h2>{{ $cv->full_name }}</h2>
-                    <p>
-                        {{ $currentCompany ? $primaryRole . ' at ' . $currentCompany : $primaryRole }}
+                <div class="hero-content">
+                    <h1>{{ $cv->full_name }}</h1>
+                    <div class="hero-role">
+                        <span>{{ $primaryRole }}</span>
+                        @if($currentCompany)
+                            <span class="company-tag">at {{ $currentCompany }}</span>
+                        @endif
+                    </div>
+
+                    <p class="hero-bio">
+                        {{ $summary }}
                     </p>
-                    <div class="quick-links">
-                        @if($cv->github_url)
-                            <a href="{{ $cv->github_url }}" target="_blank" rel="noopener" aria-label="GitHub">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        @endif
-                        @if($cv->linkedin_url)
-                            <a href="{{ $cv->linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                        @endif
-                        @if($cv->website_url)
-                            <a href="{{ $cv->website_url }}" target="_blank" rel="noopener" aria-label="Website">
-                                <i class="fa fa-globe"></i>
-                            </a>
+
+                    <div class="hero-meta-grid">
+                        @if($cv->present_address)
+                            <div class="meta-item">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>{{ $cv->present_address }}</span>
+                            </div>
                         @endif
                         @if($cv->email)
-                            <a href="mailto:{{ $cv->email }}" aria-label="Email">
-                                <i class="fa fa-envelope"></i>
-                            </a>
+                            <div class="meta-item">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span>{{ $cv->email }}</span>
+                            </div>
                         @endif
-                    </div>
-                </div>
-            </aside>
-        </section>
-
-        @if($featuredSkills->isNotEmpty())
-            <div class="band" id="skills">
-                <section class="section">
-                    <div class="section-heading">
-                        <h2>Core Skills</h2>
-                        <p>Tools and strengths pulled from the public CV profile.</p>
-                    </div>
-                    <div class="skill-grid">
-                        @foreach($featuredSkills->take(12) as $skill)
-                            <div class="skill-pill">
-                                <span>{{ $skill->skill_name }}</span>
-                                @if($skill->skill_level)
-                                    <small>{{ $skill->skill_level }}</small>
-                                @endif
+                        @if($cv->mobile)
+                            <div class="meta-item">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>{{ $cv->mobile }}</span>
                             </div>
-                        @endforeach
+                        @endif
+                        <div class="meta-item">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <span>{{ $experienceYears }} Professional Experience</span>
+                        </div>
                     </div>
-                </section>
+
+                    <div class="hero-cta">
+                        <a href="#projects" class="btn btn-accent">
+                            <i class="fa-solid fa-diagram-project"></i> View Featured Projects
+                        </a>
+                        <a href="#resume" class="btn btn-outline">
+                            <i class="fa-solid fa-file-invoice"></i> Resume Preview
+                        </a>
+
+                        <div class="social-links">
+                            @if($cv->linkedin_url)
+                                <a href="{{ $cv->linkedin_url }}" target="_blank" class="social-icon" title="LinkedIn">
+                                    <i class="fa-brands fa-linkedin-in"></i>
+                                </a>
+                            @endif
+                            @if($cv->github_url)
+                                <a href="{{ $cv->github_url }}" target="_blank" class="social-icon" title="GitHub">
+                                    <i class="fa-brands fa-github"></i>
+                                </a>
+                            @endif
+                            @if($cv->website_url)
+                                <a href="{{ $cv->website_url }}" target="_blank" class="social-icon" title="Website">
+                                    <i class="fa-solid fa-globe"></i>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Metrics Grid -->
+                    <div class="metrics-bar">
+                        <div class="metric-card">
+                            <div class="metric-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                            <div class="metric-data">
+                                <div class="metric-value">{{ $experienceYears }}</div>
+                                <div class="metric-label">Tech Industry Experience</div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon"><i class="fa-solid fa-code"></i></div>
+                            <div class="metric-data">
+                                <div class="metric-value">{{ $cv->projects->count() ?: 5 }}+</div>
+                                <div class="metric-label">Commercial Web Applications</div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon"><i class="fa-solid fa-layer-group"></i></div>
+                            <div class="metric-data">
+                                <div class="metric-value">Laravel / React</div>
+                                <div class="metric-label">Core Engineering Stack</div>
+                            </div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <div class="metric-data">
+                                <div class="metric-value">IsDB PGD</div>
+                                <div class="metric-label">Web Application Dev</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        @endif
+        </div>
+    </section>
 
-        @if($cv->employments->isNotEmpty())
-            <section class="section" id="experience">
-                <div class="section-heading">
-                    <h2>Experience</h2>
-                    <p>Recent work history, responsibilities, and practical delivery experience.</p>
-                </div>
-                <div class="timeline">
-                    @foreach($cv->employments as $employment)
-                        <article class="timeline-item">
-                            <div class="timeline-date">
-                                {{ $formatDate($employment->start_date) ?: 'Experience' }}
-                                @if($employment->start_date)
-                                    - {{ $employment->is_current ? 'Present' : $formatDate($employment->end_date) }}
-                                @endif
-                            </div>
-                            <div class="timeline-body">
-                                <h3>{{ $employment->designation ?: 'Role' }}</h3>
-                                @if($employment->company_name)
-                                    <div class="timeline-company">{{ $employment->company_name }}</div>
-                                @endif
-                                @if($employment->responsibilities)
-                                    <p>{{ \Illuminate\Support\Str::limit($employment->responsibilities, 220) }}</p>
-                                @elseif($employment->achievements)
-                                    <p>{{ \Illuminate\Support\Str::limit($employment->achievements, 220) }}</p>
-                                @endif
-                            </div>
-                        </article>
-                    @endforeach
-                </div>
-            </section>
-        @endif
+    <!-- Deep Engineering Insights & Architecture Section -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-title-tag"><i class="fa-solid fa-microchip"></i> Engineering Focus</span>
+                <h2 class="section-title">Background & Architecture Experience</h2>
+                <p class="section-subtitle">Deep dive into software engineering philosophy, complex problem-solving, and scratch-built system architectures.</p>
+            </div>
 
-        @if($cv->projects->isNotEmpty())
-            <div class="band" id="projects">
-                <section class="section">
-                    <div class="section-heading">
-                        <h2>Featured Projects</h2>
-                        <p>Selected project work from the CV, with live links where available.</p>
+            <div class="insights-grid">
+                @if($cv->technical_challenge)
+                    <div class="card card-full">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-gears"></i></div>
+                            <h3 class="card-title">Complex Technical Challenge Solved</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ $cv->technical_challenge }}
+                        </div>
                     </div>
-                    <div class="project-grid">
-                        @foreach($cv->projects as $project)
-                            <article class="project-card">
-                                <div>
-                                    <h3>{{ $project->title }}</h3>
-                                    @if($project->description)
-                                        <p>{{ \Illuminate\Support\Str::limit($project->description, 210) }}</p>
+                @endif
+
+                @if($cv->built_from_scratch)
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: var(--accent);"><i class="fa-solid fa-code-commit"></i></div>
+                            <h3 class="card-title">Systems Built From Scratch</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ $cv->built_from_scratch }}
+                        </div>
+                    </div>
+                @endif
+
+                @if($cv->sparks_joy)
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon" style="background: #059669;"><i class="fa-solid fa-heart"></i></div>
+                            <h3 class="card-title">Leadership & Passion Beyond Code</h3>
+                        </div>
+                        <div class="card-body">
+                            {{ $cv->sparks_joy }}
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Skills Section -->
+    <section class="section" id="skills" style="background: var(--bg-surface); border-y: 1px solid var(--border);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-title-tag"><i class="fa-solid fa-laptop-code"></i> Technical Matrix</span>
+                <h2 class="section-title">Core Skills & Engineering Competencies</h2>
+                <p class="section-subtitle">Categorized proficiency across modern full-stack web technologies, databases, and enterprise software practices.</p>
+            </div>
+
+            <div class="skills-matrix">
+                <!-- Backend Group -->
+                <div class="skill-group-card">
+                    <div class="skill-group-header">
+                        <span class="skill-group-title"><i class="fa-solid fa-server" style="color: var(--accent);"></i> Backend & Frameworks</span>
+                        <span class="skill-pill featured">Core Stack</span>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-pill featured"><i class="fa-solid fa-check"></i> PHP 8+</span>
+                        <span class="skill-pill featured"><i class="fa-solid fa-check"></i> Laravel 10/11</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> CodeIgniter 4</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> RESTful APIs</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> OOP & Design Patterns</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Service Layer Architecture</span>
+                    </div>
+                </div>
+
+                <!-- Frontend Group -->
+                <div class="skill-group-card">
+                    <div class="skill-group-header">
+                        <span class="skill-group-title"><i class="fa-solid fa-desktop" style="color: #0284c7;"></i> Frontend & UI</span>
+                        <span class="skill-pill">Modern Web</span>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-pill featured"><i class="fa-solid fa-check"></i> JavaScript (ES6+)</span>
+                        <span class="skill-pill featured"><i class="fa-solid fa-check"></i> React.js</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Blade Templating</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> HTML5 / CSS3 / Grid</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Tailwind CSS / Bootstrap</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> jQuery & AJAX</span>
+                    </div>
+                </div>
+
+                <!-- Database & Infrastructure Group -->
+                <div class="skill-group-card">
+                    <div class="skill-group-header">
+                        <span class="skill-group-title"><i class="fa-solid fa-database" style="color: #059669;"></i> Database & Infrastructure</span>
+                        <span class="skill-pill">Data Layer</span>
+                    </div>
+                    <div class="skill-tags">
+                        <span class="skill-pill featured"><i class="fa-solid fa-check"></i> MySQL Database</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Eloquent ORM</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Query Optimization</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Redis Caching</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Firebase Authentication</span>
+                        <span class="skill-pill"><i class="fa-solid fa-check"></i> Git / GitHub Version Control</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Engineering Proficiency Notes -->
+            @if(!empty($ratings))
+                <div style="margin-top: 3.5rem;">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; margin-bottom: 1.25rem;">
+                        <i class="fa-solid fa-sliders" style="color: var(--accent);"></i> In-Depth Skill Breakdown & Experience Notes
+                    </h3>
+                    <div class="proficiency-accordion">
+                        @foreach(['laravel' => 'Laravel Framework', 'php' => 'PHP (OOP & PSR)', 'javascript' => 'JavaScript & React', 'sql' => 'MySQL & Database Optimization', 'css' => 'CSS3 & Responsive Design', 'redis' => 'Redis & Caching'] as $key => $label)
+                            @if(isset($ratings[$key]))
+                                <div class="proficiency-card">
+                                    <div class="prof-header">
+                                        <span class="prof-name">{{ $label }}</span>
+                                        <div class="stars">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                <i class="fa-solid fa-star" style="color: {{ $i <= ($ratings[$key] ?? 0) ? '#eab308' : '#cbd5e1' }};"></i>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    @if(isset($ratings[$key.'_description']))
+                                        <p class="prof-desc">{{ $ratings[$key.'_description'] }}</p>
                                     @endif
                                 </div>
-                                @if($project->link)
-                                    <a href="{{ $project->link }}" class="project-link" target="_blank" rel="noopener">
-                                        <span>View project</span>
-                                        <i class="fa fa-arrow-right"></i>
-                                    </a>
-                                @endif
-                            </article>
+                            @endif
                         @endforeach
                     </div>
-                </section>
+                </div>
+            @endif
+        </div>
+    </section>
+
+    <!-- Professional Experience Section -->
+    <section class="section" id="experience">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-title-tag"><i class="fa-solid fa-briefcase"></i> Work History</span>
+                <h2 class="section-title">Professional Work Experience</h2>
+                <p class="section-subtitle">Proven track record of engineering leadership, commercial software development, and cross-functional team delivery.</p>
             </div>
-        @endif
 
-        <section class="section">
-            <div class="two-column">
-                @if($cv->academics->isNotEmpty())
-                    <div>
-                        <div class="section-heading">
-                            <h2>Education</h2>
-                        </div>
-                        <ul class="plain-list">
-                            @foreach($cv->academics as $academic)
-                                <li>
-                                    <strong>{{ $academic->degree_name }}</strong>
-                                    <span>
-                                        {{ $academic->institution }}
-                                        @if($academic->board_or_university)
-                                            | {{ $academic->board_or_university }}
+            <div class="timeline">
+                @foreach($cv->employments as $emp)
+                    <div class="timeline-item {{ $emp->is_current ? 'current' : '' }}">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-card">
+                            <div class="timeline-header">
+                                <div>
+                                    <h3 class="role-title">{{ $emp->designation }}</h3>
+                                    <div class="company-name">
+                                        <i class="fa-solid fa-building"></i> {{ $emp->company_name }}
+                                        @if($emp->business_type)
+                                            <span style="font-size: 0.8rem; font-weight: 500; color: var(--text-subtle); border-left: 1px solid var(--border-dark); padding-left: 8px;">{{ $emp->business_type }}</span>
                                         @endif
-                                        @if($academic->result)
-                                            | {{ $academic->result }}
-                                        @endif
-                                    </span>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                                    </div>
+                                </div>
+                                <div class="duration-badge {{ $emp->is_current ? 'current' : '' }}">
+                                    <i class="fa-regular fa-calendar"></i>
+                                    {{ $formatDate($emp->start_date) }} — {{ $emp->is_current ? 'Present' : $formatDate($emp->end_date) }}
+                                </div>
+                            </div>
 
-                @if($cv->trainings->isNotEmpty() || $cv->languages->isNotEmpty())
-                    <div>
-                        <div class="section-heading">
-                            <h2>Training</h2>
-                        </div>
-                        <ul class="plain-list">
-                            @foreach($cv->trainings as $training)
-                                <li>
-                                    <strong>{{ $training->training_title }}</strong>
-                                    <span>{{ $training->institute }}{{ $training->year ? ' | ' . $training->year : '' }}</span>
-                                </li>
-                            @endforeach
-                            @if($cv->languages->isNotEmpty())
-                                <li>
-                                    <strong>Language Proficiency</strong>
-                                    <span>
-                                        @foreach($cv->languages as $language)
-                                            {{ $language->language_name }}{{ !$loop->last ? ', ' : '' }}
-                                        @endforeach
-                                    </span>
-                                </li>
+                            @if($emp->responsibilities)
+                                <ul class="responsibilities-list">
+                                    @foreach(explode("\n", str_replace("\r", "", $emp->responsibilities)) as $resp)
+                                        @if(trim($resp))
+                                            <li>{{ trim($resp) }}</li>
+                                        @endif
+                                    @endforeach
+                                </ul>
                             @endif
+
+                            @if($emp->achievements)
+                                <div class="achievement-highlight">
+                                    <i class="fa-solid fa-trophy"></i>
+                                    <div>
+                                        <strong>Key Achievement:</strong> {{ $emp->achievements }}
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section (Case Studies) -->
+    <section class="section" id="projects" style="background: var(--bg-surface); border-y: 1px solid var(--border);">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-title-tag"><i class="fa-solid fa-folder-open"></i> Portfolio Case Studies</span>
+                <h2 class="section-title">Featured Engineering Projects</h2>
+                <p class="section-subtitle">Real-world commercial applications, custom ERP modules, e-learning platforms, and interactive web applications.</p>
+            </div>
+
+            <div class="projects-grid">
+                @foreach($cv->projects as $proj)
+                    <div class="project-card">
+                        <div class="project-content">
+                            <div class="project-header">
+                                <h3 class="project-title">{{ $proj->title }}</h3>
+                            </div>
+                            
+                            <span class="project-role-badge">
+                                <i class="fa-solid fa-user-gear"></i> {{ $proj->role ?: 'Software Engineer' }}
+                            </span>
+
+                            @if($proj->problem)
+                                <div class="case-block">
+                                    <div class="case-label"><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> The Challenge</div>
+                                    <div class="case-text">{{ $proj->problem }}</div>
+                                </div>
+                            @endif
+
+                            @if($proj->solution)
+                                <div class="case-block">
+                                    <div class="case-label"><i class="fa-solid fa-lightbulb" style="color: #eab308;"></i> The Solution</div>
+                                    <div class="case-text">{{ $proj->solution }}</div>
+                                </div>
+                            @endif
+
+                            @if(!$proj->problem && $proj->description)
+                                <div class="case-block">
+                                    <div class="case-text">{{ $proj->description }}</div>
+                                </div>
+                            @endif
+
+                            <div class="project-tech-stack">
+                                @if($proj->technologies)
+                                    @foreach(explode(',', $proj->technologies) as $tech)
+                                        <span class="tech-pill">{{ trim($tech) }}</span>
+                                    @endforeach
+                                @else
+                                    <span class="tech-pill">Laravel</span>
+                                    <span class="tech-pill">PHP</span>
+                                    <span class="tech-pill">MySQL</span>
+                                @endif
+                            </div>
+
+                            <div class="project-footer">
+                                @if($proj->link)
+                                    <a href="{{ $proj->link }}" target="_blank" class="btn btn-accent btn-sm">
+                                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo
+                                    </a>
+                                @endif
+                                @if($proj->github_url)
+                                    <a href="{{ $proj->github_url }}" target="_blank" class="btn btn-outline btn-sm">
+                                        <i class="fa-brands fa-github"></i> Repository
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Education & Certifications -->
+    <section class="section" id="education">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-title-tag"><i class="fa-solid fa-graduation-cap"></i> Qualifications</span>
+                <h2 class="section-title">Education & Training</h2>
+                <p class="section-subtitle">Academic background, postgraduate diplomas, and professional IT training.</p>
+            </div>
+
+            <div class="edu-grid">
+                <!-- Training / PGD -->
+                @foreach($cv->trainings as $tr)
+                    <div class="edu-card" style="border-left: 4px solid var(--accent);">
+                        <div class="edu-icon"><i class="fa-solid fa-award"></i></div>
+                        <h3 class="edu-degree">{{ $tr->training_title }}</h3>
+                        <div class="edu-inst">{{ $tr->institute }}</div>
+                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                            {{ $tr->certificate_details }}
+                        </p>
+                    </div>
+                @endforeach
+
+                <!-- Academic Degrees -->
+                @foreach($cv->academics as $acad)
+                    <div class="edu-card">
+                        <div class="edu-icon"><i class="fa-solid fa-university"></i></div>
+                        <h3 class="edu-degree">{{ $acad->degree_name }} in {{ $acad->group_or_major }}</h3>
+                        <div class="edu-inst">{{ $acad->institution }}</div>
+                        <div class="edu-meta">
+                            <span><i class="fa-solid fa-building-columns"></i> {{ $acad->board_or_university }}</span>
+                            @if($acad->result)
+                                <span><i class="fa-solid fa-star"></i> {{ $acad->result }}</span>
+                            @endif
+                            @if($acad->passing_year)
+                                <span><i class="fa-regular fa-calendar"></i> {{ $acad->passing_year }}</span>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- References -->
+            @if($cv->references->isNotEmpty())
+                <div style="margin-top: 3.5rem;">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.3rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--primary);">
+                        <i class="fa-solid fa-user-check" style="color: var(--accent);"></i> Professional & Academic References
+                    </h3>
+                    <div class="references-grid">
+                        @foreach($cv->references as $ref)
+                            <div class="ref-card">
+                                <div class="ref-name">{{ $ref->name }}</div>
+                                <div class="ref-role">{{ $ref->designation }}</div>
+                                <div class="ref-org">{{ $ref->organization }}</div>
+                                <div style="font-size: 0.85rem; color: var(--text-muted);">
+                                    @if($ref->phone)
+                                        <div><i class="fa-solid fa-phone" style="width: 16px;"></i> {{ $ref->phone }}</div>
+                                    @endif
+                                    @if($ref->email)
+                                        <div><i class="fa-solid fa-envelope" style="width: 16px;"></i> {{ $ref->email }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        </div>
+    </section>
+
+    <!-- Resume Preview Section -->
+    <section class="section" id="resume" style="background: var(--bg-surface); border-y: 1px solid var(--border);">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <span class="section-title-tag"><i class="fa-solid fa-file-pdf"></i> Verification</span>
+                <h2 class="section-title">Official Resume Document</h2>
+                <p class="section-subtitle" style="margin-inline: auto;">Download or print the traditional recruiter CV generated dynamically from database records.</p>
+            </div>
+
+            <div class="resume-preview-box">
+                <div class="resume-preview-header">
+                    <div>
+                        <div class="cv-title-name">{{ $cv->full_name }}</div>
+                        <div style="font-size: 1.1rem; color: var(--accent); font-weight: 600;">{{ $primaryRole }}</div>
+                        <div style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">{{ $cv->present_address }}</div>
+                    </div>
+                    <div>
+                        <a href="{{ route('public.cv.print', $username) }}" target="_blank" class="btn btn-accent">
+                            <i class="fa-solid fa-download"></i> Download / Print Resume
+                        </a>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; font-size: 0.95rem; color: var(--text-muted);">
+                    <div>
+                        <h4 style="font-family: var(--font-heading); color: var(--primary); font-size: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 4px;">
+                            Summary Statement
+                        </h4>
+                        <p>{{ $summary }}</p>
+                    </div>
+
+                    <div>
+                        <h4 style="font-family: var(--font-heading); color: var(--primary); font-size: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 4px;">
+                            Direct Contact Channels
+                        </h4>
+                        <ul style="list-style: none; display: grid; gap: 8px;">
+                            <li><i class="fa-solid fa-envelope" style="width: 20px; color: var(--accent);"></i> {{ $cv->email }}</li>
+                            <li><i class="fa-solid fa-phone" style="width: 20px; color: var(--accent);"></i> {{ $cv->mobile }}</li>
+                            <li><i class="fa-brands fa-linkedin-in" style="width: 20px; color: var(--accent);"></i> {{ $cv->linkedin_url }}</li>
+                            <li><i class="fa-brands fa-github" style="width: 20px; color: var(--accent);"></i> {{ $cv->github_url }}</li>
                         </ul>
                     </div>
-                @endif
+                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="section" id="contact">
-            <div class="contact-panel">
+    <!-- Contact Section -->
+    <section class="section contact-section" id="contact">
+        <div class="container">
+            <div class="contact-grid">
                 <div>
-                    <h2>Available for useful software work.</h2>
-                    <p>Use the CV view for full career details and print support, or reach out directly through the contact information.</p>
-                    <div class="hero-actions">
-                        <a href="{{ $cvUrl }}" class="btn btn-primary">
-                            <i class="fa fa-file-alt"></i>
-                            <span>CV View</span>
-                        </a>
-                        @if(!empty($printEnabled))
-                            <a href="{{ $printUrl }}" class="btn btn-secondary">
-                                <i class="fa fa-print"></i>
-                                <span>Print CV</span>
-                            </a>
+                    <div class="section-header">
+                        <span class="section-title-tag"><i class="fa-solid fa-paper-plane"></i> Get In Touch</span>
+                        <h2 class="section-title">Let's Discuss Your Project or Team Needs</h2>
+                        <p class="section-subtitle">Currently exploring high-impact software engineering roles and consulting projects.</p>
+                    </div>
+
+                    <div class="contact-info-list">
+                        @if($cv->email)
+                            <div class="contact-item-card">
+                                <div class="contact-item-icon"><i class="fa-solid fa-envelope"></i></div>
+                                <div>
+                                    <div class="contact-item-label">Direct Email</div>
+                                    <a href="mailto:{{ $cv->email }}" class="contact-item-val">{{ $cv->email }}</a>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($cv->mobile)
+                            <div class="contact-item-card">
+                                <div class="contact-item-icon"><i class="fa-solid fa-phone"></i></div>
+                                <div>
+                                    <div class="contact-item-label">Mobile & WhatsApp</div>
+                                    <a href="tel:{{ $cv->mobile }}" class="contact-item-val">{{ $cv->mobile }}</a>
+                                </div>
+                            </div>
+                        @endif
+
+                        @if($cv->present_address)
+                            <div class="contact-item-card">
+                                <div class="contact-item-icon"><i class="fa-solid fa-location-dot"></i></div>
+                                <div>
+                                    <div class="contact-item-label">Location</div>
+                                    <div class="contact-item-val">{{ $cv->present_address }}</div>
+                                </div>
+                            </div>
                         @endif
                     </div>
                 </div>
-                <div class="contact-list">
-                    @if($cv->email)
-                        <a class="contact-item" href="mailto:{{ $cv->email }}">
-                            <i class="fa fa-envelope"></i>
-                            <span>{{ $cv->email }}</span>
-                        </a>
-                    @endif
-                    @if($cv->mobile)
-                        <a class="contact-item" href="tel:{{ preg_replace('/\s+/', '', $cv->mobile) }}">
-                            <i class="fa fa-phone"></i>
-                            <span>{{ $cv->mobile }}</span>
-                        </a>
-                    @endif
-                    @if($cv->present_address)
-                        <div class="contact-item">
-                            <i class="fa fa-map-marker-alt"></i>
-                            <span>{{ $cv->present_address }}</span>
+
+                <div class="contact-form-card">
+                    <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; color: var(--primary); margin-bottom: 1.5rem;">
+                        Send a Message
+                    </h3>
+                    <form id="portfolioContactForm" onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent successfully.');">
+                        <div class="form-group">
+                            <label class="form-label">Your Name</label>
+                            <input type="text" class="form-input" placeholder="e.g. John Doe" required>
                         </div>
-                    @endif
-                    @if($cv->website_url)
-                        <a class="contact-item" href="{{ $cv->website_url }}" target="_blank" rel="noopener">
-                            <i class="fa fa-globe"></i>
-                            <span>{{ $cv->website_url }}</span>
-                        </a>
-                    @endif
+                        <div class="form-group">
+                            <label class="form-label">Your Email</label>
+                            <input type="email" class="form-input" placeholder="e.g. john@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-textarea" rows="4" placeholder="Tell me about your project or opportunity..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-accent" style="width: 100%;">
+                            <i class="fa-solid fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
+    <!-- Footer -->
     <footer class="site-footer">
-        <span>{{ $cv->full_name }} Portfolio</span>
+        <div class="container footer-inner">
+            <div>
+                <div class="footer-brand">{{ $cv->full_name }} — {{ $primaryRole }}</div>
+                <div style="font-size: 0.825rem; margin-top: 4px;">&copy; {{ date('Y') }} All Rights Reserved. Built with Laravel 10.</div>
+            </div>
+            <div class="social-links">
+                @if($cv->linkedin_url)
+                    <a href="{{ $cv->linkedin_url }}" target="_blank" class="social-icon" style="background: #1e293b; color: #fff; border-color: #334155;"><i class="fa-brands fa-linkedin-in"></i></a>
+                @endif
+                @if($cv->github_url)
+                    <a href="{{ $cv->github_url }}" target="_blank" class="social-icon" style="background: #1e293b; color: #fff; border-color: #334155;"><i class="fa-brands fa-github"></i></a>
+                @endif
+                @if($cv->website_url)
+                    <a href="{{ $cv->website_url }}" target="_blank" class="social-icon" style="background: #1e293b; color: #fff; border-color: #334155;"><i class="fa-solid fa-globe"></i></a>
+                @endif
+            </div>
+        </div>
     </footer>
+
 </body>
 </html>

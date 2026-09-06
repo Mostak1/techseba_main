@@ -10,6 +10,12 @@ class CvProject extends Model
         'user_cv_id',
         'title',
         'link',
+        'github_url',
+        'technologies',
+        'role',
+        'problem',
+        'solution',
+        'image',
         'description',
         'sort_order',
     ];

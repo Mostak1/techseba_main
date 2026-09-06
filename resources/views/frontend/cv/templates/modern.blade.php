@@ -336,17 +336,17 @@
         <h1 class="name">{{ $cv->full_name }}</h1>
         <div class="headline">Senior Full-Stack Laravel Developer & Team Lead</div>
         <div class="contact-row">
-            <div><i class="fa-solid fa-location-dot"></i> Dhaka, Bangladesh (Open to US Remote)</div>
+            <div><i class="fa-solid fa-location-dot"></i> Dhaka, Bangladesh</div>
             <span>•</span>
             <div><i class="fa-solid fa-phone"></i> {{ $cv->mobile }}</div>
             <span>•</span>
             <div><i class="fa-solid fa-envelope"></i> <a href="mailto:{{ $cv->email }}">{{ $cv->email }}</a></div>
             <span>•</span>
-            <div><i class="fa-solid fa-globe"></i> <a href="{{ $cv->website_url }}" target="_blank">mostaksarker.com</a></div>
+            <div><i class="fa-solid fa-globe"></i> <a href="{{ $cv->website_url }}" target="_blank">{{ $cv->website_url }}</a></div>
             <span>•</span>
-            <div><i class="fa-brands fa-linkedin"></i> <a href="{{ $cv->linkedin_url }}" target="_blank">LinkedIn</a></div>
+            <div><i class="fa-brands fa-linkedin"></i> <a href="{{ $cv->linkedin_url }}" target="_blank">{{ $cv->linkedin_url }}</a></div>
             <span>•</span>
-            <div><i class="fa-brands fa-github"></i> <a href="{{ $cv->github_url }}" target="_blank">GitHub</a></div>
+            <div><i class="fa-brands fa-github"></i> <a href="{{ $cv->github_url }}" target="_blank">{{ $cv->github_url }}</a></div>
         </div>
     </header>
 
@@ -505,10 +505,27 @@
             <li><strong>Enterprise Solution Delivery:</strong> Successfully engineered 5+ commercial enterprise applications across ERP, POS, Healthcare, and EdTech domains with zero floating-point accounting errors.</li>
             <li><strong>Community Welfare & Voluntary Initiative:</strong> Organized community relief distribution for 525 flood-affected victims in 2019.</li>
         </ul>
+    <!-- References -->
+    @if($cv->references->isNotEmpty())
+    <section class="section">
+        <h2 class="section-header">Professional References</h2>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            @foreach($cv->references as $ref)
+            <div style="border-left: 3px solid #1e3a8a; background: #f8fafc; padding: 6px 10px; border-radius: 0 3px 3px 0; font-size: 10px;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 11px;">{{ $ref->name }}</div>
+                <div><strong>Designation:</strong> {{ $ref->designation }}</div>
+                <div><strong>Organization:</strong> {{ $ref->organization }}</div>
+                @if($ref->phone)<div><strong>Phone:</strong> {{ $ref->phone }}</div>@endif
+                @if($ref->email)<div><strong>Email:</strong> {{ $ref->email }}</div>@endif
+                @if($ref->relationship)<div><strong>Relation:</strong> {{ $ref->relationship }}</div>@endif
+            </div>
+            @endforeach
+        </div>
     </section>
+    @endif
 
     <!-- Declaration -->
-    <section class="section" style="margin-top: 15px;">
+    <section class="section" style="margin-top: 10px;">
         <h2 class="section-header">Declaration</h2>
         <p class="summary-text" style="font-size: 9.5px;">{{ $cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.' }}</p>
 

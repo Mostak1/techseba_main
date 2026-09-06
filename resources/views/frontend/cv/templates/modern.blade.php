@@ -531,6 +531,7 @@
                 </div>
             @endif
 
+            {{-- Muted for clean print view
             @if($project->problem)
                 <p class="section-text" style="font-size: 10.5px; margin-top: 2px;"><strong>Problem Solved:</strong> {{ $project->problem }}</p>
             @endif
@@ -538,6 +539,7 @@
             @if($project->solution)
                 <p class="section-text" style="font-size: 10.5px; margin-top: 2px;"><strong>Technical Solution:</strong> {{ $project->solution }}</p>
             @endif
+            --}}
 
             @if($project->description)
                 <p class="section-text" style="font-size: 10.5px; margin-top: 2px;">{{ $project->description }}</p>

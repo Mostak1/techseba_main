@@ -51,8 +51,8 @@
             background: #eef2f5;
             color: #2d3748;
             font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            font-size: 9.5px;
-            line-height: 1.4;
+            font-size: 11px;
+            line-height: 1.42;
         }
 
         .no-print-area {
@@ -65,7 +65,7 @@
         }
 
         .btn {
-            padding: 6px 14px;
+            padding: 7px 16px;
             border-radius: 4px;
             text-decoration: none;
             font-weight: 700;
@@ -73,7 +73,7 @@
             background: #5a8f85;
             border: none;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -98,16 +98,16 @@
         .cv-sidebar {
             width: 32%;
             background: #75a095;
-            color: #112621;
-            padding: 22px 16px;
+            color: #0f241f;
+            padding: 22px 18px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
         .profile-photo-wrap {
-            width: 110px;
-            height: 110px;
+            width: 115px;
+            height: 115px;
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid #ffffff;
@@ -126,46 +126,46 @@
         }
 
         .sidebar-name {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 800;
             color: #0d1e1a;
             text-align: center;
             margin: 0 0 4px 0;
-            line-height: 1.1;
+            line-height: 1.15;
         }
 
         .sidebar-role {
-            font-size: 11px;
-            font-weight: 600;
-            color: #17362f;
+            font-size: 12px;
+            font-weight: 700;
+            color: #15362f;
             text-align: center;
-            margin-bottom: 14px;
-            line-height: 1.25;
+            margin-bottom: 12px;
+            line-height: 1.3;
         }
 
         .sidebar-divider {
             width: 100%;
-            border-top: 1.5px solid #588076;
+            border-top: 1.5px solid #567e74;
             margin: 12px 0;
         }
 
         .sidebar-section-title {
-            font-size: 12px;
+            font-size: 13.5px;
             font-weight: 800;
-            color: #0d1e1a;
+            color: #0c1c18;
             text-align: center;
             margin: 0 0 10px 0;
             text-transform: capitalize;
-            letter-spacing: 0.2px;
+            letter-spacing: 0.3px;
         }
 
         .contact-list {
             width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            font-size: 9px;
-            color: #142e27;
+            gap: 7px;
+            font-size: 10.5px;
+            color: #0f241f;
         }
 
         .contact-item {
@@ -176,28 +176,29 @@
         }
 
         .contact-item i {
-            font-size: 10px;
-            width: 14px;
+            font-size: 11px;
+            width: 15px;
             text-align: center;
-            color: #0d1e1a;
+            color: #0b1a16;
         }
 
         .contact-item a {
-            color: #142e27;
+            color: #0f241f;
             text-decoration: none;
+            font-weight: 600;
         }
 
         .skills-bullet-list {
             width: 100%;
-            padding-left: 14px;
+            padding-left: 16px;
             margin: 0;
-            color: #142e27;
-            font-size: 9px;
-            line-height: 1.4;
+            color: #0f241f;
+            font-size: 10.5px;
+            line-height: 1.45;
         }
 
         .skills-bullet-list li {
-            margin-bottom: 4px;
+            margin-bottom: 4.5px;
             font-weight: 600;
         }
 
@@ -209,7 +210,7 @@
         }
 
         .main-section-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 800;
             color: #5a8e84;
             text-align: center;
@@ -222,10 +223,10 @@
         }
 
         .profile-summary-text {
-            font-size: 9.5px;
+            font-size: 11px;
             color: #2d3748;
             text-align: justify;
-            line-height: 1.45;
+            line-height: 1.48;
             margin: 0;
         }
 
@@ -242,7 +243,7 @@
         }
 
         .exp-dates {
-            font-size: 9.5px;
+            font-size: 11px;
             font-weight: 700;
             color: #1a202c;
             width: 32%;
@@ -254,19 +255,19 @@
         }
 
         .exp-company {
-            font-size: 10.5px;
+            font-size: 12.5px;
             font-weight: 800;
             color: #1a202c;
         }
 
         .exp-designation {
-            font-size: 10px;
+            font-size: 11.5px;
             font-weight: 700;
             color: #2d3748;
         }
 
         .sub-heading-italic {
-            font-size: 9.5px;
+            font-size: 11px;
             font-weight: 700;
             font-style: italic;
             color: #2d3748;
@@ -274,15 +275,15 @@
         }
 
         .entry-bullet-list {
-            padding-left: 14px;
+            padding-left: 16px;
             margin: 2px 0 4px 0;
             color: #2d3748;
-            font-size: 9px;
-            line-height: 1.35;
+            font-size: 10.5px;
+            line-height: 1.4;
         }
 
         .entry-bullet-list li {
-            margin-bottom: 2px;
+            margin-bottom: 2.5px;
         }
 
         /* Projects Section Styling */
@@ -290,7 +291,7 @@
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             border-left: 3px solid #5a8e84;
-            padding: 6px 8px;
+            padding: 7px 10px;
             border-radius: 3px;
             margin-bottom: 8px;
         }
@@ -302,13 +303,13 @@
         }
 
         .project-name {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 800;
             color: #1a202c;
         }
 
         .project-role-badge {
-            font-size: 8.5px;
+            font-size: 10px;
             font-weight: 700;
             color: #2b6cb0;
         }
@@ -317,22 +318,22 @@
             background: #e6fffa;
             border: 1px solid #b2f5ea;
             color: #234e52;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 3px;
-            font-size: 8.5px;
+            font-size: 10px;
             margin: 3px 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
         }
 
         /* Education Bullet List */
         .education-list {
-            padding-left: 14px;
+            padding-left: 16px;
             margin: 0;
             color: #1a202c;
-            font-size: 9.5px;
-            line-height: 1.45;
+            font-size: 11px;
+            line-height: 1.5;
         }
 
         .education-list li {
@@ -341,7 +342,7 @@
 
         .declaration-box {
             margin-top: 10px;
-            font-size: 8.5px;
+            font-size: 10px;
             color: #4a5568;
         }
 
@@ -354,21 +355,21 @@
 
         .sig-col {
             text-align: center;
-            width: 130px;
+            width: 140px;
         }
 
         .sig-line-top {
             border-top: 1px solid #4a5568;
             padding-top: 2px;
             font-weight: 700;
-            font-size: 9px;
+            font-size: 10px;
         }
 
         .page-footer-num {
             position: absolute;
             bottom: 8px;
             right: 25px;
-            font-size: 8.5px;
+            font-size: 9px;
             color: #718096;
         }
 
@@ -423,7 +424,7 @@
             @if($photoSrc)
                 <img src="{{ $photoSrc }}" alt="{{ $cv->full_name }}">
             @else
-                <i class="fa-solid fa-user" style="font-size: 45px; color: #75a095;"></i>
+                <i class="fa-solid fa-user" style="font-size: 50px; color: #75a095;"></i>
             @endif
         </div>
 
@@ -508,13 +509,13 @@
                 @endif
 
                 @if($project->technologies)
-                    <div style="font-size: 8.5px; color: #4a5568; margin-bottom: 2px;">
+                    <div style="font-size: 10px; color: #4a5568; margin-bottom: 2px;">
                         <strong>Tech Stack:</strong> {{ $project->technologies }}
                     </div>
                 @endif
 
                 @if($project->description)
-                    <p class="profile-summary-text" style="font-size: 9px; line-height: 1.35;">{{ $project->description }}</p>
+                    <p class="profile-summary-text" style="font-size: 10.5px; line-height: 1.38;">{{ $project->description }}</p>
                 @endif
             </div>
             @endforeach
@@ -561,7 +562,7 @@
         @if($cv->references->isNotEmpty())
             <h3 class="sidebar-section-title">References</h3>
             @foreach($cv->references as $ref)
-                <div style="font-size: 8.5px; margin-bottom: 8px; color: #142e27;">
+                <div style="font-size: 10px; margin-bottom: 8px; color: #0f241f;">
                     <strong>{{ $ref->name }}</strong><br>
                     {{ $ref->designation }} — {{ $ref->organization }}<br>
                     @if($ref->phone) Tel: {{ $ref->phone }} @endif
@@ -639,7 +640,7 @@
 
         <!-- Declaration -->
         <div class="declaration-box">
-            <p style="margin: 0; text-align: justify; font-size: 8.5px;">{{ $cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.' }}</p>
+            <p style="margin: 0; text-align: justify; font-size: 10px;">{{ $cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.' }}</p>
 
             <div class="sig-flex">
                 <div class="sig-col">
@@ -647,10 +648,10 @@
                         <img src="{{ $signatureSrc }}" class="sig-img" alt="Signature">
                     @endif
                     <div class="sig-line-top">{{ $cv->full_name }}</div>
-                    <div style="font-size: 8px;">Signature</div>
+                    <div style="font-size: 9px;">Signature</div>
                 </div>
                 <div class="sig-col">
-                    <div style="margin-bottom: 16px; font-weight: 700; font-size: 8.5px;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
+                    <div style="margin-bottom: 16px; font-weight: 700; font-size: 10px;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
                     <div class="sig-line-top">Date</div>
                 </div>
             </div>

@@ -1697,18 +1697,23 @@
                     <h3 style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; color: var(--primary); margin-bottom: 1.5rem;">
                         Send a Message
                     </h3>
-                    <form id="portfolioContactForm" onsubmit="event.preventDefault(); alert('Thank you! Your message has been sent successfully.');">
+                    <form id="portfolioContactForm">
+                        @csrf
                         <div class="form-group">
                             <label class="form-label">Your Name</label>
-                            <input type="text" class="form-input" placeholder="e.g. John Doe" required>
+                            <input type="text" name="name" class="form-input" placeholder="e.g. John Doe" required>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Your Email</label>
-                            <input type="email" class="form-input" placeholder="e.g. john@company.com" required>
+                            <input type="email" name="email" class="form-input" placeholder="e.g. john@company.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Subject</label>
+                            <input type="text" name="subject" class="form-input" placeholder="Project Inquiry / Job Opportunity">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Message</label>
-                            <textarea class="form-textarea" rows="4" placeholder="Tell me about your project or opportunity..." required></textarea>
+                            <textarea name="message" class="form-textarea" rows="4" placeholder="Tell me about your project or opportunity..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-accent" style="width: 100%;">
                             <i class="fa-solid fa-paper-plane"></i> Send Message
@@ -1740,5 +1745,76 @@
         </div>
     </footer>
 
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('global/sweetalert/sweetalert2@11.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const contactForm = document.getElementById('portfolioContactForm');
+            if (!contactForm) return;
+
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalBtnHtml = submitBtn.innerHTML;
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
+
+                const formData = new FormData(contactForm);
+
+                fetch("{{ route('public.cv.contact', $username) }}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: formData
+                })
+                .then(response => response.json().then(data => ({ status: response.status, body: data })))
+                .then(res => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
+
+                    if (res.status === 200 && res.body.status === 'success') {
+                        contactForm.reset();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Message Sent Successfully!',
+                            text: res.body.message || 'Thank you! Your message has been sent to {{ $cv->full_name }}.',
+                            confirmButtonColor: '#2563eb',
+                            timer: 5000,
+                            timerProgressBar: true,
+                            showConfirmButton: true
+                        });
+                    } else {
+                        let errMsg = res.body.message || 'Failed to send message. Please check the fields and try again.';
+                        if (res.body.errors) {
+                            errMsg = Object.values(res.body.errors).flat().join('<br>');
+                        }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Submission Error',
+                            html: errMsg,
+                            confirmButtonColor: '#ef4444'
+                        });
+                    }
+                })
+                .catch(err => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalBtnHtml;
+
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Network Error',
+                        text: 'Could not send message. Please try again or email directly.',
+                        confirmButtonColor: '#ef4444'
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

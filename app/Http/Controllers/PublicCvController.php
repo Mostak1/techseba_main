@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Helper\EmailHelper;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Modules\ContactMessage\App\Models\ContactMessage;
 
 class PublicCvController extends Controller
 {
@@ -48,6 +53,70 @@ class PublicCvController extends Controller
             'pdfUrl' => null,
             'printEnabled' => $cv->public_print_enabled,
             'pdfEnabled' => false,
+        ]);
+    }
+
+    public function sendContactMessage(Request $request, string $username)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'subject' => 'nullable|string|max:255',
+            'message' => 'required|string|max:5000',
+        ]);
+
+        $cv = $this->publicCv($username);
+        $user = $cv->user;
+
+        // 1. Save to DB contact_messages table
+        try {
+            if (class_exists(ContactMessage::class)) {
+                $contactMessage = new ContactMessage();
+                $contactMessage->name = $request->name;
+                $contactMessage->email = $request->email;
+                $contactMessage->phone = $request->phone ?? null;
+                $contactMessage->subject = $request->subject ?: 'Portfolio Contact: '.$cv->full_name;
+                $contactMessage->message = "Portfolio: {$cv->full_name} (@{$username})\nSender: {$request->name} <{$request->email}>\n\nMessage:\n{$request->message}";
+                $contactMessage->save();
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to save portfolio contact message: '.$e->getMessage());
+        }
+
+        // 2. Send email to owner
+        $recipientEmail = $cv->email ?: ($user->email ?? null);
+        $mailSent = false;
+
+        if ($recipientEmail) {
+            try {
+                if (class_exists(EmailHelper::class)) {
+                    EmailHelper::mail_setup();
+                }
+
+                $mailSubject = $request->subject ?: 'New Message from Portfolio Website — '.$request->name;
+                $mailBody = "You have received a new contact inquiry from your portfolio website:\n\n".
+                    "Name: {$request->name}\n".
+                    "Email: {$request->email}\n".
+                    "Subject: {$mailSubject}\n\n".
+                    "Message:\n{$request->message}\n\n".
+                    "---\nSent via Portfolio: ".route('freelancer', $username);
+
+                Mail::raw($mailBody, function ($message) use ($recipientEmail, $request, $mailSubject) {
+                    $message->to($recipientEmail)
+                        ->replyTo($request->email, $request->name)
+                        ->subject($mailSubject);
+                });
+
+                $mailSent = true;
+            } catch (\Exception $e) {
+                Log::error("Failed sending portfolio mail to {$recipientEmail}: ".$e->getMessage());
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Thank you! Your message has been sent successfully.',
+            'mail_sent' => $mailSent,
         ]);
     }
 

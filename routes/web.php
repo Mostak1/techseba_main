@@ -346,3 +346,7 @@ Route::get('/{username}/pdf', [PublicCvController::class, 'pdf'])
 Route::get('/{username}', [PublicCvController::class, 'show'])
     ->where('username', '^(?!('.$reservedUsernames.')$)[A-Za-z0-9._-]+$')
     ->name('freelancer');
+
+Route::post('/{username}/contact', [PublicCvController::class, 'sendContactMessage'])
+    ->where('username', '^(?!('.$reservedUsernames.')$)[A-Za-z0-9._-]+$')
+    ->name('public.cv.contact');

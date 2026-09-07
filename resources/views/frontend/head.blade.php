@@ -14,7 +14,8 @@
     @yield('title')
     @include('frontend.seo')
 
-    <link rel="shortcut icon" href="{{ asset($general_setting->favicon) }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset($general_setting->favicon ?? 'favicon.ico') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset($general_setting->favicon ?? 'favicon.ico') }}" type="image/png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 

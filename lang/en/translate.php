@@ -1050,4 +1050,8 @@
   'month' => 'month',
   'star' => 'star',
   'to Upload' => 'to Upload',
+  'Edit CV' => 'Edit CV',
+  'Digital CV' => 'Digital CV',
+  'Create CV' => 'Create CV',
+  'Work Orders' => 'Work Orders',
 );

@@ -14,49 +14,41 @@
 
 @section('dashboard-content')
     @if(!Auth::guard('web')->user()->userCv()->exists())
-        <div class="alert alert-info d-flex align-items-center justify-content-between mb-4" role="alert" style="background-color: var(--light-bg2); border: 1px solid var(--accent-color); color: var(--heading-color); padding: 15px 20px; border-radius: 8px;">
+        <div class="alert d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert" style="background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 18px 24px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);">
             <div>
-                <strong style="font-size: 16px;">{{ __('translate.You haven\'t created a Digital CV yet!') }}</strong>
-                <p class="mb-0" style="font-size: 14px; opacity: 0.8;">{{ __('translate.Create your professional Digital CV to apply for jobs and build your online presence.') }}</p>
+                <strong style="font-size: 16px; font-family: 'Space Grotesk', sans-serif; display: block; margin-bottom: 4px; color: var(--text);">{{ __('translate.You haven\'t created a Digital CV yet!') }}</strong>
+                <p class="mb-0" style="font-size: 14px; color: var(--muted);">{{ __('translate.Create your professional Digital CV to apply for jobs and build your online presence.') }}</p>
             </div>
-            <a href="{{ profile_route('user.cv.edit') }}" class="optech-default-btn btn-sm" style="background: var(--accent-bg); color: var(--white-color); padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 500; min-width: 140px; text-align: center; display: inline-block;">
-                <span class="btn-wraper" style="color: var(--white-color);">{{ __('translate.Create CV Now') }}</span>
+            <a href="{{ profile_route('user.cv.edit') }}" class="btn-primary" style="padding: 10px 20px; text-decoration: none; border-radius: 10px; font-size: 13px; font-weight: 600; white-space: nowrap;">
+                {{ __('translate.Create CV Now') }}
             </a>
         </div>
     @endif
 
-    <div class="row">
-        <div class="col-xxl-3 col-xl-4 col-md-6 mt-3 mt-md-0">
+    <div class="row g-3 g-xl-4 mb-4">
+        <div class="col-xxl-4 col-xl-4 col-md-6">
             <div class="dashbord_item">
                 <span class="dashbord_item_icon">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M26.6667 29.3337H6.66675C4.45761 29.3337 2.66675 27.5428 2.66675 25.3337V6.66699C2.66675 4.45785 4.45761 2.66699 6.66675 2.66699H20.0001C22.2092 2.66699 24.0001 4.45785 24.0001 6.66699V10.667M26.6667 29.3337C25.194 29.3337 24.0001 28.1397 24.0001 26.667V10.667M26.6667 29.3337C28.1395 29.3337 29.3334 28.1397 29.3334 26.667V13.3337C29.3334 11.8609 28.1395 10.667 26.6667 10.667H24.0001M8.00008 9.33366H18.6667M8.00008 16.0003H18.6667M8.00008 22.667H13.3334"
-                            stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round" />
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M26.6667 29.3337H6.66675C4.45761 29.3337 2.66675 27.5428 2.66675 25.3337V6.66699C2.66675 4.45785 4.45761 2.66699 6.66675 2.66699H20.0001C22.2092 2.66699 24.0001 4.45785 24.0001 6.66699V10.667M26.6667 29.3337C25.194 29.3337 24.0001 28.1397 24.0001 26.667V10.667M26.6667 29.3337C28.1395 29.3337 29.3334 28.1397 29.3334 26.667V13.3337C29.3334 11.8609 28.1395 10.667 26.6667 10.667H24.0001M8.00008 9.33366H18.6667M8.00008 16.0003H18.6667M8.00008 22.667H13.3334" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </span>
 
                 <div class="dashbord_item_text">
-                    <h5> {{ __($orders->count()) }}</h5>
+                    <h5>{{ $orders->count() }}</h5>
                     <p class="d-item-label">
                         {{ __('translate.Total Orders') }}
                     </p>
                 </div>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4 mt-md-0">
+        <div class="col-xxl-4 col-xl-4 col-md-6">
             <div class="dashbord_item">
-                    <span class="dashbord_item_icon">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                            <rect width="32" height="32" fill="none" />
-                            <path
-                                d="M16.0001 16.0003H15.2501C15.2501 16.3231 15.4567 16.6098 15.7629 16.7118L16.0001 16.0003ZM16.7501 9.33366C16.7501 8.91945 16.4143 8.58366 16.0001 8.58366C15.5859 8.58366 15.2501 8.91945 15.2501 9.33366H16.7501ZM19.7629 18.0452C20.1559 18.1762 20.5806 17.9638 20.7116 17.5708C20.8426 17.1779 20.6302 16.7531 20.2373 16.6221L19.7629 18.0452ZM16.7501 16.0003V9.33366H15.2501V16.0003H16.7501ZM15.7629 16.7118L19.7629 18.0452L20.2373 16.6221L16.2373 15.2888L15.7629 16.7118ZM28.5834 16.0003C28.5834 22.9499 22.9497 28.5837 16.0001 28.5837V30.0837C23.7781 30.0837 30.0834 23.7783 30.0834 16.0003H28.5834ZM16.0001 28.5837C9.0505 28.5837 3.41675 22.9499 3.41675 16.0003H1.91675C1.91675 23.7783 8.22207 30.0837 16.0001 30.0837V28.5837ZM3.41675 16.0003C3.41675 9.05074 9.0505 3.41699 16.0001 3.41699V1.91699C8.22207 1.91699 1.91675 8.22231 1.91675 16.0003H3.41675ZM16.0001 3.41699C22.9497 3.41699 28.5834 9.05074 28.5834 16.0003H30.0834C30.0834 8.22231 23.7781 1.91699 16.0001 1.91699V3.41699Z"
-                                fill="currentcolor" />
-                        </svg>
-                    </span>
+                <span class="dashbord_item_icon">
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.0001 16.0003H15.2501C15.2501 16.3231 15.4567 16.6098 15.7629 16.7118L16.0001 16.0003ZM16.7501 9.33366C16.7501 8.91945 16.4143 8.58366 16.0001 8.58366C15.5859 8.58366 15.2501 8.91945 15.2501 9.33366H16.7501ZM19.7629 18.0452C20.1559 18.1762 20.5806 17.9638 20.7116 17.5708C20.8426 17.1779 20.6302 16.7531 20.2373 16.6221L19.7629 18.0452ZM16.7501 16.0003V9.33366H15.2501V16.0003H16.7501ZM15.7629 16.7118L19.7629 18.0452L20.2373 16.6221L16.2373 15.2888L15.7629 16.7118ZM28.5834 16.0003C28.5834 22.9499 22.9497 28.5837 16.0001 28.5837V30.0837C23.7781 30.0837 30.0834 23.7783 30.0834 16.0003H28.5834ZM16.0001 28.5837C9.0505 28.5837 3.41675 22.9499 3.41675 16.0003H1.91675C1.91675 23.7783 8.22207 30.0837 16.0001 30.0837V28.5837ZM3.41675 16.0003C3.41675 9.05074 9.0505 3.41699 16.0001 3.41699V1.91699C8.22207 1.91699 1.91675 8.22231 1.91675 16.0003H3.41675ZM16.0001 3.41699C22.9497 3.41699 28.5834 9.05074 28.5834 16.0003H30.0834C30.0834 8.22231 23.7781 1.91699 16.0001 1.91699V3.41699Z" fill="currentColor" />
+                    </svg>
+                </span>
 
                 <div class="dashbord_item_text">
                     <h5>{{ $pending_orders }}</h5>
@@ -66,55 +58,34 @@
                 </div>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4 mt-lg-0">
+        <div class="col-xxl-4 col-xl-4 col-md-6">
             <div class="dashbord_item">
                 <span class="dashbord_item_icon">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" fill="" />
-                        <path
-                            d="M8.00008 5.33366H24.0001C26.9456 5.33366 29.3334 7.72147 29.3334 10.667V17.3337C29.3334 20.2792 26.9456 22.667 24.0001 22.667H13.3334C10.3879 22.667 8.00008 20.2792 8.00008 17.3337V5.33366ZM8.00008 5.33366C8.00008 3.8609 6.80617 2.66699 5.33341 2.66699H2.66675"
-                            stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"
-                            stroke-linejoin="round" />
-                        <path
-                            d="M14.6667 27.333C14.6667 28.4376 13.7713 29.333 12.6667 29.333C11.5622 29.333 10.6667 28.4376 10.6667 27.333C10.6667 26.2284 11.5622 25.333 12.6667 25.333C13.7713 25.333 14.6667 26.2284 14.6667 27.333Z"
-                            stroke="currentcolor" stroke-width="1.5" />
-                        <path
-                            d="M26.6667 27.333C26.6667 28.4376 25.7713 29.333 24.6667 29.333C23.5622 29.333 22.6667 28.4376 22.6667 27.333C22.6667 26.2284 23.5622 25.333 24.6667 25.333C25.7713 25.333 26.6667 26.2284 26.6667 27.333Z"
-                            stroke="currentcolor" stroke-width="1.5" />
-                        <path d="M14.6667 16C17.8083 17.7871 19.5302 17.7684 22.6667 16"
-                                stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8.00008 5.33366H24.0001C26.9456 5.33366 29.3334 7.72147 29.3334 10.667V17.3337C29.3334 20.2792 26.9456 22.667 24.0001 22.667H13.3334C10.3879 22.667 8.00008 20.2792 8.00008 17.3337V5.33366ZM8.00008 5.33366C8.00008 3.8609 6.80617 2.66699 5.33341 2.66699H2.66675" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M14.6667 27.333C14.6667 28.4376 13.7713 29.333 12.6667 29.333C11.5622 29.333 10.6667 28.4376 10.6667 27.333C10.6667 26.2284 11.5622 25.333 12.6667 25.333C13.7713 25.333 14.6667 26.2284 14.6667 27.333Z" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M26.6667 27.333C26.6667 28.4376 25.7713 29.333 24.6667 29.333C23.5622 29.333 22.6667 28.4376 22.6667 27.333C22.6667 26.2284 23.5622 25.333 24.6667 25.333C25.7713 25.333 26.6667 26.2284 26.6667 27.333Z" stroke="currentColor" stroke-width="1.5" />
+                        <path d="M14.6667 16C17.8083 17.7871 19.5302 17.7684 22.6667 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </span>
 
                 <div class="dashbord_item_text">
-                    <h5>{{ __($complete_orders) }}</h5>
+                    <h5>{{ $complete_orders }}</h5>
                     <p class="d-item-label">
                         {{ __('translate.Complete Orders') }}
                     </p>
                 </div>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4  mt-lg-0 ">
+        <div class="col-xxl-4 col-xl-4 col-md-6">
             <div class="dashbord_item">
                 <span class="dashbord_item_icon">
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                        <rect width="32" height="32" fill="" />
-                        <path
-                            d="M18.6666 17.0003C18.6666 15.7117 17.4727 14.667 15.9999 14.667C14.5272 14.667 13.3333 15.7117 13.3333 17.0003C13.3333 18.289 14.5272 19.3337 15.9999 19.3337C17.4727 19.3337 18.6666 20.3783 18.6666 21.667C18.6666 22.9557 17.4727 24.0003 15.9999 24.0003C14.5272 24.0003 13.3333 22.9557 13.3333 21.667"
-                            stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" />
-                        <path d="M16 12.667V14.667" stroke="currentcolor" stroke-width="1.5"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        <path d="M16 24V26" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round"
-                                stroke-linejoin="round" />
-                        <path
-                            d="M7.96587 13.4356C8.78255 10.9856 11.0754 9.33301 13.658 9.33301H18.3422C20.9248 9.33301 23.2176 10.9856 24.0343 13.4356L26.701 21.4356C27.996 25.3208 25.1042 29.333 21.0089 29.333H10.9913C6.89595 29.333 4.00414 25.3208 5.2992 21.4356L7.96587 13.4356Z"
-                            stroke="currentcolor" stroke-width="1.5" stroke-linejoin="round" />
-                        <path
-                            d="M18.7813 9.33366L13.2189 9.33366L11.3508 7.19094C9.51954 5.09049 11.6559 1.95096 14.3295 2.81346L15.5665 3.21251C15.8482 3.30337 16.152 3.30337 16.4336 3.21251L17.6707 2.81346C20.3443 1.95096 22.4806 5.0905 20.6494 7.19094L18.7813 9.33366Z"
-                            stroke="currentcolor" stroke-width="1.5" stroke-linejoin="round" />
+                    <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.6666 17.0003C18.6666 15.7117 17.4727 14.667 15.9999 14.667C14.5272 14.667 13.3333 15.7117 13.3333 17.0003C13.3333 18.289 14.5272 19.3337 15.9999 19.3337C17.4727 19.3337 18.6666 20.3783 18.6666 21.667C18.6666 22.9557 17.4727 24.0003 15.9999 24.0003C14.5272 24.0003 13.3333 22.9557 13.3333 21.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                        <path d="M16 12.667V14.667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M16 24V26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M7.96587 13.4356C8.78255 10.9856 11.0754 9.33301 13.658 9.33301H18.3422C20.9248 9.33301 23.2176 10.9856 24.0343 13.4356L26.701 21.4356C27.996 25.3208 25.1042 29.333 21.0089 29.333H10.9913C6.89595 29.333 4.00414 25.3208 5.2992 21.4356L7.96587 13.4356Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        <path d="M18.7813 9.33366L13.2189 9.33366L11.3508 7.19094C9.51954 5.09049 11.6559 1.95096 14.3295 2.81346L15.5665 3.21251C15.8482 3.30337 16.152 3.30337 16.4336 3.21251L17.6707 2.81346C20.3443 1.95096 22.4806 5.0905 20.6494 7.19094L18.7813 9.33366Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
                     </svg>
                 </span>
 
@@ -126,17 +97,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4">
+        <div class="col-xxl-4 col-xl-4 col-md-6">
             <div class="dashbord_item position-relative">
                 <span class="dashbord_item_icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 3.75H14.5L19 8.25V20.25H7C5.89543 20.25 5 19.3546 5 18.25V5.75C5 4.64543 5.89543 3.75 7 3.75Z"
-                              stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
-                        <path d="M14.5 3.75V8.25H19" stroke="currentColor" stroke-width="1.5"
-                              stroke-linejoin="round"/>
-                        <path d="M8.75 12H15.25M8.75 15H15.25M8.75 18H12.25" stroke="currentColor"
-                              stroke-width="1.5" stroke-linecap="round"/>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M7 3.75H14.5L19 8.25V20.25H7C5.89543 20.25 5 19.3546 5 18.25V5.75C5 4.64543 5.89543 3.75 7 3.75Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M14.5 3.75V8.25H19" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M8.75 12H15.25M8.75 15H15.25M8.75 18H12.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                     </svg>
                 </span>
 
@@ -156,11 +123,10 @@
             </div>
         </div>
 
-        <div class="col-xxl-3 col-xl-4 col-md-6 mt-4">
+        <div class="col-xxl-4 col-xl-4 col-md-6">
             <div class="dashbord_item position-relative">
                 <span class="dashbord_item_icon">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
-                         xmlns="http://www.w3.org/2000/svg">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
@@ -168,7 +134,7 @@
                 <div class="dashbord_item_text">
                     <h5>{{ $work_orders_count }}</h5>
                     <p class="d-item-label">
-                        Work Orders
+                        {{ __('translate.Work Orders') }}
                     </p>
                 </div>
                 <a href="{{ route('user.work_orders.index') }}" class="stretched-link"></a>

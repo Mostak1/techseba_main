@@ -334,10 +334,10 @@
         </section>
     @endif
 
-    @if($cv->career_summary || $cv->total_experience)
+    @if($cv->career_summary || $cv->formatted_total_experience)
         <section class="section">
             <h2 class="section-title">Career Summary / Profile Summary</h2>
-            @if($cv->total_experience)<p><strong>Total Experience:</strong> {{ $cv->total_experience }} years</p>@endif
+            @if($cv->formatted_total_experience)<p><strong>Total Experience:</strong> {{ $cv->formatted_total_experience }}</p>@endif
             @if($cv->career_summary)<p>{!! nl2br(e($cv->career_summary)) !!}</p>@endif
         </section>
     @endif

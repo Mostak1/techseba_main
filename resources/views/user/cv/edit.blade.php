@@ -578,7 +578,16 @@
                 <h5 class="cv-section-title">Career Objective & Summary</h5>
                 <div class="cv-grid">
                     <div class="cv-field cv-full"><label>Career Objective</label><textarea name="career_objective" placeholder="Write a short 2-4 line career objective">{{ old('career_objective', $cv->career_objective ?? '') }}</textarea></div>
-                    <div class="cv-field"><label>Total Years of Experience</label><input type="number" step="0.01" min="0" name="total_experience" value="{{ old('total_experience', $cv->total_experience ?? '') }}"></div>
+                    <div class="cv-field">
+                        <label>
+                            Total Years of Experience
+                            @if($cv?->formatted_total_experience)
+                                <span style="font-size: 11px; color: #10b981; font-weight: 600; margin-left: 6px;">⚡ Auto-Calculated: {{ $cv->formatted_total_experience }}</span>
+                            @endif
+                        </label>
+                        <input type="number" step="0.01" min="0" name="total_experience" value="{{ old('total_experience', $cv->calculated_total_experience_years ?? $cv->total_experience ?? '') }}" placeholder="Auto-calculated from Employment History">
+                        <small style="color: #64748b; font-size: 11px;">Calculated dynamically by summing your Employment History date ranges (including active ongoing jobs).</small>
+                    </div>
                     <div class="cv-field cv-full"><label>Career Summary / Profile Summary</label><textarea name="career_summary" placeholder="Sector, role, key skills, and achievements summary">{{ old('career_summary', $cv->career_summary ?? '') }}</textarea></div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'career', 'next' => $nextTab('career'), 'cv' => $cv])

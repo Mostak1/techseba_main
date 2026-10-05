@@ -115,6 +115,11 @@ class UserCvController extends Controller
 
             $cv->save();
             $this->syncChildren($cv, $validated);
+
+            if (empty($validated['total_experience']) || $cv->calculated_total_days > 0) {
+                $cv->total_experience = $cv->calculated_total_experience_years;
+                $cv->save();
+            }
         });
 
         if ($request->boolean('extract_source')) {

@@ -485,7 +485,7 @@
                 </div>
                 <div class="stats">
                     <div class="stat">
-                        <strong>{{ $cv->total_experience ? rtrim(rtrim(number_format((float) $cv->total_experience, 1), '0'), '.') . '+' : '3+' }}</strong>
+                        <strong>{{ $cv->calculated_total_experience_years ? rtrim(rtrim(number_format((float) $cv->calculated_total_experience_years, 1), '0'), '.') . '+' : '0+' }}</strong>
                         <span>Years experience</span>
                     </div>
                     <div class="stat">

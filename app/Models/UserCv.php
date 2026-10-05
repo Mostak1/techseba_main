@@ -113,4 +113,102 @@ class UserCv extends Model
     {
         return $this->hasMany(CvProject::class)->orderBy('sort_order');
     }
+
+    /**
+     * Calculate total days from all employment histories.
+     * Running jobs (is_current = true or null end_date) use the current date (Carbon::now()).
+     */
+    public function getCalculatedTotalDaysAttribute(): int
+    {
+        $totalDays = 0;
+        foreach ($this->employments as $employment) {
+            if (! $employment->start_date) {
+                continue;
+            }
+            $start = \Illuminate\Support\Carbon::parse($employment->start_date);
+            $end = ($employment->is_current || ! $employment->end_date)
+                ? \Illuminate\Support\Carbon::now()
+                : \Illuminate\Support\Carbon::parse($employment->end_date);
+
+            if ($end->greaterThanOrEqualTo($start)) {
+                $totalDays += $start->diffInDays($end) + 1;
+            }
+        }
+
+        return (int) $totalDays;
+    }
+
+    /**
+     * Calculate total experience in decimal years (e.g. 4.5)
+     */
+    public function getCalculatedTotalExperienceYearsAttribute(): float
+    {
+        $days = $this->calculated_total_days;
+        if ($days <= 0) {
+            return (float) ($this->attributes['total_experience'] ?? 0);
+        }
+
+        return round($days / 365.25, 1);
+    }
+
+    /**
+     * Format total experience dynamically (e.g., "4 Years 5 Months" or "6 Years 6 Months")
+     */
+    public function getFormattedTotalExperienceAttribute(): string
+    {
+        $days = $this->calculated_total_days;
+        if ($days <= 0) {
+            $manual = (float) ($this->attributes['total_experience'] ?? 0);
+            if ($manual <= 0) {
+                return '0 Months';
+            }
+            $years = (int) floor($manual);
+            $months = (int) round(($manual - $years) * 12);
+            $parts = [];
+            if ($years > 0) {
+                $parts[] = $years.' '.($years === 1 ? 'Year' : 'Years');
+            }
+            if ($months > 0) {
+                $parts[] = $months.' '.($months === 1 ? 'Month' : 'Months');
+            }
+
+            return ! empty($parts) ? implode(' ', $parts) : '0 Months';
+        }
+
+        $years = (int) floor($days / 365.25);
+        $remDays = $days - ($years * 365.25);
+        $months = (int) round($remDays / 30.4375);
+
+        if ($months >= 12) {
+            $years += 1;
+            $months = 0;
+        }
+
+        $parts = [];
+        if ($years > 0) {
+            $parts[] = $years.' '.($years === 1 ? 'Year' : 'Years');
+        }
+        if ($months > 0) {
+            $parts[] = $months.' '.($months === 1 ? 'Month' : 'Months');
+        }
+
+        return ! empty($parts) ? implode(' ', $parts) : 'Less than 1 Month';
+    }
+
+    /**
+     * Short format for badges / headers (e.g. "6.5+ Years" or "4y 5m")
+     */
+    public function getFormattedTotalExperienceShortAttribute(): string
+    {
+        $days = $this->calculated_total_days;
+        if ($days <= 0) {
+            $manual = (float) ($this->attributes['total_experience'] ?? 0);
+
+            return $manual > 0 ? rtrim(rtrim(number_format($manual, 1), '0'), '.').'+ Years' : '0 Years';
+        }
+
+        $decimal = round($days / 365.25, 1);
+
+        return rtrim(rtrim(number_format($decimal, 1), '0'), '.').'+ Years';
+    }
 }

@@ -6,7 +6,7 @@
     $summarySource = $cv->career_summary ?: $cv->career_objective;
     $summary = $summarySource ?: 'Experienced software engineer specialized in building enterprise web applications, high-performance APIs, and scalable modular database architectures.';
     
-    $experienceYears = $cv->total_experience ? rtrim(rtrim(number_format((float) $cv->total_experience, 1), '0'), '.') . '+ Years' : '3.5+ Years';
+    $experienceYears = $cv->formatted_total_experience_short;
 
     // Skill categorizations
     $technicalSkills = $cv->skills->filter(fn ($s) => in_array($s->skill_type, ['Technical Skills', 'Computer Skills', 'Software Skills']));

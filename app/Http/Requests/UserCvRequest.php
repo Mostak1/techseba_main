@@ -100,9 +100,9 @@ class UserCvRequest extends FormRequest
             'professional_qualifications.*.details' => ['nullable', 'string', 'max:3000'],
 
             'skills' => ['nullable', 'array'],
-            'skills.*.skill_type' => ['nullable', 'string', 'max:100'],
+            'skills.*.skill_type' => ['nullable', 'string', 'max:255'],
             'skills.*.skill_name' => ['nullable', 'string', 'max:255'],
-            'skills.*.skill_level' => ['nullable', 'string', 'max:100'],
+            'skills.*.skill_level' => ['nullable', 'string', 'max:1000'],
 
             'languages' => ['nullable', 'array'],
             'languages.*.language_name' => ['nullable', 'string', 'max:100'],

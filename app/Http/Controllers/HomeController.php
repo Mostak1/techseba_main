@@ -27,8 +27,9 @@ use Modules\GlobalSetting\App\Models\GlobalSetting;
 class HomeController extends Controller
 {
 
-    public function index(Request $request)
+    public function index(?Request $request = null)
     {
+        $request = $request ?? request();
         abort_unless_page_enabled('home');
 
         $theme_setting = GlobalSetting::where('key', 'selected_theme')->first();

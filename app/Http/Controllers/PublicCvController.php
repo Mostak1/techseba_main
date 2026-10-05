@@ -45,7 +45,7 @@ class PublicCvController extends Controller
     {
         $user = $request->attributes->get('profileUser');
         if (! $user) {
-            return app(\App\Http\Controllers\HomeController::class)->index();
+            return app(\App\Http\Controllers\HomeController::class)->index($request);
         }
 
         return $this->show($user);

@@ -64,9 +64,21 @@ class UserCvController extends Controller
     public function edit()
     {
         $user = Auth::guard('web')->user();
-        $cv = $user->userCv()->with($this->relations)->first();
         $templates = CvTemplate::where('is_active', true)->orderBy('name')->get();
         $portfolioTemplates = PortfolioTemplate::where('is_active', true)->orderBy('name')->get();
+        $cv = $user->userCv()->with($this->relations)->first();
+
+        if (! $cv) {
+            $defaultTemplate = $templates->first();
+            $cv = UserCv::create([
+                'user_id' => $user->id,
+                'full_name' => $user->name,
+                'email' => $user->email,
+                'mobile' => $user->phone ?? '',
+                'template_id' => $defaultTemplate?->id ?? 1,
+            ]);
+            $cv->load($this->relations);
+        }
 
         return view('user.cv.edit', compact('user', 'cv', 'templates', 'portfolioTemplates'));
     }
@@ -277,10 +289,22 @@ class UserCvController extends Controller
 
     private function ownerCv(): UserCv
     {
-        return Auth::guard('web')->user()
-            ->userCv()
-            ->with($this->relations)
-            ->firstOrFail();
+        $user = Auth::guard('web')->user();
+        $cv = $user->userCv()->with($this->relations)->first();
+
+        if (! $cv) {
+            $defaultTemplate = CvTemplate::where('is_active', true)->first();
+            $cv = UserCv::create([
+                'user_id' => $user->id,
+                'full_name' => $user->name,
+                'email' => $user->email,
+                'mobile' => $user->phone ?? '',
+                'template_id' => $defaultTemplate?->id ?? 1,
+            ]);
+            $cv->load($this->relations);
+        }
+
+        return $cv;
     }
 
     private function extractSourceAndRedirect(UserCv $cv, CvSourceExtractor $extractor)

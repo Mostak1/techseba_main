@@ -437,6 +437,12 @@
 @endpush
 
 @section('dashboard-content')
+    <!-- Separate standalone form for spreadsheet import -->
+    <form action="{{ profile_route('user.cv.import-spreadsheet') }}" method="post" enctype="multipart/form-data" id="importSpreadsheetForm" style="display: none;">
+        @csrf
+        <input type="file" name="spreadsheet_file" id="spreadsheet_file_input_hidden" accept=".xlsx,.xls,.csv,.json,.txt" onchange="document.getElementById('importSpreadsheetForm').submit()">
+    </form>
+
     <div class="cv-shell">
         <div class="cv-head">
             <h4>Digital CV</h4>
@@ -495,13 +501,12 @@
                     </p>
 
                     <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                        <form action="{{ profile_route('user.cv.import-spreadsheet') }}" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1;">
-                            @csrf
-                            <input type="file" name="spreadsheet_file" accept=".xlsx,.xls,.csv,.json,.txt" required style="font-size: 13px; background: #fff; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1; min-width: 220px;">
-                            <button type="submit" class="cv-small-btn" style="background: #16a34a; border-color: #16a34a; white-space: nowrap;">
+                        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1;">
+                            <input type="file" id="spreadsheet_file_picker" accept=".xlsx,.xls,.csv,.json,.txt" style="font-size: 13px; background: #fff; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1; min-width: 220px;">
+                            <button type="button" class="cv-small-btn" style="background: #16a34a; border-color: #16a34a; white-space: nowrap;" onclick="const picker = document.getElementById('spreadsheet_file_picker'); if (!picker.files.length) { alert('Please select a spreadsheet file first.'); return; } const hiddenInput = document.getElementById('spreadsheet_file_input_hidden'); hiddenInput.files = picker.files; document.getElementById('importSpreadsheetForm').submit();">
                                 <i class="fas fa-file-import"></i> Upload & Update Data Sheet
                             </button>
-                        </form>
+                        </div>
 
                         <div style="display: flex; gap: 8px;">
                             <a href="{{ profile_route('user.cv.sample-spreadsheet', ['format' => 'csv']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">

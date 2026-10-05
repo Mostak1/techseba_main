@@ -306,3 +306,25 @@ if (!function_exists('getImageOrPlaceholder')) {
         return "https://placehold.co/{$size}?text={$size}";
     }
 }
+
+if (!function_exists('profile_route')) {
+    function profile_route(string $name, mixed $parameters = [], bool $absolute = true): string
+    {
+        $isProfileContext = request()->attributes->has('profileUser') || request()->attributes->has('profileDomain');
+
+        if ($isProfileContext) {
+            $mappedName = str_replace(
+                ['user.cv.', 'user.dashboard', 'user.login', 'user.store-login'],
+                ['profile.domain.cv.', 'profile.domain.dashboard', 'profile.domain.login', 'profile.domain.store-login'],
+                $name
+            );
+
+            if (\Illuminate\Support\Facades\Route::has($mappedName)) {
+                return route($mappedName, $parameters, $absolute);
+            }
+        }
+
+        return route($name, $parameters, $absolute);
+    }
+}
+

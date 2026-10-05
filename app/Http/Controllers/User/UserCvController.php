@@ -112,7 +112,7 @@ class UserCvController extends Controller
         $tab = $request->input('next_tab') ?: $request->input('active_tab', 'personal');
 
         return redirect()
-            ->route('user.cv.edit', ['tab' => $tab])
+            ->to(profile_route('user.cv.edit', ['tab' => $tab]))
             ->with(['message' => trans('translate.Updated successfully'), 'alert-type' => 'success']);
     }
 
@@ -124,8 +124,8 @@ class UserCvController extends Controller
             'showActions' => true,
             'printEnabled' => true,
             'pdfEnabled' => true,
-            'printUrl' => route('user.cv.print'),
-            'pdfUrl' => route('user.cv.pdf'),
+            'printUrl' => profile_route('user.cv.print'),
+            'pdfUrl' => profile_route('user.cv.pdf'),
             'printMode' => false,
             'forPdf' => false,
         ]);
@@ -139,9 +139,9 @@ class UserCvController extends Controller
         return view($this->portfolioViewPath($cv), [
             'cv' => $cv,
             'username' => $user->username,
-            'cvUrl' => route('user.cv.preview'),
-            'printUrl' => route('user.cv.print'),
-            'pdfUrl' => route('user.cv.pdf'),
+            'cvUrl' => profile_route('user.cv.preview'),
+            'printUrl' => profile_route('user.cv.print'),
+            'pdfUrl' => profile_route('user.cv.pdf'),
             'printEnabled' => true,
             'pdfEnabled' => true,
         ]);
@@ -155,8 +155,8 @@ class UserCvController extends Controller
             'showActions' => true,
             'printEnabled' => true,
             'pdfEnabled' => true,
-            'printUrl' => route('user.cv.print'),
-            'pdfUrl' => route('user.cv.pdf'),
+            'printUrl' => profile_route('user.cv.print'),
+            'pdfUrl' => profile_route('user.cv.pdf'),
             'printMode' => true,
             'forPdf' => false,
         ]);
@@ -194,7 +194,7 @@ class UserCvController extends Controller
         $result = $importer->import($request->file('spreadsheet_file'), $cv);
 
         return redirect()
-            ->route('user.cv.edit', ['tab' => 'upload'])
+            ->to(profile_route('user.cv.edit', ['tab' => 'upload']))
             ->with([
                 'message' => $result['message'],
                 'alert-type' => $result['status'] === 'success' ? 'success' : 'error',
@@ -287,7 +287,7 @@ class UserCvController extends Controller
     {
         if (! $cv->source_file || ! File::exists(public_path($cv->source_file))) {
             return redirect()
-                ->route('user.cv.edit', ['tab' => 'upload'])
+                ->to(profile_route('user.cv.edit', ['tab' => 'upload']))
                 ->with(['message' => 'Please upload a PDF or image first.', 'alert-type' => 'error']);
         }
 
@@ -307,7 +307,7 @@ class UserCvController extends Controller
             : 'Could not extract readable text from this file. '.implode(' ', $messages);
 
         return redirect()
-            ->route('user.cv.edit', ['tab' => $result['status'] === 'success' ? 'personal' : 'upload'])
+            ->to(profile_route('user.cv.edit', ['tab' => $result['status'] === 'success' ? 'personal' : 'upload']))
             ->with([
                 'message' => $message,
                 'alert-type' => $result['status'] === 'success' ? 'success' : 'error',

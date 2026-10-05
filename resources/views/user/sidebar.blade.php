@@ -18,12 +18,12 @@
 
             </div>
             <div class="dashbord_prof_thumb_text">
-                <a href="{{ route('user.dashboard') }}">{{ __(auth()->user()->name) }}</a>
+                <a href="{{ profile_route('user.dashboard') }}">{{ __(auth()->user()->name) }}</a>
             </div>
         </div>
         <ul class="dashbord_sidebar_menu">
             <li>
-                <a href="{{ route('user.dashboard') }}" class="{{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+                <a href="{{ profile_route('user.dashboard') }}" class="{{ request()->routeIs('user.dashboard', 'profile.domain.dashboard') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                              xmlns="http://www.w3.org/2000/svg">
@@ -75,7 +75,7 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('user.cv.edit') }}" class="{{ request()->routeIs('user.cv.*') ? 'active' : '' }}">
+                <a href="{{ profile_route('user.cv.edit') }}" class="{{ request()->routeIs('user.cv.*', 'profile.domain.cv.*') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                              xmlns="http://www.w3.org/2000/svg">

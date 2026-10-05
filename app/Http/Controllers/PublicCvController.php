@@ -41,20 +41,40 @@ class PublicCvController extends Controller
         'projects',
     ];
 
-    public function show(string $username)
+    public function showFromDomain(Request $request)
+    {
+        $user = $request->attributes->get('profileUser');
+        if (! $user) {
+            return app(\App\Http\Controllers\HomeController::class)->index();
+        }
+
+        return $this->show($user);
+    }
+
+    public function cvFromDomain(Request $request)
+    {
+        $user = $request->attributes->get('profileUser');
+        abort_unless($user, 404);
+
+        return $this->cv($user);
+    }
+
+    public function show(User|string $username)
     {
         $cv = $this->publicCv($username);
+        $uname = $username instanceof User ? $username->username : $username;
 
         return view($this->portfolioViewPath($cv), [
             'cv' => $cv,
-            'username' => $username,
-            'cvUrl' => route('cv.public', $username),
-            'printUrl' => route('public.cv.print', $username),
+            'username' => $uname,
+            'cvUrl' => route('cv.public', $uname),
+            'printUrl' => route('public.cv.print', $uname),
             'pdfUrl' => null,
             'printEnabled' => $cv->public_print_enabled,
             'pdfEnabled' => false,
         ]);
     }
+
 
     public function sendContactMessage(Request $request, string $username)
     {
@@ -120,15 +140,16 @@ class PublicCvController extends Controller
         ]);
     }
 
-    public function cv(string $username)
+    public function cv(User|string $username)
     {
         $cv = $this->publicCv($username);
+        $uname = $username instanceof User ? $username->username : $username;
 
         return $this->renderCv($cv, [
             'showActions' => true,
             'printEnabled' => $cv->public_print_enabled,
             'pdfEnabled' => false,
-            'printUrl' => route('public.cv.print', $username),
+            'printUrl' => route('public.cv.print', $uname),
             'pdfUrl' => null,
             'printMode' => false,
             'forPdf' => false,
@@ -195,11 +216,15 @@ class PublicCvController extends Controller
             ->download($filename);
     }
 
-    private function publicCv(string $username)
+    private function publicCv(User|string $userOrUsername)
     {
-        abort_if(in_array(strtolower($username), $this->reservedUsernames, true), 404);
+        if ($userOrUsername instanceof User) {
+            $user = $userOrUsername;
+        } else {
+            abort_if(in_array(strtolower($userOrUsername), $this->reservedUsernames, true), 404);
+            $user = User::where('username', $userOrUsername)->firstOrFail();
+        }
 
-        $user = User::where('username', $username)->firstOrFail();
         $cv = $user->userCv()->with($this->relations)->first();
 
         abort_unless($cv && $cv->is_public, 404);

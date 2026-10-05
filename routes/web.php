@@ -139,7 +139,8 @@ Route::get('/sitemap.xml', function () {
 })->name('sitemap');
 Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function () {
 
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::middleware(['resolve.profile.domain'])->get('/', [PublicCvController::class, 'showFromDomain'])->name('home');
+
     Route::get('/about-us', [HomeController::class, 'about_us'])->name('about-us');
 
     Route::get('/services', [HomeController::class, 'services'])->name('services');
@@ -330,7 +331,30 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
     });
 });
 
+Route::middleware(['resolve.profile.domain'])->group(function () {
+    Route::get('/login', [UserLoginController::class, 'domain_login_page'])->name('profile.domain.login');
+    Route::post('/login', [UserLoginController::class, 'store_domain_login'])->name('profile.domain.store-login');
+    Route::get('/domain-profile', [PublicCvController::class, 'showFromDomain'])->name('profile.domain.show');
+    Route::get('/domain-cv', [PublicCvController::class, 'cvFromDomain'])->name('profile.domain.cv');
+});
+
+Route::middleware(['resolve.profile.domain', 'auth:web', 'ensure.profile.owner'])->group(function () {
+    Route::get('/dashboard', [UserProfileController::class, 'dashboard'])->name('profile.domain.dashboard');
+    Route::get('/cv', [UserCvController::class, 'edit'])->name('profile.domain.cv.edit');
+    Route::post('/cv', [UserCvController::class, 'update'])->name('profile.domain.cv.update');
+    Route::post('/cv/import-spreadsheet', [UserCvController::class, 'importSpreadsheet'])->name('profile.domain.cv.import-spreadsheet');
+    Route::get('/cv/export-spreadsheet', [UserCvController::class, 'exportSpreadsheet'])->name('profile.domain.cv.export-spreadsheet');
+    Route::get('/cv/sample-spreadsheet', [UserCvController::class, 'downloadSampleSpreadsheet'])->name('profile.domain.cv.sample-spreadsheet');
+    Route::get('/cv/preview', [UserCvController::class, 'preview'])->name('profile.domain.cv.preview');
+    Route::get('/cv/portfolio-preview', [UserCvController::class, 'portfolioPreview'])->name('profile.domain.cv.portfolio-preview');
+    Route::get('/cv/print', [UserCvController::class, 'print'])->name('profile.domain.cv.print');
+    Route::get('/cv/pdf', [UserCvController::class, 'pdf'])->name('profile.domain.cv.pdf');
+});
+
+
+
 $reservedUsernames = 'login|register|admin|user|dashboard|about|contact|blog|api|password|logout';
+
 
 Route::get('/cv/{username}', [PublicCvController::class, 'cv'])->name('cv.public');
 Route::get('/cv/id/{id}', [PublicCvController::class, 'showById'])->name('cv.public.id');

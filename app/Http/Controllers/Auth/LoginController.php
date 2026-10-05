@@ -43,13 +43,121 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:web')->except( 'seller_logout');
+        $this->middleware('guest:web')->except(['seller_logout', 'domain_login_page', 'store_domain_login']);
     }
 
     public function custom_login_page()
     {
        return view('auth.login');
     }
+
+    public function domain_login_page(Request $request)
+    {
+        $profileUser = $request->attributes->get('profileUser');
+
+        if (Auth::guard('web')->check()) {
+            $authUser = Auth::guard('web')->user();
+            if ($profileUser && (int) $authUser->id === (int) $profileUser->id) {
+                return redirect('/dashboard');
+            }
+
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+        }
+
+        return view('auth.login');
+    }
+
+    public function store_domain_login(Request $request)
+    {
+        $profileUser = $request->attributes->get('profileUser');
+        if (! $profileUser) {
+            abort(404, 'Profile context not found.');
+        }
+
+        $rules = [
+            'email' => 'required',
+            'password' => 'required',
+        ];
+
+        if ($this->recaptchaEnabled()) {
+            $rules['g-recaptcha-response'] = new Captcha();
+        }
+
+        $custom_error = [
+            'email.required' => trans('translate.Email is required'),
+            'password.required' => trans('translate.Password is required'),
+        ];
+
+        $this->validate($request, $rules, $custom_error);
+
+        $credentials = [
+            'email' => $request->email,
+            'password' => $request->password,
+        ];
+
+        $user = User::where('email', $request->email)->first();
+
+        if ($user) {
+            if ($user->status == $user::STATUS_ACTIVE && $user->is_banned == $user::BANNED_INACTIVE) {
+                if ($user->provider) {
+                    $notify_message = trans('translate.Please try to login with social media');
+                    $notify_message = ['message' => $notify_message, 'alert-type' => 'error'];
+                    return redirect()->back()->with($notify_message);
+                }
+
+                if ($user->feez_status == 1) {
+                    $notify_message = trans('translate.Your account is in freeze mode. Please contact the admin.');
+                    $notify_message = ['message' => $notify_message, 'alert-type' => 'error'];
+                    return redirect()->back()->with($notify_message);
+                }
+
+                if ((int) $user->id !== (int) $profileUser->id) {
+                    $notify_message = ['message' => 'You are not authorized to log into this profile domain.', 'alert-type' => 'error'];
+                    return redirect()->back()->with($notify_message);
+                }
+
+                if (Hash::check($request->password, $user->password)) {
+                    $sessionId = session()->getId();
+
+                    if (Auth::guard('web')->attempt($credentials, $request->remember)) {
+                        if ((int) Auth::guard('web')->id() !== (int) $profileUser->id) {
+                            Auth::guard('web')->logout();
+                            $request->session()->invalidate();
+                            $request->session()->regenerateToken();
+
+                            $notify_message = ['message' => 'Unauthorized profile domain login.', 'alert-type' => 'error'];
+                            return redirect()->back()->with($notify_message);
+                        }
+
+                        if (class_exists(\Modules\Ecommerce\Entities\Cart::class)) {
+                            \Modules\Ecommerce\Entities\Cart::where('session_id', $sessionId)
+                                ->update(['user_id' => $user->id]);
+                        }
+
+                        $notify_message = trans('translate.Login successfully');
+                        $notify_message = ['message' => $notify_message, 'alert-type' => 'success'];
+                        return redirect('/dashboard')->with($notify_message);
+                    }
+                } else {
+                    $notify_message = trans('translate.Credential does not match');
+                    $notify_message = ['message' => $notify_message, 'alert-type' => 'error'];
+                    return redirect()->back()->with($notify_message);
+                }
+
+            } else {
+                $notify_message = trans('translate.Inactive your account');
+                $notify_message = ['message' => $notify_message, 'alert-type' => 'error'];
+                return redirect()->back()->with($notify_message);
+            }
+        } else {
+            $notify_message = trans('translate.Email not found');
+            $notify_message = ['message' => $notify_message, 'alert-type' => 'error'];
+            return redirect()->back()->with($notify_message);
+        }
+    }
+
 
     public function store_login(Request $request)
     {

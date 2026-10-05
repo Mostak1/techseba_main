@@ -6,7 +6,7 @@
     <h1 class="post__title">{{ __('translate.Dashboard') }}</h1>
     <nav class="breadcrumbs">
         <ul>
-            <li><a href="{{ route('user.dashboard') }}">{{ __('translate.Home') }}</a></li>
+            <li><a href="{{ profile_route('user.dashboard') }}">{{ __('translate.Home') }}</a></li>
             <li aria-current="page"> {{ __('translate.Dashboard') }}</li>
         </ul>
     </nav>
@@ -19,7 +19,7 @@
                 <strong style="font-size: 16px;">{{ __('translate.You haven\'t created a Digital CV yet!') }}</strong>
                 <p class="mb-0" style="font-size: 14px; opacity: 0.8;">{{ __('translate.Create your professional Digital CV to apply for jobs and build your online presence.') }}</p>
             </div>
-            <a href="{{ route('user.cv.edit') }}" class="optech-default-btn btn-sm" style="background: var(--accent-bg); color: var(--white-color); padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 500; min-width: 140px; text-align: center; display: inline-block;">
+            <a href="{{ profile_route('user.cv.edit') }}" class="optech-default-btn btn-sm" style="background: var(--accent-bg); color: var(--white-color); padding: 8px 16px; border-radius: 4px; text-decoration: none; font-weight: 500; min-width: 140px; text-align: center; display: inline-block;">
                 <span class="btn-wraper" style="color: var(--white-color);">{{ __('translate.Create CV Now') }}</span>
             </a>
         </div>
@@ -152,7 +152,7 @@
                         {{ __('translate.Digital CV') }}
                     </p>
                 </div>
-                <a href="{{ route('user.cv.edit') }}" class="stretched-link"></a>
+                <a href="{{ profile_route('user.cv.edit') }}" class="stretched-link"></a>
             </div>
         </div>
 

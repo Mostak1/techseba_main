@@ -73,4 +73,14 @@ class User extends Authenticatable
         return $this->hasMany(WorkOrder::class);
     }
 
+    public function profileDomains()
+    {
+        return $this->hasMany(ProfileDomain::class);
+    }
+
+    public function primaryProfileDomain()
+    {
+        return $this->hasOne(ProfileDomain::class)->where('is_primary', true);
+    }
 }
+

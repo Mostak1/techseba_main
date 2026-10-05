@@ -73,5 +73,9 @@ class Kernel extends HttpKernel
         'MaintenanceMode' => MaintenanceMode::class,
         'HtmlSpecialchars' => HtmlSpecialchars::class,
         'admin.redirect' => \App\Http\Middleware\AdminRedirectMiddleware::class,
+        'resolve.profile.domain' => \App\Http\Middleware\ResolveProfileDomain::class,
+        'ensure.profile.owner' => \App\Http\Middleware\EnsureProfileOwner::class,
     ];
 }
+
+

@@ -55,7 +55,7 @@
     <h1 class="post__title">Digital CV</h1>
     <nav class="breadcrumbs">
         <ul>
-            <li><a href="{{ route('user.dashboard') }}">{{ __('translate.Home') }}</a></li>
+            <li><a href="{{ profile_route('user.dashboard') }}">{{ __('translate.Home') }}</a></li>
             <li>Digital CV</li>
         </ul>
     </nav>
@@ -449,7 +449,7 @@
             </div>
         </div>
 
-        <form class="d_profile_setting_from" method="post" action="{{ route('user.cv.update') }}" enctype="multipart/form-data" id="cvForm">
+        <form class="d_profile_setting_from" method="post" action="{{ profile_route('user.cv.update') }}" enctype="multipart/form-data" id="cvForm">
             @csrf
             <input type="hidden" name="active_tab" id="active_tab" value="{{ $activeTab }}">
             <input type="hidden" name="next_tab" id="next_tab" value="">
@@ -495,7 +495,7 @@
                     </p>
 
                     <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
-                        <form action="{{ route('user.cv.import-spreadsheet') }}" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1;">
+                        <form action="{{ profile_route('user.cv.import-spreadsheet') }}" method="post" enctype="multipart/form-data" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap; flex: 1;">
                             @csrf
                             <input type="file" name="spreadsheet_file" accept=".xlsx,.xls,.csv,.json,.txt" required style="font-size: 13px; background: #fff; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1; min-width: 220px;">
                             <button type="submit" class="cv-small-btn" style="background: #16a34a; border-color: #16a34a; white-space: nowrap;">
@@ -504,13 +504,13 @@
                         </form>
 
                         <div style="display: flex; gap: 8px;">
-                            <a href="{{ route('user.cv.sample-spreadsheet', ['format' => 'csv']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
+                            <a href="{{ profile_route('user.cv.sample-spreadsheet', ['format' => 'csv']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
                                 <i class="fas fa-file-csv"></i> Sample CSV Template
                             </a>
-                            <a href="{{ route('user.cv.sample-spreadsheet', ['format' => 'json']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
+                            <a href="{{ profile_route('user.cv.sample-spreadsheet', ['format' => 'json']) }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; white-space: nowrap;">
                                 <i class="fas fa-file-code"></i> Sample JSON Template
                             </a>
-                            <a href="{{ route('user.cv.export-spreadsheet') }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; background: #166534; color: #ffffff; border-color: #166534; white-space: nowrap;">
+                            <a href="{{ profile_route('user.cv.export-spreadsheet') }}" class="cv-secondary-btn" style="font-size: 12px; padding: 8px 12px; background: #166534; color: #ffffff; border-color: #166534; white-space: nowrap;">
                                 <i class="fas fa-file-export"></i> Export My Data
                             </a>
                         </div>
@@ -519,7 +519,7 @@
 
                 <div class="cv-actions">
                     @if($cv)
-                        <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
+                        <a href="{{ profile_route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
                     @endif
                     <button type="button" id="scan_cv_btn" class="cv-small-btn" style="background: #10b981; border-color: #10b981;">
                         <i class="fas fa-magic"></i> Scan & Auto-fill Form
@@ -836,7 +836,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
                             <label style="margin: 0;">CV Template*</label>
                             @if($cv)
-                                <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
+                                <a href="{{ profile_route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
                                     <i class="fas fa-eye"></i> View Live Preview
                                 </a>
                             @endif
@@ -857,7 +857,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
                             <label style="margin: 0;">Portfolio Template</label>
                             @if($cv)
-                                <a href="{{ route('user.cv.portfolio-preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
+                                <a href="{{ profile_route('user.cv.portfolio-preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
                                     <i class="fas fa-eye"></i> View Portfolio Preview
                                 </a>
                             @endif

@@ -1,6 +1,6 @@
 <div class="cv-actions">
     @if($cv)
-        <a href="{{ route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
+        <a href="{{ profile_route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
     @endif
     <button type="submit" class="cv-secondary-btn" data-save-tab="{{ $tab }}">Save</button>
     @if(empty($last))

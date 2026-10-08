@@ -1,4 +1,5 @@
 @php
+    $username = $username ?? ($cv->user?->username ?? 'mostak');
     $photoSrc = $cv->photo ? asset($cv->photo) : asset('uploads/website-images/avatar-image-2024-07-02-10-08-24-5849.png');
     $currentEmployment = $cv->employments->firstWhere('is_current', true) ?: $cv->employments->first();
     $primaryRole = $currentEmployment?->designation ?: 'Senior Software Engineer';

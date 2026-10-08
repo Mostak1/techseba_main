@@ -9,6 +9,7 @@ use App\Models\PortfolioTemplate;
 use App\Models\UserCv;
 use App\Services\CvSourceExtractor;
 use App\Services\SpreadsheetCvImporter;
+use App\Services\TemplateRegistry;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -61,15 +62,16 @@ class UserCvController extends Controller
         'declaration_date',
     ];
 
-    public function edit()
+    public function edit(TemplateRegistry $registry)
     {
         $user = Auth::guard('web')->user();
-        $templates = CvTemplate::where('is_active', true)->orderBy('name')->get();
-        $portfolioTemplates = PortfolioTemplate::where('is_active', true)->orderBy('name')->get();
+        // Gallery cards are loaded via AJAX (TemplateGalleryController); only lightweight data here.
+        $templates = $registry->activeQuery('cv')->get(['id', 'name', 'slug']);
+        $portfolioTemplates = $registry->activeQuery('portfolio')->get(['id', 'name', 'slug']);
         $cv = $user->userCv()->with($this->relations)->first();
 
         if (! $cv) {
-            $defaultTemplate = $templates->first();
+            $defaultTemplate = $registry->effectiveTemplate('cv', null);
             $cv = UserCv::create([
                 'user_id' => $user->id,
                 'full_name' => $user->name,
@@ -80,7 +82,18 @@ class UserCvController extends Controller
             $cv->load($this->relations);
         }
 
-        return view('user.cv.edit', compact('user', 'cv', 'templates', 'portfolioTemplates'));
+        // Effective selection: keeps legacy selections, but falls back safely if a template
+        // was deactivated/removed so the main form never submits an invalid template_id.
+        $selectedCvTemplate = $registry->effectiveTemplate('cv', $cv->template);
+        $selectedPortfolioTemplate = $registry->effectiveTemplate('portfolio', $cv->portfolioTemplate);
+        $cvTemplateCategories = $registry->categories('cv');
+        $portfolioTemplateCategories = $registry->categories('portfolio');
+
+        return view('user.cv.edit', compact(
+            'user', 'cv', 'templates', 'portfolioTemplates',
+            'selectedCvTemplate', 'selectedPortfolioTemplate',
+            'cvTemplateCategories', 'portfolioTemplateCategories'
+        ));
     }
 
     public function update(UserCvRequest $request, CvSourceExtractor $extractor)
@@ -507,18 +520,12 @@ class UserCvController extends Controller
 
     private function viewPath(UserCv $cv): string
     {
-        $viewPath = $cv->template?->view_path ?: 'frontend.cv.templates.bdjobs';
-
-        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.templates.bdjobs';
+        return app(TemplateRegistry::class)->resolveView('cv', $cv->template, ['user_cv_id' => $cv->id]);
     }
 
     private function portfolioViewPath(UserCv $cv): string
     {
-        $viewPath = $cv->portfolioTemplate?->is_active
-            ? $cv->portfolioTemplate->view_path
-            : 'frontend.cv.portfolio';
-
-        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.portfolio';
+        return app(TemplateRegistry::class)->resolveView('portfolio', $cv->portfolioTemplate, ['user_cv_id' => $cv->id]);
     }
 
     private function pdfOptions(): array

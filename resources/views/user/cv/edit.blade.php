@@ -845,55 +845,27 @@
 
             <section class="cv-tab-panel {{ $activeTab === 'settings' ? 'active' : '' }}" data-tab-panel="settings">
                 <h5 class="cv-section-title">CV & Portfolio Settings</h5>
+                @include('user.cv.partials.template-gallery', [
+                    'type' => 'cv',
+                    'title' => 'CV Template',
+                    'inputName' => 'template_id',
+                    'selected' => $selectedCvTemplate,
+                    'categories' => $cvTemplateCategories,
+                    'myPreviewUrl' => $cv ? profile_route('user.cv.preview') : null,
+                    'myPreviewLabel' => 'Preview My CV',
+                ])
+                @include('user.cv.partials.template-gallery', [
+                    'type' => 'portfolio',
+                    'title' => 'Portfolio Template',
+                    'inputName' => 'portfolio_template_id',
+                    'selected' => $selectedPortfolioTemplate,
+                    'categories' => $portfolioTemplateCategories,
+                    'myPreviewUrl' => $cv ? profile_route('user.cv.portfolio-preview') : null,
+                    'myPreviewLabel' => 'Preview My Portfolio',
+                ])
+                <div class="tg-settings-box">
+                    <h6><i class="fas fa-sliders-h"></i> Visibility &amp; Sharing</h6>
                 <div class="cv-grid">
-                    <div class="cv-field cv-full">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
-                            <label style="margin: 0;">CV Template*</label>
-                            @if($cv)
-                                <a href="{{ profile_route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
-                                    <i class="fas fa-eye"></i> View Live Preview
-                                </a>
-                            @endif
-                        </div>
-                        <div class="cv-template-options">
-                            @foreach($templates as $template)
-                                <label class="cv-template-card">
-                                    <input type="radio" name="template_id" value="{{ $template->id }}" @checked(old('template_id', $cv->template_id ?? $templates->first()?->id) == $template->id)>
-                                    <strong>{{ $template->name }}</strong>
-                                    @if($template->preview_image)
-                                        <img src="{{ asset($template->preview_image) }}" alt="{{ $template->name }}" class="cv-preview-image">
-                                    @endif
-                                </label>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="cv-field cv-full">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px;">
-                            <label style="margin: 0;">Portfolio Template</label>
-                            @if($cv)
-                                <a href="{{ profile_route('user.cv.portfolio-preview') }}" target="_blank" class="cv-secondary-btn" style="padding: 4px 10px; font-size: 12px; height: auto; min-height: auto;">
-                                    <i class="fas fa-eye"></i> View Portfolio Preview
-                                </a>
-                            @endif
-                        </div>
-                        <div class="cv-template-options">
-                            @forelse($portfolioTemplates as $portfolioTemplate)
-                                <label class="cv-template-card">
-                                    <input type="radio" name="portfolio_template_id" value="{{ $portfolioTemplate->id }}" @checked(old('portfolio_template_id', $cv->portfolio_template_id ?? $portfolioTemplates->first()?->id) == $portfolioTemplate->id)>
-                                    <strong>{{ $portfolioTemplate->name }}</strong>
-                                    <small>{{ $portfolioTemplate->slug }} layout</small>
-                                    @if($portfolioTemplate->preview_image)
-                                        <img src="{{ asset($portfolioTemplate->preview_image) }}" alt="{{ $portfolioTemplate->name }}" class="cv-preview-image">
-                                    @endif
-                                </label>
-                            @empty
-                                <div class="cv-template-card">
-                                    <strong>No active portfolio templates found.</strong>
-                                    <small>Run the portfolio template seeder to create selectable layouts.</small>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
                         <div class="cv-toggle-grid cv-full">
                             <label class="cv-toggle">
                                 <input type="hidden" name="is_public" value="0">
@@ -923,6 +895,7 @@
                             </label>
                             --}}
                         </div>
+                </div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'settings', 'next' => 'settings', 'cv' => $cv, 'last' => true])
             </section>

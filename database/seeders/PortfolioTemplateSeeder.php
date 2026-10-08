@@ -9,34 +9,47 @@ class PortfolioTemplateSeeder extends Seeder
 {
     public function run(): void
     {
-        PortfolioTemplate::updateOrCreate(
-            ['slug' => 'modern'],
+        $templates = [
             [
+                'slug' => 'modern',
                 'name' => 'Modern Portfolio',
-                'preview_image' => null,
+                'description' => 'Full-featured web portfolio with interactive project cards, technical metrics, and skill breakdowns.',
+                'category' => 'Modern',
+                'style' => 'Interactive Showcase',
                 'view_path' => 'frontend.cv.portfolio',
+                'preview_image' => 'uploads/website-images/templates/portfolio_modern.webp',
+                'is_premium' => false,
                 'is_active' => true,
-            ]
-        );
-
-        PortfolioTemplate::updateOrCreate(
-            ['slug' => 'classic'],
+                'sort_order' => 1,
+            ],
             [
+                'slug' => 'classic',
                 'name' => 'Classic Portfolio',
-                'preview_image' => null,
+                'description' => 'Clean, elegant layout focusing on experience timeline, core achievements, and contact information.',
+                'category' => 'Minimal',
+                'style' => 'Clean Single-Page',
                 'view_path' => 'frontend.cv.portfolio_classic',
+                'preview_image' => 'uploads/website-images/templates/portfolio_classic.webp',
+                'is_premium' => false,
                 'is_active' => true,
-            ]
-        );
-
-        PortfolioTemplate::updateOrCreate(
-            ['slug' => 'application'],
+                'sort_order' => 2,
+            ],
             [
+                'slug' => 'application',
                 'name' => 'Application Portfolio',
-                'preview_image' => null,
+                'description' => 'App-dashboard styled portfolio featuring dark aesthetic, project metrics, and rating breakdowns.',
+                'category' => 'Professional',
+                'style' => 'App Dashboard Layout',
                 'view_path' => 'frontend.cv.portfolio_application',
+                'preview_image' => 'uploads/website-images/templates/portfolio_application.webp',
+                'is_premium' => false,
                 'is_active' => true,
-            ]
-        );
+                'sort_order' => 3,
+            ],
+        ];
+
+        foreach ($templates as $t) {
+            PortfolioTemplate::updateOrCreate(['slug' => $t['slug']], $t);
+        }
     }
 }

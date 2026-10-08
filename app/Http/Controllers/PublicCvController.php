@@ -249,18 +249,12 @@ class PublicCvController extends Controller
 
     private function viewPath($cv): string
     {
-        $viewPath = $cv->template?->view_path ?: 'frontend.cv.templates.bdjobs';
-
-        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.templates.bdjobs';
+        return app(\App\Services\TemplateRegistry::class)->resolveView('cv', $cv->template, ['user_cv_id' => $cv->id, 'context' => 'public']);
     }
 
     private function portfolioViewPath($cv): string
     {
-        $viewPath = $cv->portfolioTemplate?->is_active
-            ? $cv->portfolioTemplate->view_path
-            : 'frontend.cv.portfolio';
-
-        return view()->exists($viewPath) ? $viewPath : 'frontend.cv.portfolio';
+        return app(\App\Services\TemplateRegistry::class)->resolveView('portfolio', $cv->portfolioTemplate, ['user_cv_id' => $cv->id, 'context' => 'public']);
     }
 
     private function pdfOptions(): array

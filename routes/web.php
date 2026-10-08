@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\PublicCvController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\User\UserCvController;
+use App\Http\Controllers\User\TemplateGalleryController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
 use App\Http\Controllers\User\WorkOrderController as UserWorkOrderController;
 use App\Http\Controllers\Admin\WorkOrderController as AdminWorkOrderController;
@@ -223,6 +224,16 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
             Route::get('/cv/print', [UserCvController::class, 'print'])->name('cv.print');
             Route::get('/cv/pdf', [UserCvController::class, 'pdf'])->name('cv.pdf');
 
+            // Template gallery + live preview engine (type is fixed by route defaults, never by input)
+            Route::get('/cv/templates', [TemplateGalleryController::class, 'index'])->defaults('type', 'cv')->name('cv.templates.index');
+            Route::post('/cv/templates/select', [TemplateGalleryController::class, 'select'])->defaults('type', 'cv')->name('cv.templates.select');
+            Route::get('/cv/templates/{slug}/preview', [TemplateGalleryController::class, 'preview'])->defaults('type', 'cv')->where('slug', '[A-Za-z0-9_-]+')->name('cv.templates.preview');
+            Route::get('/cv/templates/{slug}/render', [TemplateGalleryController::class, 'render'])->defaults('type', 'cv')->where('slug', '[A-Za-z0-9_-]+')->name('cv.templates.render');
+            Route::get('/portfolio/templates', [TemplateGalleryController::class, 'index'])->defaults('type', 'portfolio')->name('cv.portfolio-templates.index');
+            Route::post('/portfolio/templates/select', [TemplateGalleryController::class, 'select'])->defaults('type', 'portfolio')->name('cv.portfolio-templates.select');
+            Route::get('/portfolio/templates/{slug}/preview', [TemplateGalleryController::class, 'preview'])->defaults('type', 'portfolio')->where('slug', '[A-Za-z0-9_-]+')->name('cv.portfolio-templates.preview');
+            Route::get('/portfolio/templates/{slug}/render', [TemplateGalleryController::class, 'render'])->defaults('type', 'portfolio')->where('slug', '[A-Za-z0-9_-]+')->name('cv.portfolio-templates.render');
+
             Route::get('/edit-profile', [UserProfileController::class, 'edit_profile'])->name('edit-profile');
             Route::put('/update-profile', [UserProfileController::class, 'update_profile'])->name('update-profile');
 
@@ -349,6 +360,15 @@ Route::middleware(['resolve.profile.domain', 'auth:web', 'ensure.profile.owner']
     Route::get('/cv/portfolio-preview', [UserCvController::class, 'portfolioPreview'])->name('profile.domain.cv.portfolio-preview');
     Route::get('/cv/print', [UserCvController::class, 'print'])->name('profile.domain.cv.print');
     Route::get('/cv/pdf', [UserCvController::class, 'pdf'])->name('profile.domain.cv.pdf');
+
+    Route::get('/cv/templates', [TemplateGalleryController::class, 'index'])->defaults('type', 'cv')->name('profile.domain.cv.templates.index');
+    Route::post('/cv/templates/select', [TemplateGalleryController::class, 'select'])->defaults('type', 'cv')->name('profile.domain.cv.templates.select');
+    Route::get('/cv/templates/{slug}/preview', [TemplateGalleryController::class, 'preview'])->defaults('type', 'cv')->where('slug', '[A-Za-z0-9_-]+')->name('profile.domain.cv.templates.preview');
+    Route::get('/cv/templates/{slug}/render', [TemplateGalleryController::class, 'render'])->defaults('type', 'cv')->where('slug', '[A-Za-z0-9_-]+')->name('profile.domain.cv.templates.render');
+    Route::get('/portfolio/templates', [TemplateGalleryController::class, 'index'])->defaults('type', 'portfolio')->name('profile.domain.cv.portfolio-templates.index');
+    Route::post('/portfolio/templates/select', [TemplateGalleryController::class, 'select'])->defaults('type', 'portfolio')->name('profile.domain.cv.portfolio-templates.select');
+    Route::get('/portfolio/templates/{slug}/preview', [TemplateGalleryController::class, 'preview'])->defaults('type', 'portfolio')->where('slug', '[A-Za-z0-9_-]+')->name('profile.domain.cv.portfolio-templates.preview');
+    Route::get('/portfolio/templates/{slug}/render', [TemplateGalleryController::class, 'render'])->defaults('type', 'portfolio')->where('slug', '[A-Za-z0-9_-]+')->name('profile.domain.cv.portfolio-templates.render');
 });
 
 

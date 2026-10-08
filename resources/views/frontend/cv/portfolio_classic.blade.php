@@ -1,4 +1,6 @@
 @php
+    $username = $username ?? ($cv->user?->username ?? 'mostak');
+    $cvUrl = $cvUrl ?? (route('cv.public', $username));
     $photoSrc = $cv->photo ? asset($cv->photo) : asset('uploads/website-images/avatar-image-2024-07-02-10-08-24-5849.png');
     $currentEmployment = $cv->employments->first();
     $primaryRole = $currentEmployment?->designation ?: 'Software Developer';

@@ -447,6 +447,10 @@
                         @endforeach
                     </div>
                 </div>
+            @endforeach
+        </section>
+    @endif
+
     @if($cv->projects->isNotEmpty())
         <section class="section">
             <h2 class="section-title">Projects & Software Engineering Case Studies</h2>

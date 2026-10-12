@@ -15,14 +15,20 @@ class HtmlSpecialchars
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Do not alter CV routes to avoid multi-encoding entities like &amp;amp;
+        if ($request->is('user/cv*') || $request->is('*/cv*')) {
+            return $next($request);
+        }
+
         $input = array_filter($request->all());
 
         array_walk_recursive($input, function (&$input) {
-            $input = htmlspecialchars($input, ENT_QUOTES);
+            if (is_string($input)) {
+                $input = htmlspecialchars($input, ENT_QUOTES, 'UTF-8', false);
+            }
         });
 
         $request->merge($input);
-
 
         return $next($request);
     }

@@ -99,7 +99,7 @@ class UserCvController extends Controller
     public function update(UserCvRequest $request, CvSourceExtractor $extractor)
     {
         $user = Auth::guard('web')->user();
-        $validated = $request->validated();
+        $validated = $this->cleanEntities($request->validated());
         $cv = null;
 
         DB::transaction(function () use ($request, $validated, $user, &$cv) {
@@ -551,5 +551,24 @@ class UserCvController extends Controller
             'isHtml5ParserEnabled' => true,
             'chroot' => base_path(),
         ];
+    }
+
+    private function cleanEntities(mixed $value): mixed
+    {
+        if (is_array($value)) {
+            return array_map([$this, 'cleanEntities'], $value);
+        }
+
+        if (! is_string($value)) {
+            return $value;
+        }
+
+        $prev = null;
+        while ($prev !== $value && (str_contains($value, '&amp;') || str_contains($value, '&quot;') || str_contains($value, '&#039;'))) {
+            $prev = $value;
+            $value = htmlspecialchars_decode($value, ENT_QUOTES);
+        }
+
+        return preg_replace('/(?:&)?(?:amp;)+/i', '&', $value);
     }
 }

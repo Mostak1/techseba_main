@@ -2,6 +2,7 @@
 
 @php
     $emptyEmployment = ['company_name' => '', 'designation' => '', 'department' => '', 'start_date' => '', 'end_date' => '', 'is_current' => 0, 'responsibilities' => '', 'achievements' => '', 'company_location' => '', 'business_type' => ''];
+    $emptyProject = ['title' => '', 'role' => '', 'technologies' => '', 'link' => '', 'github_url' => '', 'demo_user' => '', 'demo_password' => '', 'description' => '', 'problem' => '', 'solution' => ''];
     $emptyAcademic = ['degree_name' => '', 'institution' => '', 'board_or_university' => '', 'group_or_major' => '', 'result' => '', 'passing_year' => ''];
     $emptyTraining = ['training_title' => '', 'institute' => '', 'duration' => '', 'year' => '', 'certificate_details' => ''];
     $emptyQualification = ['title' => '', 'authority' => '', 'result_or_score' => '', 'year' => '', 'details' => ''];
@@ -10,6 +11,7 @@
     $emptyReference = ['name' => '', 'designation' => '', 'organization' => '', 'phone' => '', 'email' => '', 'relationship' => ''];
 
     $employments = old('employments', $cv ? $cv->employments->toArray() : []);
+    $projects = old('projects', $cv ? $cv->projects->toArray() : []);
     $academics = old('academics', $cv ? $cv->academics->toArray() : []);
     $trainings = old('trainings', $cv ? $cv->trainings->toArray() : []);
     $qualifications = old('professional_qualifications', $cv ? $cv->professionalQualifications->toArray() : []);
@@ -18,6 +20,7 @@
     $references = old('references', $cv ? $cv->references->toArray() : []);
 
     $employments = count($employments) ? $employments : [$emptyEmployment];
+    $projects = count($projects) ? $projects : [$emptyProject];
     $academics = count($academics) ? $academics : [$emptyAcademic];
     $trainings = count($trainings) ? $trainings : [$emptyTraining];
     $qualifications = count($qualifications) ? $qualifications : [$emptyQualification];
@@ -30,6 +33,7 @@
         'personal' => 'Personal',
         'career' => 'Career',
         'employment' => 'Employment',
+        'projects' => 'Projects',
         'academic' => 'Academic',
         'training' => 'Training',
         'professional' => 'Professional',
@@ -622,6 +626,91 @@
                 @include('user.cv.partials.actions', ['tab' => 'employment', 'next' => $nextTab('employment'), 'cv' => $cv])
             </section>
 
+            <section class="cv-tab-panel {{ $activeTab === 'projects' ? 'active' : '' }}" data-tab-panel="projects" data-repeater="projects">
+                <div style="margin-bottom: 18px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px 18px;">
+                    <h5 style="margin: 0 0 6px; color: #1e3a8a; font-size: 16px; font-weight: 700;">
+                        <i class="fa-solid fa-diagram-project" style="margin-right: 6px;"></i> Featured Projects & Live Demos
+                    </h5>
+                    <p style="margin: 0; font-size: 13px; color: #1e40af; line-height: 1.5;">
+                        📌 <strong>পেজ বিন্যাস নির্দেশিকা:</strong> এই তালিকার <strong>১ম ও ২য় প্রজেক্ট</strong> সিভির ১ম পৃষ্ঠায় <em>(Selected Featured Projects)</em> এবং <strong>৩য় প্রজেক্ট থেকে বাকিগুলো</strong> সিভির ২য় পৃষ্ঠায় <em>(Featured Projects & Live Demos Contd.)</em> সেকশনে প্রদর্শিত হবে। আপনি <strong>↑ Move Up</strong> ও <strong>↓ Move Down</strong> বাটন দিয়ে যেকোনো প্রজেক্ট আগে বা পরে নিতে পারেন।
+                    </p>
+                </div>
+
+                <div data-repeat-list>
+                    @foreach($projects as $index => $project)
+                        <div class="cv-repeat-row" data-repeat-row style="border-left: 4px solid #0a165e; background: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; gap: 8px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <strong style="color: #0a165e; font-size: 14px;">
+                                        Project #<span class="project-item-number">{{ $index + 1 }}</span>
+                                    </strong>
+                                    <span class="project-page-badge" style="font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 700; {{ $index < 2 ? 'background: #dbeafe; color: #1e40af;' : 'background: #fef3c7; color: #92400e;' }}">
+                                        {{ $index < 2 ? 'Page 1 — Selected Featured' : 'Page 2 — Live Demos (Contd.)' }}
+                                    </span>
+                                </div>
+                                <div style="display: flex; gap: 6px;">
+                                    <button type="button" class="cv-secondary-btn move-up-row" style="padding: 4px 10px; font-size: 12px; cursor: pointer;" title="Move Up">
+                                        <i class="fas fa-arrow-up"></i> Up
+                                    </button>
+                                    <button type="button" class="cv-secondary-btn move-down-row" style="padding: 4px 10px; font-size: 12px; cursor: pointer;" title="Move Down">
+                                        <i class="fas fa-arrow-down"></i> Down
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="cv-grid">
+                                <div class="cv-field">
+                                    <label>Project Title*</label>
+                                    <input type="text" name="projects[{{ $index }}][title]" value="{{ $project['title'] ?? '' }}" placeholder="e.g. Carenet ERP — Healthcare Platform">
+                                </div>
+                                <div class="cv-field">
+                                    <label>Your Role</label>
+                                    <input type="text" name="projects[{{ $index }}][role]" value="{{ $project['role'] ?? '' }}" placeholder="e.g. Senior Full-Stack Laravel Developer">
+                                </div>
+                                <div class="cv-field cv-full">
+                                    <label>Tech Stack / Technologies</label>
+                                    <input type="text" name="projects[{{ $index }}][technologies]" value="{{ $project['technologies'] ?? '' }}" placeholder="e.g. PHP, Laravel 10, MySQL, Redis, Passport, Docker">
+                                </div>
+                                <div class="cv-field">
+                                    <label>Live Demo URL</label>
+                                    <input type="url" name="projects[{{ $index }}][link]" value="{{ $project['link'] ?? '' }}" placeholder="https://mostak.awcbd.org">
+                                </div>
+                                <div class="cv-field">
+                                    <label>GitHub Repository URL</label>
+                                    <input type="url" name="projects[{{ $index }}][github_url]" value="{{ $project['github_url'] ?? '' }}" placeholder="https://github.com/Mostak1/carenet">
+                                </div>
+                                <div class="cv-field">
+                                    <label>Demo Username / ID</label>
+                                    <input type="text" name="projects[{{ $index }}][demo_user]" value="{{ $project['demo_user'] ?? '' }}" placeholder="e.g. demoadmin">
+                                </div>
+                                <div class="cv-field">
+                                    <label>Demo Password</label>
+                                    <input type="text" name="projects[{{ $index }}][demo_password]" value="{{ $project['demo_password'] ?? '' }}" placeholder="e.g. 123456">
+                                </div>
+                                <div class="cv-field cv-full">
+                                    <label>Project Description / Summary</label>
+                                    <textarea name="projects[{{ $index }}][description]" placeholder="Enterprise healthcare platform unifying clinical care, lab diagnostic modules...">{{ $project['description'] ?? '' }}</textarea>
+                                </div>
+                                <div class="cv-field cv-full">
+                                    <label>Problem Statement (Optional / Portfolio Details)</label>
+                                    <textarea name="projects[{{ $index }}][problem]" placeholder="What problem did this project address?">{{ $project['problem'] ?? '' }}</textarea>
+                                </div>
+                                <div class="cv-field cv-full">
+                                    <label>Architecture & Solution (Optional / Portfolio Details)</label>
+                                    <textarea name="projects[{{ $index }}][solution]" placeholder="Modular micro-monolith architecture, performance tuning...">{{ $project['solution'] ?? '' }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="cv-repeat-actions">
+                                <button type="button" class="cv-small-btn remove-row">Remove Project</button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <button type="button" class="cv-small-btn add-row">Add Project</button>
+                @include('user.cv.partials.actions', ['tab' => 'projects', 'next' => $nextTab('projects'), 'cv' => $cv])
+            </section>
+
             <section class="cv-tab-panel {{ $activeTab === 'academic' ? 'active' : '' }}" data-tab-panel="academic" data-repeater="academics">
                 <h5 class="cv-section-title">Academic Qualification</h5>
                 <div data-repeat-list>
@@ -935,6 +1024,22 @@
                     row.querySelectorAll('[name]').forEach(function (field) {
                         field.name = field.name.replace(new RegExp(key + '\\[[0-9]+\\]'), key + '[' + index + ']');
                     });
+                    if (key === 'projects') {
+                        const num = row.querySelector('.project-item-number');
+                        if (num) num.textContent = (index + 1);
+                        const badge = row.querySelector('.project-page-badge');
+                        if (badge) {
+                            if (index < 2) {
+                                badge.textContent = 'Page 1 — Selected Featured';
+                                badge.style.background = '#dbeafe';
+                                badge.style.color = '#1e40af';
+                            } else {
+                                badge.textContent = 'Page 2 — Live Demos (Contd.)';
+                                badge.style.background = '#fef3c7';
+                                badge.style.color = '#92400e';
+                            }
+                        }
+                    }
                 });
             }
 
@@ -966,6 +1071,24 @@
                         const list = section.querySelector('[data-repeat-list]');
                         if (list.querySelectorAll('[data-repeat-row]').length > 1) {
                             event.target.closest('[data-repeat-row]').remove();
+                            reindex(section);
+                        }
+                    }
+
+                    if (event.target.closest('.move-up-row')) {
+                        const row = event.target.closest('[data-repeat-row]');
+                        const prev = row.previousElementSibling;
+                        if (prev && prev.matches('[data-repeat-row]')) {
+                            row.parentNode.insertBefore(row, prev);
+                            reindex(section);
+                        }
+                    }
+
+                    if (event.target.closest('.move-down-row')) {
+                        const row = event.target.closest('[data-repeat-row]');
+                        const next = row.nextElementSibling;
+                        if (next && next.matches('[data-repeat-row]')) {
+                            row.parentNode.insertBefore(next, row);
                             reindex(section);
                         }
                     }

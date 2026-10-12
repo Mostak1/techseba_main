@@ -409,6 +409,20 @@ class UserCvController extends Controller
             'business_type',
         ], ['is_current']));
 
+        $cv->projects()->delete();
+        $cv->projects()->createMany($this->rows($validated['projects'] ?? [], [
+            'title',
+            'role',
+            'technologies',
+            'link',
+            'github_url',
+            'demo_user',
+            'demo_password',
+            'problem',
+            'solution',
+            'description',
+        ]));
+
         $cv->academics()->delete();
         $cv->academics()->createMany($this->rows($validated['academics'] ?? [], [
             'degree_name',

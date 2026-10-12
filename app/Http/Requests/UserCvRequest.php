@@ -77,6 +77,18 @@ class UserCvRequest extends FormRequest
             'employments.*.company_location' => ['nullable', 'string', 'max:255'],
             'employments.*.business_type' => ['nullable', 'string', 'max:255'],
 
+            'projects' => ['nullable', 'array'],
+            'projects.*.title' => ['nullable', 'string', 'max:255'],
+            'projects.*.role' => ['nullable', 'string', 'max:255'],
+            'projects.*.technologies' => ['nullable', 'string', 'max:1000'],
+            'projects.*.link' => ['nullable', 'string', 'max:500'],
+            'projects.*.github_url' => ['nullable', 'string', 'max:500'],
+            'projects.*.demo_user' => ['nullable', 'string', 'max:255'],
+            'projects.*.demo_password' => ['nullable', 'string', 'max:255'],
+            'projects.*.problem' => ['nullable', 'string', 'max:5000'],
+            'projects.*.solution' => ['nullable', 'string', 'max:5000'],
+            'projects.*.description' => ['nullable', 'string', 'max:5000'],
+
             'academics' => ['nullable', 'array'],
             'academics.*.degree_name' => ['nullable', 'string', 'max:255'],
             'academics.*.institution' => ['nullable', 'string', 'max:255'],

@@ -465,6 +465,8 @@
             <input type="hidden" name="next_tab" id="next_tab" value="">
 
             <section class="cv-tab-panel {{ $activeTab === 'upload' ? 'active' : '' }}" data-tab-panel="upload">
+                {{-- Temporarily disabled: Upload CV PDF / Image --}}
+                {{--
                 <h5 class="cv-section-title">Upload CV PDF / Image</h5>
                 <div class="cv-grid">
                     <div class="cv-field cv-full">
@@ -495,8 +497,9 @@
                         @endif
                     </div>
                 </div>
+                --}}
 
-                <div style="margin-top: 24px; padding: 20px; background: #f0fdf4; border: 1px dashed #86efac; border-radius: 8px;">
+                <div style="padding: 20px; background: #f0fdf4; border: 1px dashed #86efac; border-radius: 8px;">
                     <h5 style="margin: 0 0 8px; color: #166534; font-size: 16px; font-weight: 700;">
                         <i class="fas fa-file-excel" style="color: #16a34a; margin-right: 6px;"></i> Import / Export CV Data Sheet (Excel / CSV / JSON)
                     </h5>
@@ -530,10 +533,12 @@
                     @if($cv)
                         <a href="{{ profile_route('user.cv.preview') }}" target="_blank" class="cv-secondary-btn">Preview</a>
                     @endif
+                    {{--
                     <button type="button" id="scan_cv_btn" class="cv-small-btn" style="background: #10b981; border-color: #10b981;">
                         <i class="fas fa-magic"></i> Scan & Auto-fill Form
                     </button>
                     <button type="submit" class="cv-secondary-btn" data-save-tab="upload">Save Upload</button>
+                    --}}
                     <button type="button" class="cv-small-btn" data-current-tab="upload" data-save-next="{{ $nextTab('upload') }}">Skip & Next</button>
                 </div>
             </section>
@@ -1133,6 +1138,7 @@
 
             const scanBtn = document.getElementById('scan_cv_btn');
             const fileInput = document.getElementById('ocr_file_input');
+            if (!scanBtn || !fileInput) return;
             const progressContainer = document.getElementById('ocr_progress_container');
             const progressBar = document.getElementById('ocr_bar');
             const progressStatus = document.getElementById('ocr_status');

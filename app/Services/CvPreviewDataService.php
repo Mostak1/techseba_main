@@ -53,7 +53,7 @@ class CvPreviewDataService
             'website_url' => 'https://alexjohnson.dev',
             'github_url' => 'https://github.com/alexjohnson',
             'linkedin_url' => 'https://linkedin.com/in/alexjohnson',
-            'photo' => null,
+            'photo' => 'uploads/website-images/avatar-image-2024-07-02-10-08-24-5849.png',
             'signature' => null,
             'career_objective' => 'To contribute to a forward-thinking engineering team by building reliable, scalable and user-focused web platforms while continuing to grow as a technical leader.',
             'career_summary' => 'Experienced software engineer with expertise in Laravel, PHP, JavaScript, cloud systems and scalable web applications. Passionate about clean architecture, performance optimization and mentoring developers.',

@@ -175,6 +175,9 @@
                         </svg>
                     </span>
                     {{ __('translate.Delete Account') }}
+                    @if(auth('web')->check() && auth('web')->user()->pendingDeleteRequest)
+                        <span class="badge bg-danger ms-auto" style="font-size: 10px; padding: 2px 6px;">Pending</span>
+                    @endif
                 </a>
             </li>
             <li>

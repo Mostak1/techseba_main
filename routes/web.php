@@ -241,7 +241,9 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
             Route::put('/update-password', [UserProfileController::class, 'update_password'])->name('update-password');
 
             Route::get('/account-delete', [UserProfileController::class, 'account_delete'])->name('account-delete');
-            Route::delete('/confirm-account-delete', [UserProfileController::class, 'confirm_account_delete'])->name('confirm-account-delete');
+            Route::post('/request-account-delete', [UserProfileController::class, 'request_account_delete'])->name('request-account-delete');
+            Route::post('/cancel-account-delete-request', [UserProfileController::class, 'cancel_account_delete_request'])->name('cancel-account-delete-request');
+            Route::match(['delete', 'post'], '/confirm-account-delete', [UserProfileController::class, 'confirm_account_delete'])->name('confirm-account-delete');
 
             Route::get('/orders', [UserProfileController::class, 'orders'])->name('orders');
             Route::get('/order/details/{order_id}', [UserProfileController::class, 'order_show'])->name('order_show');
@@ -297,6 +299,15 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
             Route::put('user-update/{id}', 'update')->name('user-update');
 
             Route::get('feez-profile/{id}', 'user_feez')->name('feez-profile');
+
+            Route::get('account-delete-requests', 'account_delete_requests')->name('account-delete-requests');
+            Route::post('account-delete-requests/{id}/confirm', 'confirm_delete_request')->name('account-delete-requests.confirm');
+            Route::delete('account-delete-requests/{id}/hard-delete', 'hard_delete_user')->name('account-delete-requests.hard-delete');
+            Route::post('account-delete-requests/{id}/reject', 'reject_delete_request')->name('account-delete-requests.reject');
+
+            Route::get('deleted-users', 'deleted_users')->name('deleted-users');
+            Route::post('deleted-users/{id}/restore', 'restore_user')->name('deleted-users.restore');
+            Route::delete('deleted-users/{id}/force-delete', 'force_delete_user')->name('deleted-users.force-delete');
         });
 
         Route::get('cv-templates/{cv_template}/preview', [CvTemplateController::class, 'preview'])->name('cv-templates.preview');

@@ -74,6 +74,11 @@
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">
                                                         <h4 class="crancy-table__product-title">{{ html_decode($user->name) }}</h4>
+                                                        @if($user->pendingDeleteRequest)
+                                                            <a href="{{ route('admin.account-delete-requests') }}" class="badge bg-danger text-white text-decoration-none" style="font-size: 11px;">
+                                                                <i class="fas fa-exclamation-triangle"></i> Deletion Requested
+                                                            </a>
+                                                        @endif
                                                     </td>
 
                                                     <td class="crancy-table__column-2 crancy-table__data-2">

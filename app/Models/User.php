@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable;
+    use HasApiTokens, Notifiable, SoftDeletes;
 
     const STATUS_ACTIVE = 'enable';
 
@@ -81,6 +82,16 @@ class User extends Authenticatable
     public function primaryProfileDomain()
     {
         return $this->hasOne(ProfileDomain::class)->where('is_primary', true);
+    }
+
+    public function deleteRequests()
+    {
+        return $this->hasMany(AccountDeleteRequest::class);
+    }
+
+    public function pendingDeleteRequest()
+    {
+        return $this->hasOne(AccountDeleteRequest::class)->where('status', 'pending');
     }
 }
 

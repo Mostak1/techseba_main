@@ -19,6 +19,24 @@
         <h4>{{ __('translate.Profile Settings') }}</h4>
     </div>
 
+    @if(!empty($pendingDeleteRequest))
+        <div class="alert alert-danger d-flex flex-wrap align-items-center justify-content-between p-3 mb-4 rounded-3" style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #ff8585;">
+            <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+                <i class="ri-error-warning-line fs-4 text-danger"></i>
+                <div>
+                    <strong>{{ __('translate.Account Deletion Requested') }}:</strong>
+                    <span>Your request to delete your account is pending admin approval. You can cancel it anytime before confirmation.</span>
+                </div>
+            </div>
+            <form action="{{ route('user.cancel-account-delete-request') }}" method="POST" onsubmit="return confirm('Are you sure you want to cancel your account deletion request?');">
+                @csrf
+                <button type="submit" class="optech-default-btn two" style="padding: 7px 16px; font-size: 13px;" data-text="{{ __('translate.Cancel Request') }}">
+                    <span class="btn-wraper">{{ __('translate.Cancel Request') }}</span>
+                </button>
+            </form>
+        </div>
+    @endif
+
     <form class="d_profile_setting_from" method="post" action="{{ route('user.update-profile') }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\AccountDeleteRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Ecommerce\Entities\Order;
-use  File;
+use File;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -128,6 +130,110 @@ class UserController extends Controller
             $notify_message = trans('translate.Freeze This Profile Successfully');
         }
         $notify_message = array('message'=>$notify_message,'alert-type'=>'success');
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function account_delete_requests()
+    {
+        $requests = AccountDeleteRequest::with(['user' => function ($q) {
+            $q->withTrashed();
+        }])->latest()->get();
+
+        $title = trans('translate.Account Deletion Requests');
+
+        return view('admin.user.account_delete_requests', [
+            'requests' => $requests,
+            'title' => $title,
+        ]);
+    }
+
+    public function confirm_delete_request($id)
+    {
+        $deleteRequest = AccountDeleteRequest::findOrFail($id);
+        $user = User::find($deleteRequest->user_id);
+
+        if ($user) {
+            $user->delete(); // Soft delete
+        }
+
+        $deleteRequest->status = 'confirmed';
+        $deleteRequest->action_type = 'soft_delete';
+        $deleteRequest->save();
+
+        $notify_message = ['message' => 'User account soft deleted successfully.', 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function hard_delete_user($id)
+    {
+        $deleteRequest = AccountDeleteRequest::findOrFail($id);
+        $user = User::withTrashed()->find($deleteRequest->user_id);
+
+        if ($user) {
+            if ($user->image && File::exists(public_path($user->image))) {
+                File::delete(public_path($user->image));
+            }
+            DB::table('product_reviews')->where('user_id', $user->id)->delete();
+            DB::table('orders')->where('user_id', $user->id)->delete();
+            DB::table('wishlists')->where('user_id', $user->id)->delete();
+            DB::table('carts')->where('user_id', $user->id)->delete();
+
+            $user->forceDelete();
+        }
+
+        $deleteRequest->status = 'confirmed';
+        $deleteRequest->action_type = 'hard_delete';
+        $deleteRequest->save();
+
+        $notify_message = ['message' => 'User account permanently (hard) deleted successfully.', 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function reject_delete_request($id)
+    {
+        $deleteRequest = AccountDeleteRequest::findOrFail($id);
+        $deleteRequest->status = 'rejected';
+        $deleteRequest->action_type = 'rejected';
+        $deleteRequest->save();
+
+        $notify_message = ['message' => 'Account deletion request rejected successfully.', 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function deleted_users()
+    {
+        $users = User::onlyTrashed()->latest()->get();
+        $title = trans('translate.Soft Deleted Users');
+
+        return view('admin.user.deleted_users', [
+            'users' => $users,
+            'title' => $title,
+        ]);
+    }
+
+    public function restore_user($id)
+    {
+        $user = User::onlyTrashed()->findOrFail($id);
+        $user->restore();
+
+        $notify_message = ['message' => 'User restored successfully.', 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function force_delete_user($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        if ($user->image && File::exists(public_path($user->image))) {
+            File::delete(public_path($user->image));
+        }
+        DB::table('product_reviews')->where('user_id', $user->id)->delete();
+        DB::table('orders')->where('user_id', $user->id)->delete();
+        DB::table('wishlists')->where('user_id', $user->id)->delete();
+        DB::table('carts')->where('user_id', $user->id)->delete();
+
+        $user->forceDelete();
+
+        $notify_message = ['message' => 'User permanently deleted.', 'alert-type' => 'success'];
         return redirect()->back()->with($notify_message);
     }
 }

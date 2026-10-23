@@ -5,12 +5,18 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PasswordChangeRequest;
 use Modules\Ecommerce\Entities\Order;
+use App\Models\AccountDeleteRequest;
+use App\Models\Admin;
+use App\Helper\EmailHelper;
+use App\Mail\AccountDeletionRequestedMail;
+use Modules\GlobalSetting\App\Models\GlobalSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Image;
 use Str;
@@ -48,8 +54,14 @@ class ProfileController extends Controller
     public function edit_profile(){
 
         $user = Auth::guard('web')->user();
+        $pendingDeleteRequest = AccountDeleteRequest::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->first();
 
-        return view('user.edit_profile', ['user' => $user]);
+        return view('user.edit_profile', [
+            'user' => $user,
+            'pendingDeleteRequest' => $pendingDeleteRequest,
+        ]);
     }
 
     public function update_profile(Request $request){
@@ -136,97 +148,110 @@ class ProfileController extends Controller
     }
 
     public function account_delete(){
-        return view('user.account_delete');
+        return redirect()->route('user.edit-profile');
+    }
+
+    public function request_account_delete(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+
+        if (!$user) {
+            return redirect()->back()->with([
+                'message' => trans('translate.User not found'),
+                'alert-type' => 'error'
+            ]);
+        }
+
+        $request->validate([
+            'password' => 'required',
+        ], [
+            'password.required' => trans('translate.Password is required'),
+        ]);
+
+        if (!Hash::check($request->password, $user->password)) {
+            Log::warning('Account deletion request failed: Password mismatch for user ' . $user->id);
+            return redirect()->back()->with([
+                'message' => trans('translate.Password does not match. Please try again.'),
+                'alert-type' => 'error'
+            ]);
+        }
+
+        $existingRequest = AccountDeleteRequest::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($existingRequest) {
+            return redirect()->back()->with([
+                'message' => 'You already have a pending account deletion request.',
+                'alert-type' => 'info'
+            ]);
+        }
+
+        $deleteRequest = AccountDeleteRequest::create([
+            'user_id' => $user->id,
+            'reason' => $request->reason,
+            'status' => 'pending',
+        ]);
+
+        // Send email notification to Admin
+        try {
+            EmailHelper::mail_setup();
+
+            $adminEmail = GlobalSetting::where('key', 'contact_message_mail')->value('value');
+            if (!$adminEmail) {
+                $adminEmail = Admin::where('status', 'enable')->first()?->email;
+            }
+
+            if ($adminEmail) {
+                $subject = 'New Account Deletion Request - ' . $user->name;
+                Mail::to($adminEmail)->send(new AccountDeletionRequestedMail($user, $deleteRequest, $subject));
+                Log::info('Account deletion notification sent to admin: ' . $adminEmail);
+            }
+        } catch (\Throwable $e) {
+            Log::error('Failed to send account deletion email notification: ' . $e->getMessage());
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Account deletion request submitted successfully. It will be reviewed by admin.',
+            'alert-type' => 'success'
+        ]);
+    }
+
+    public function cancel_account_delete_request(Request $request)
+    {
+        $user = Auth::guard('web')->user();
+
+        if (!$user) {
+            return redirect()->back()->with([
+                'message' => trans('translate.User not found'),
+                'alert-type' => 'error'
+            ]);
+        }
+
+        $deleteRequest = AccountDeleteRequest::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->first();
+
+        if ($deleteRequest) {
+            $deleteRequest->status = 'cancelled';
+            $deleteRequest->action_type = 'cancelled';
+            $deleteRequest->save();
+
+            return redirect()->back()->with([
+                'message' => 'Account deletion request has been cancelled.',
+                'alert-type' => 'success'
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message' => 'No pending account deletion request found.',
+            'alert-type' => 'error'
+        ]);
     }
 
     public function confirm_account_delete(Request $request)
     {
-        try {
-            $user = Auth::guard('web')->user();
-
-            if (!$user) {
-                Log::warning('Account deletion attempt failed: User not found');
-                return redirect()
-                    ->back()
-                    ->with([
-                        'message' => 'User not found',
-                        'alert-type' => 'error'
-                    ]);
-            }
-
-            if (!Hash::check($request->password, $user->password)) {
-                Log::warning('Account deletion failed: Password mismatch for user ' . $user->id);
-                return redirect()
-                    ->back()
-                    ->with([
-                        'message' => trans('translate.Password does not match. Please try again.'),
-                        'alert-type' => 'error'
-                    ]);
-            }
-
-            DB::beginTransaction();
-
-            try {
-                // Handle image deletion
-                if ($user->image) {
-                    $imagePath = public_path($user->image);
-                    if (File::exists($imagePath)) {
-                        File::delete($imagePath);
-                        Log::info('Deleted image for user: ' . $user->id);
-                    } else {
-                        Log::warning('Image not found or already null for user: ' . $user->id);
-                    }
-                }
-
-                // Delete related records
-                DB::table('product_reviews')->where('user_id', $user->id)->delete();
-                DB::table('orders')->where('user_id', $user->id)->delete();
-                DB::table('wishlists')->where('user_id', $user->id)->delete();
-                DB::table('carts')->where('user_id', $user->id)->delete();
-
-                // Force delete the user
-                DB::enableQueryLog(); // Start query logging
-                $user->forceDelete();
-                Log::info('Query log after force delete: ', DB::getQueryLog());
-
-                // Confirm user deletion
-                $userExists = DB::table('users')->where('id', $user->id)->exists();
-                if ($userExists) {
-                    throw new \Exception('User still exists in the database after forceDelete.');
-                }
-
-                DB::commit();
-
-                Auth::guard('web')->logout();
-                Session::flush();
-
-                Log::info('Successfully deleted account for user: ' . $user->id);
-
-                return redirect()
-                    ->route('home')
-                    ->with([
-                        'message' => trans('translate.Your account deleted successful'),
-                        'alert-type' => 'success'
-                    ]);
-            } catch (\Exception $e) {
-                DB::rollBack();
-                Log::error('Account deletion transaction failed for user ' . $user->id . ': ' . $e->getMessage());
-                return redirect()
-                    ->back()
-                    ->with([
-                        'message' => 'Failed to delete account: ' . $e->getMessage(),
-                        'alert-type' => 'error'
-                    ]);
-            }
-        } catch (\Exception $e) {
-            Log::error('Account deletion pre-check failed: ' . $e->getMessage());
-            return redirect()
-                ->back()
-                ->with([
-                    'message' => trans('translate.Something went wrong. Please try again.'),
-                    'alert-type' => 'error'
-                ]);
-        }
+        // Direct account deletion is disabled for users; redirect through request flow
+        return $this->request_account_delete($request);
     }
-
 }

@@ -3,6 +3,10 @@
 @yield('title')
 
 @section('new-layout')
+    @php
+        $pendingDeleteRequest = auth('web')->check() ? auth('web')->user()->pendingDeleteRequest : null;
+    @endphp
+
     <!-- delete account modal  -->
     <div class="modal delet_account_modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
@@ -32,35 +36,64 @@
                     <!-- modal body text  -->
                     <div class="modal_body_text">
                         <h4>
-                            {{ __('translate.Deleting Account') }}
+                            {{ __('translate.Request For Deleting Account') }}
                         </h4>
 
-                        <p>
-                            {{ __('translate.Confirm your want to delete your account forever.') }}
-                        </p>
+                        @if($pendingDeleteRequest)
+                            <p class="text-danger fw-semibold">
+                                {{ __('translate.You have already submitted a request for deleting your account.') }}
+                            </p>
+                            <p class="text-muted small">
+                                Requested at: {{ $pendingDeleteRequest->created_at->format('d M, Y h:i A') }}.
+                                {{ __('translate.Your request is pending admin confirmation. You can cancel your request anytime before admin confirmation.') }}
+                            </p>
+                        @else
+                            <p>
+                                {{ __('translate.Confirm your want to request account deletion. An admin will review and process your request.') }}
+                            </p>
+                        @endif
                     </div>
-                    <!-- modal form  -->
-                    <form class="d_change_password_box_form" action="{{ route('user.confirm-account-delete') }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <div class="d_profile_setting_from_item">
-                            <div class="optech-checkout-field">
-                                <label>{{ __('translate.Current Password*') }}</label>
-                                <input type="password" placeholder="Current Password" name="password">
 
+                    @if($pendingDeleteRequest)
+                        <form class="d_change_password_box_form" action="{{ route('user.cancel-account-delete-request') }}" method="POST">
+                            @csrf
+                            <div class="d_profile_setting_from_btn">
+                                <button class="optech-default-btn red" type="submit" data-text="{{ __('translate.Cancel Request') }}">
+                                    <span class="btn-wraper">{{ __('translate.Cancel Request') }}</span>
+                                </button>
+
+                                <button class="optech-default-btn two" type="button" data-text="{{ __('translate.Close') }}" data-bs-dismiss="modal">
+                                    <span class="btn-wraper">{{ __('translate.Close') }}</span>
+                                </button>
                             </div>
-                        </div>
-                        <div class="d_profile_setting_from_btn">
-                            <button class="optech-default-btn red" data-text="{{ __('translate.Delete Account') }}">
-                                <span class="btn-wraper">{{ __('translate.Delete Account') }}</span>
-                            </button>
+                        </form>
+                    @else
+                        <!-- modal form  -->
+                        <form class="d_change_password_box_form" action="{{ route('user.request-account-delete') }}" method="POST">
+                            @csrf
+                            <div class="d_profile_setting_from_item">
+                                <div class="optech-checkout-field">
+                                    <label>{{ __('translate.Current Password*') }}</label>
+                                    <input type="password" placeholder="{{ __('translate.Current Password') }}" name="password" required>
+                                </div>
+                            </div>
+                            <div class="d_profile_setting_from_item">
+                                <div class="optech-checkout-field">
+                                    <label>{{ __('translate.Reason (Optional)') }}</label>
+                                    <textarea name="reason" placeholder="{{ __('translate.Reason for deleting account (optional)') }}" rows="2" style="width: 100%; border-radius: 6px; padding: 10px; background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1);"></textarea>
+                                </div>
+                            </div>
+                            <div class="d_profile_setting_from_btn">
+                                <button class="optech-default-btn red" data-text="{{ __('translate.Request Submit') }}">
+                                    <span class="btn-wraper">{{ __('translate.Request Submit') }}</span>
+                                </button>
 
-                            <button class="optech-default-btn two" type="button" data-text="{{ __('translate.Cancel') }}" data-bs-dismiss="modal">
-                                <span class="btn-wraper">{{ __('translate.Cancel') }}</span>
-                            </button>
-
-                        </div>
-                    </form>
+                                <button class="optech-default-btn two" type="button" data-text="{{ __('translate.Cancel') }}" data-bs-dismiss="modal">
+                                    <span class="btn-wraper">{{ __('translate.Cancel') }}</span>
+                                </button>
+                            </div>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

@@ -127,6 +127,11 @@ class DomainSettingController extends Controller
                 'min:4',
                 'max:120',
             ],
+            'user_note' => [
+                'nullable',
+                'string',
+                'max:2000',
+            ],
         ]);
 
         // Clean domain input
@@ -160,13 +165,37 @@ class DomainSettingController extends Controller
             'user_id' => $user->id,
             'host' => $host,
             'type' => 'custom_domain',
+            'status' => ProfileDomain::STATUS_PENDING,
+            'user_note' => $request->user_note,
+            'admin_message' => null,
             'is_primary' => false,
             'is_active' => false,
             'verified_at' => null,
         ]);
 
         return redirect()->back()->with([
-            'message' => "Custom domain '{$host}' added successfully. Please configure your DNS records to activate it.",
+            'message' => "Custom domain request submitted for '{$host}'. Status is Pending admin review.",
+            'alert-type' => 'success',
+        ]);
+    }
+
+    public function updateUserNote(Request $request, $id)
+    {
+        $user = Auth::guard('web')->user();
+        $domain = $user->profileDomains()->where('type', 'custom_domain')->findOrFail($id);
+
+        $request->validate([
+            'user_note' => 'required|string|max:2000',
+        ]);
+
+        $domain->user_note = $request->user_note;
+        if ($domain->status === ProfileDomain::STATUS_CANCELED) {
+            $domain->status = ProfileDomain::STATUS_PENDING;
+        }
+        $domain->save();
+
+        return redirect()->back()->with([
+            'message' => 'Domain information / notes updated successfully for review.',
             'alert-type' => 'success',
         ]);
     }

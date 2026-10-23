@@ -272,4 +272,31 @@ class UserController extends Controller
         $notify_message = ['message' => "Domain '{$host}' removed successfully.", 'alert-type' => 'success'];
         return redirect()->back()->with($notify_message);
     }
+
+    public function update_domain_request(Request $request, $id)
+    {
+        $domain = ProfileDomain::findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:pending,reviewing,complete,canceled',
+            'admin_message' => 'nullable|string|max:2500',
+        ]);
+
+        $domain->status = $request->status;
+        $domain->admin_message = $request->admin_message;
+
+        if ($request->status === ProfileDomain::STATUS_COMPLETE) {
+            $domain->is_active = true;
+            if (!$domain->verified_at) {
+                $domain->verified_at = now();
+            }
+        } elseif ($request->status === ProfileDomain::STATUS_CANCELED) {
+            $domain->is_active = false;
+        }
+
+        $domain->save();
+
+        $notify_message = ['message' => "Domain request for '{$domain->host}' updated successfully.", 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
 }

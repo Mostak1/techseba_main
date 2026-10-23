@@ -82,36 +82,20 @@
         border: 1px solid rgba(245, 158, 11, 0.4);
         color: #F59E0B;
     }
+    .domain-badge-reviewing {
+        background: rgba(0, 212, 255, 0.15);
+        border: 1px solid rgba(0, 212, 255, 0.4);
+        color: #00D4FF;
+    }
+    .domain-badge-canceled {
+        background: rgba(239, 68, 68, 0.15);
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        color: #EF4444;
+    }
     .domain-badge-primary {
         background: rgba(59, 130, 246, 0.15);
         border: 1px solid rgba(59, 130, 246, 0.4);
         color: #3B82F6;
-    }
-    .dns-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 15px 0;
-        font-size: 13.5px;
-    }
-    .dns-table th, .dns-table td {
-        padding: 12px 14px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        text-align: left;
-    }
-    .dns-table th {
-        background: rgba(255, 255, 255, 0.04);
-        color: #8b9dc3;
-        font-weight: 600;
-    }
-    .dns-table td {
-        color: #fff;
-    }
-    .dns-code {
-        background: rgba(0, 0, 0, 0.4);
-        padding: 2px 8px;
-        border-radius: 4px;
-        color: #00D4FF;
-        font-family: monospace;
     }
     .subdomain-input-group {
         display: flex;
@@ -222,14 +206,15 @@
         </div>
 
         <p class="text-muted small">
-            Connect your own purchased domain (e.g., <code>johnsmith.com</code> or <code>portfolio.mybrand.me</code>) to point directly to your TechSeba portfolio.
+            Connect your own purchased domain (e.g., <code>johnsmith.com</code> or <code>portfolio.mybrand.me</code>). Submit your request along with any configuration information or registrar details for our admin team to review and activate.
         </p>
 
         <!-- Add Custom Domain Form -->
         <form action="{{ route('user.domain-settings.custom-domain') }}" method="POST" class="mb-4">
             @csrf
-            <div class="row g-2 align-items-center">
-                <div class="col-md-8">
+            <div class="row g-3">
+                <div class="col-md-7">
+                    <label class="form-label text-white-50 small mb-1">{{ __('translate.Custom Domain Name') }} <span class="text-danger">*</span></label>
                     <div class="optech-checkout-field m-0">
                         <input type="text"
                                name="custom_domain"
@@ -238,10 +223,20 @@
                                required>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <button type="submit" class="optech-default-btn w-100" style="padding: 12px 20px; justify-content: center;" data-text="{{ __('translate.Connect Domain') }}">
-                        <span class="btn-wraper">{{ __('translate.Connect Domain') }}</span>
+                <div class="col-md-5 d-flex align-items-end">
+                    <button type="submit" class="optech-default-btn w-100" style="padding: 12px 20px; justify-content: center; height: 48px;" data-text="{{ __('translate.Submit Request') }}">
+                        <span class="btn-wraper"><i class="ri-send-plane-fill me-1"></i> {{ __('translate.Submit Request') }}</span>
                     </button>
+                </div>
+                <div class="col-12 mt-2">
+                    <label class="form-label text-white-50 small mb-1">
+                        <i class="ri-information-line text-info"></i> {{ __('translate.Information / Instructions for Admin (Optional)') }}
+                    </label>
+                    <textarea name="user_note"
+                              rows="2"
+                              class="form-control"
+                              placeholder="e.g. Domain registered on Namecheap/GoDaddy, DNS CNAME already configured, or any instructions for admin..."
+                              style="background: rgba(9, 15, 33, 0.85); border: 1px solid rgba(255, 255, 255, 0.12); color: #fff; border-radius: 10px; font-size: 13.5px;"></textarea>
                 </div>
             </div>
         </form>
@@ -261,19 +256,41 @@
                     <tbody>
                         @foreach($customDomains as $cd)
                             <tr style="border-bottom: 1px solid rgba(255,255,255,0.04);">
-                                <td>
-                                    <span class="fw-bold text-white">{{ $cd->host }}</span>
-                                    @if($cd->is_active)
-                                        <a href="{{ $cd->url }}" target="_blank" class="text-info ms-2 small">
-                                            <i class="ri-external-link-line"></i>
-                                        </a>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <span class="fw-bold text-white fs-6">{{ $cd->host }}</span>
+                                        @if($cd->is_active)
+                                            <a href="{{ $cd->url }}" target="_blank" class="text-info ms-2 small" title="Visit">
+                                                <i class="ri-external-link-line"></i>
+                                            </a>
+                                        @endif
+                                    </div>
+
+                                    @if(!empty($cd->user_note))
+                                        <div class="mt-1 small" style="color: #94a3b8; font-size: 12px;">
+                                            <i class="ri-file-text-line text-info"></i> <strong>{{ __('translate.Your Note') }}:</strong>
+                                            <span>{{ Str::limit($cd->user_note, 70) }}</span>
+                                            <a href="javascript:void(0)" class="text-info ms-1 text-decoration-none" data-bs-toggle="modal" data-bs-target="#userNoteModal{{ $cd->id }}">
+                                                <i class="ri-edit-line"></i> {{ __('translate.Edit') }}
+                                            </a>
+                                        </div>
+                                    @else
+                                        <div class="mt-1">
+                                            <a href="javascript:void(0)" class="text-info small text-decoration-none" style="font-size: 11.5px;" data-bs-toggle="modal" data-bs-target="#userNoteModal{{ $cd->id }}">
+                                                <i class="ri-add-line"></i> {{ __('translate.Add Note for Admin') }}
+                                            </a>
+                                        </div>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($cd->is_active)
-                                        <span class="domain-badge domain-badge-active"><i class="ri-checkbox-circle-line"></i> Verified & Active</span>
+                                    @if($cd->status === 'complete')
+                                        <span class="domain-badge domain-badge-active"><i class="ri-checkbox-circle-line"></i> Complete</span>
+                                    @elseif($cd->status === 'reviewing')
+                                        <span class="domain-badge domain-badge-reviewing"><i class="ri-loader-4-line ri-spin"></i> Reviewing</span>
+                                    @elseif($cd->status === 'canceled')
+                                        <span class="domain-badge domain-badge-canceled"><i class="ri-close-circle-line"></i> Canceled</span>
                                     @else
-                                        <span class="domain-badge domain-badge-pending"><i class="ri-time-line"></i> DNS Pending</span>
+                                        <span class="domain-badge domain-badge-pending"><i class="ri-time-line"></i> Pending</span>
                                     @endif
                                 </td>
                                 <td>
@@ -292,14 +309,9 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="d-inline-flex gap-2">
-                                        @if(!$cd->is_active)
-                                            <form action="{{ route('user.domain-settings.verify', $cd->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-info" style="font-size: 12px;">
-                                                    <i class="ri-refresh-line"></i> Verify DNS
-                                                </button>
-                                            </form>
-                                        @endif
+                                        <button type="button" class="btn btn-sm btn-outline-info" style="font-size: 12px;" data-bs-toggle="modal" data-bs-target="#userNoteModal{{ $cd->id }}">
+                                            <i class="ri-edit-2-line"></i> {{ __('translate.Info') }}
+                                        </button>
 
                                         <form action="{{ route('user.domain-settings.destroy', $cd->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to remove this domain?');">
                                             @csrf
@@ -311,6 +323,27 @@
                                     </div>
                                 </td>
                             </tr>
+
+                            @if(!empty($cd->admin_message))
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0, 212, 255, 0.04);">
+                                    <td colspan="4" class="p-3">
+                                        <div class="p-3 rounded-3" style="background: rgba(0, 212, 255, 0.08); border-left: 4px solid #00D4FF; border: 1px solid rgba(0, 212, 255, 0.25);">
+                                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <i class="ri-chat-voice-fill fs-5" style="color: #00D4FF;"></i>
+                                                    <strong style="color: #00D4FF; font-size: 13.5px;">
+                                                        {{ __('translate.Message from Administrator:') }}
+                                                    </strong>
+                                                </div>
+                                                <button type="button" class="btn btn-sm btn-outline-info py-0 px-2" style="font-size: 11px;" data-bs-toggle="modal" data-bs-target="#userNoteModal{{ $cd->id }}">
+                                                    <i class="ri-reply-line"></i> {{ __('translate.Reply / Update Info') }}
+                                                </button>
+                                            </div>
+                                            <div class="text-white ps-4" style="font-size: 13.5px; line-height: 1.6; white-space: pre-wrap;">{{ $cd->admin_message }}</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -318,52 +351,55 @@
         @endif
     </div>
 
-    <!-- Section 3: DNS Configuration Guide -->
-    <div class="domain-card">
-        <div class="domain-card-header">
-            <h5 class="domain-card-title">
-                <i class="ri-settings-5-line"></i> {{ __('translate.DNS Configuration Guide') }}
-            </h5>
-        </div>
+    <!-- Modals for User to view/reply/update information for domain -->
+    @foreach($customDomains as $cd)
+        <div class="modal fade" id="userNoteModal{{ $cd->id }}" tabindex="-1" aria-labelledby="userNoteModalLabel{{ $cd->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="background: #0e1630; border: 1px solid rgba(0, 212, 255, 0.25); border-radius: 14px; color: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+                    <div class="modal-header py-3 px-4" style="border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+                        <h5 class="modal-title fs-6 fw-bold m-0" id="userNoteModalLabel{{ $cd->id }}">
+                            <i class="ri-links-line text-info me-2"></i> {{ __('translate.Domain Information') }}: <span style="color: #00D4FF;">{{ $cd->host }}</span>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('user.domain-settings.update-note', $cd->id) }}" method="POST">
+                        @csrf
+                        <div class="modal-body p-4">
+                            @if(!empty($cd->admin_message))
+                                <div class="p-3 mb-3 rounded-3" style="background: rgba(0, 212, 255, 0.08); border-left: 3px solid #00D4FF; border: 1px solid rgba(0, 212, 255, 0.2);">
+                                    <div class="d-flex align-items-center gap-1 mb-1">
+                                        <i class="ri-chat-voice-fill" style="color: #00D4FF;"></i>
+                                        <span class="fw-bold small" style="color: #00D4FF;">{{ __('translate.Admin Message') }}:</span>
+                                    </div>
+                                    <p class="mb-0 text-white-50 small" style="white-space: pre-wrap; line-height: 1.5;">{{ $cd->admin_message }}</p>
+                                </div>
+                            @endif
 
-        <p class="text-muted small">
-            To connect your custom domain, go to your domain provider's DNS Manager (Cloudflare, Namecheap, GoDaddy, etc.) and add the following record:
-        </p>
-
-        <div class="table-responsive">
-            <table class="dns-table">
-                <thead>
-                    <tr>
-                        <th>Record Type</th>
-                        <th>Host / Name</th>
-                        <th>Target / Value</th>
-                        <th>TTL</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><span class="badge bg-primary">CNAME (Recommended)</span></td>
-                        <td><span class="dns-code">@</span> or your subdomain (e.g. <span class="dns-code">cv</span>)</td>
-                        <td><span class="dns-code">{{ $baseDomain }}</span></td>
-                        <td>Automatic or 3600</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge bg-secondary">A Record (Alternative)</span></td>
-                        <td><span class="dns-code">@</span></td>
-                        <td><span class="dns-code">{{ $serverIp }}</span></td>
-                        <td>Automatic or 3600</td>
-                    </tr>
-                </tbody>
-            </table>
+                            <div class="mb-3">
+                                <label class="form-label text-white-50 small mb-1">
+                                    <i class="ri-edit-line text-info me-1"></i> {{ __('translate.Your Information / Notes for Admin:') }}
+                                </label>
+                                <textarea name="user_note"
+                                          rows="5"
+                                          class="form-control"
+                                          placeholder="{{ __('translate.Provide any details required by admin, registrar info, DNS details, or status updates...') }}"
+                                          style="background: rgba(9, 15, 33, 0.85); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; border-radius: 8px; font-size: 13.5px;"
+                                          required>{{ $cd->user_note }}</textarea>
+                                <small class="text-muted d-block mt-1">
+                                    <i class="ri-information-line"></i> Admin will review this updated information and change status accordingly.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="modal-footer py-2 px-4" style="border-top: 1px solid rgba(255, 255, 255, 0.08);">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">{{ __('translate.Close') }}</button>
+                            <button type="submit" class="btn btn-sm btn-info text-dark fw-bold px-3">
+                                <i class="ri-send-plane-fill me-1"></i> {{ __('translate.Save & Submit Info') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="alert alert-dark d-flex align-items-center gap-2 p-3 mt-3 rounded-3" style="background: rgba(0, 212, 255, 0.08); border: 1px solid rgba(0, 212, 255, 0.2); color: #8B9DC3;">
-            <i class="ri-information-line text-info fs-5"></i>
-            <span class="small">
-                After adding the DNS records, it may take between <strong>5 minutes to a few hours</strong> to propagate worldwide. Once added, click the <strong>Verify DNS</strong> button above.
-            </span>
-        </div>
-    </div>
 @endsection
 
 @push('js_section')

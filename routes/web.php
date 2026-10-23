@@ -252,6 +252,7 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
                 Route::post('/custom-domain', 'storeCustomDomain')->name('custom-domain');
                 Route::post('/custom-domain/{id}/verify', 'verifyCustomDomain')->name('verify');
                 Route::post('/custom-domain/{id}/primary', 'setPrimary')->name('primary');
+                Route::post('/custom-domain/{id}/update-note', 'updateUserNote')->name('update-note');
                 Route::delete('/custom-domain/{id}', 'destroyCustomDomain')->name('destroy');
             });
 
@@ -320,6 +321,7 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
             Route::delete('deleted-users/{id}/force-delete', 'force_delete_user')->name('deleted-users.force-delete');
 
             Route::get('user-domains', 'user_domains')->name('user-domains');
+            Route::post('user-domains/{id}/update-request', 'update_domain_request')->name('user-domains.update-request');
             Route::post('user-domains/{id}/toggle-status', 'toggle_domain_status')->name('user-domains.toggle-status');
             Route::delete('user-domains/{id}', 'delete_domain')->name('user-domains.delete');
         });

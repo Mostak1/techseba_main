@@ -303,6 +303,11 @@
             max-width: 780px;
         }
 
+        .card-body p, .hero-bio p, .case-text p { margin: 0 0 8px; }
+        .card-body p:last-child, .hero-bio p:last-child, .case-text p:last-child { margin-bottom: 0; }
+        .card-body ul, .card-body ol, .case-text ul, .case-text ol { margin: 0 0 8px 20px; padding: 0; }
+        .meta-item p, .contact-item-val p { margin: 0; display: inline; }
+
         .hero-meta-grid {
             display: flex;
             flex-wrap: wrap;
@@ -1162,15 +1167,15 @@
                         @endif
                     </div>
 
-                    <p class="hero-bio">
-                        {{ $summary }}
-                    </p>
+                    <div class="hero-bio">
+                        {!! clean($summary) !!}
+                    </div>
 
                     <div class="hero-meta-grid">
                         @if($cv->present_address)
                             <div class="meta-item">
                                 <i class="fa-solid fa-location-dot"></i>
-                                <span>{{ $cv->present_address }}</span>
+                                <span>{!! clean($cv->present_address) !!}</span>
                             </div>
                         @endif
                         @if($cv->email)
@@ -1272,7 +1277,7 @@
                             <h3 class="card-title">Complex Technical Challenge Solved</h3>
                         </div>
                         <div class="card-body">
-                            {{ $cv->technical_challenge }}
+                            {!! clean($cv->technical_challenge) !!}
                         </div>
                     </div>
                 @endif
@@ -1284,7 +1289,7 @@
                             <h3 class="card-title">Systems Built From Scratch</h3>
                         </div>
                         <div class="card-body">
-                            {{ $cv->built_from_scratch }}
+                            {!! clean($cv->built_from_scratch) !!}
                         </div>
                     </div>
                 @endif
@@ -1296,7 +1301,7 @@
                             <h3 class="card-title">Leadership & Passion Beyond Code</h3>
                         </div>
                         <div class="card-body">
-                            {{ $cv->sparks_joy }}
+                            {!! clean($cv->sparks_joy) !!}
                         </div>
                     </div>
                 @endif
@@ -1382,7 +1387,7 @@
                                         </div>
                                     </div>
                                     @if(isset($ratings[$key.'_description']))
-                                        <p class="prof-desc">{{ $ratings[$key.'_description'] }}</p>
+                                        <div class="prof-desc">{!! clean($ratings[$key.'_description']) !!}</div>
                                     @endif
                                 </div>
                             @endif
@@ -1424,20 +1429,26 @@
                             </div>
 
                             @if($emp->responsibilities)
-                                <ul class="responsibilities-list">
-                                    @foreach(explode("\n", str_replace("\r", "", $emp->responsibilities)) as $resp)
-                                        @if(trim($resp))
-                                            <li>{{ trim($resp) }}</li>
-                                        @endif
-                                    @endforeach
-                                </ul>
+                                @if(strip_tags($emp->responsibilities) !== $emp->responsibilities)
+                                    <div class="responsibilities-rich" style="margin-top: 8px; color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
+                                        {!! clean($emp->responsibilities) !!}
+                                    </div>
+                                @else
+                                    <ul class="responsibilities-list">
+                                        @foreach(explode("\n", str_replace("\r", "", $emp->responsibilities)) as $resp)
+                                            @if(trim($resp))
+                                                <li>{{ trim($resp) }}</li>
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                @endif
                             @endif
 
                             @if($emp->achievements)
                                 <div class="achievement-highlight">
                                     <i class="fa-solid fa-trophy"></i>
                                     <div>
-                                        <strong>Key Achievement:</strong> {{ $emp->achievements }}
+                                        <strong>Key Achievement:</strong> {!! clean($emp->achievements) !!}
                                     </div>
                                 </div>
                             @endif
@@ -1472,20 +1483,20 @@
                             @if($proj->problem)
                                 <div class="case-block">
                                     <div class="case-label"><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> The Challenge</div>
-                                    <div class="case-text">{{ $proj->problem }}</div>
+                                    <div class="case-text">{!! clean($proj->problem) !!}</div>
                                 </div>
                             @endif
 
                             @if($proj->solution)
                                 <div class="case-block">
                                     <div class="case-label"><i class="fa-solid fa-lightbulb" style="color: #eab308;"></i> The Solution</div>
-                                    <div class="case-text">{{ $proj->solution }}</div>
+                                    <div class="case-text">{!! clean($proj->solution) !!}</div>
                                 </div>
                             @endif
 
                             @if(!$proj->problem && $proj->description)
                                 <div class="case-block">
-                                    <div class="case-text">{{ $proj->description }}</div>
+                                    <div class="case-text">{!! clean($proj->description) !!}</div>
                                 </div>
                             @endif
 
@@ -1550,9 +1561,9 @@
                         <div class="edu-icon"><i class="fa-solid fa-award"></i></div>
                         <h3 class="edu-degree">{{ $tr->training_title }}</h3>
                         <div class="edu-inst">{{ $tr->institute }}</div>
-                        <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-                            {{ $tr->certificate_details }}
-                        </p>
+                        <div style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+                            {!! clean($tr->certificate_details) !!}
+                        </div>
                     </div>
                 @endforeach
 
@@ -1631,7 +1642,7 @@
                         <h4 style="font-family: var(--font-heading); color: var(--primary); font-size: 1rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--border); padding-bottom: 4px;">
                             Summary Statement
                         </h4>
-                        <p>{{ $summary }}</p>
+                        <div>{!! clean($summary) !!}</div>
                     </div>
 
                     <div>
@@ -1687,7 +1698,7 @@
                                 <div class="contact-item-icon"><i class="fa-solid fa-location-dot"></i></div>
                                 <div>
                                     <div class="contact-item-label">Location</div>
-                                    <div class="contact-item-val">{{ $cv->present_address }}</div>
+                                    <div class="contact-item-val">{!! clean($cv->present_address) !!}</div>
                                 </div>
                             </div>
                         @endif

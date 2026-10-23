@@ -184,6 +184,23 @@
             resize: vertical;
         }
 
+        .tox-tinymce {
+            border: 1px solid #cbd5e1 !important;
+            border-radius: 8px !important;
+            width: 100% !important;
+            box-shadow: none !important;
+        }
+
+        .tox .tox-toolbar-overlord,
+        .tox .tox-toolbar,
+        .tox .tox-toolbar__primary {
+            background-color: #f8fafc !important;
+        }
+
+        .proficiency-card .tox-tinymce {
+            margin-top: 8px;
+        }
+
         .cv-repeat-row {
             border: 1px solid #e2e8f0;
             border-radius: 8px;
@@ -577,8 +594,8 @@
                         <input type="file" name="photo" accept=".jpg,.jpeg,.png,.webp,image/*">
                         @if($cv?->photo)<img src="{{ asset($cv->photo) }}" alt="CV photo" class="cv-preview-image">@endif
                     </div>
-                    <div class="cv-field cv-full"><label>Present Address</label><textarea name="present_address">{{ old('present_address', $cv->present_address ?? '') }}</textarea></div>
-                    <div class="cv-field cv-full"><label>Permanent Address</label><textarea name="permanent_address">{{ old('permanent_address', $cv->permanent_address ?? '') }}</textarea></div>
+                    <div class="cv-field cv-full"><label>Present Address</label><textarea class="cv-tinymce" name="present_address">{{ old('present_address', $cv->present_address ?? '') }}</textarea></div>
+                    <div class="cv-field cv-full"><label>Permanent Address</label><textarea class="cv-tinymce" name="permanent_address">{{ old('permanent_address', $cv->permanent_address ?? '') }}</textarea></div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'personal', 'next' => $nextTab('personal'), 'cv' => $cv])
             </section>
@@ -586,7 +603,7 @@
             <section class="cv-tab-panel {{ $activeTab === 'career' ? 'active' : '' }}" data-tab-panel="career">
                 <h5 class="cv-section-title">Career Objective & Summary</h5>
                 <div class="cv-grid">
-                    <div class="cv-field cv-full"><label>Career Objective</label><textarea name="career_objective" placeholder="Write a short 2-4 line career objective">{{ old('career_objective', $cv->career_objective ?? '') }}</textarea></div>
+                    <div class="cv-field cv-full"><label>Career Objective</label><textarea class="cv-tinymce" name="career_objective" placeholder="Write a short 2-4 line career objective">{{ old('career_objective', $cv->career_objective ?? '') }}</textarea></div>
                     <div class="cv-field">
                         <label>
                             Total Years of Experience
@@ -597,7 +614,7 @@
                         <input type="number" step="0.01" min="0" name="total_experience" value="{{ old('total_experience', $cv->calculated_total_experience_years ?? $cv->total_experience ?? '') }}" placeholder="Auto-calculated from Employment History">
                         <small style="color: #64748b; font-size: 11px;">Calculated dynamically by summing your Employment History date ranges (including active ongoing jobs).</small>
                     </div>
-                    <div class="cv-field cv-full"><label>Career Summary / Profile Summary</label><textarea name="career_summary" placeholder="Sector, role, key skills, and achievements summary">{{ old('career_summary', $cv->career_summary ?? '') }}</textarea></div>
+                    <div class="cv-field cv-full"><label>Career Summary / Profile Summary</label><textarea class="cv-tinymce" name="career_summary" placeholder="Sector, role, key skills, and achievements summary">{{ old('career_summary', $cv->career_summary ?? '') }}</textarea></div>
                 </div>
                 @include('user.cv.partials.actions', ['tab' => 'career', 'next' => $nextTab('career'), 'cv' => $cv])
             </section>
@@ -620,8 +637,8 @@
                                     <input type="checkbox" name="employments[{{ $index }}][is_current]" value="1" @checked(!empty($employment['is_current']))>
                                     <span></span><span>Currently Working</span>
                                 </label>
-                                <div class="cv-field cv-full"><label>Job Responsibilities</label><textarea name="employments[{{ $index }}][responsibilities]">{{ $employment['responsibilities'] ?? '' }}</textarea></div>
-                                <div class="cv-field cv-full"><label>Major Achievements</label><textarea name="employments[{{ $index }}][achievements]">{{ $employment['achievements'] ?? '' }}</textarea></div>
+                                <div class="cv-field cv-full"><label>Job Responsibilities</label><textarea class="cv-tinymce" name="employments[{{ $index }}][responsibilities]">{{ $employment['responsibilities'] ?? '' }}</textarea></div>
+                                <div class="cv-field cv-full"><label>Major Achievements</label><textarea class="cv-tinymce" name="employments[{{ $index }}][achievements]">{{ $employment['achievements'] ?? '' }}</textarea></div>
                             </div>
                             <div class="cv-repeat-actions"><button type="button" class="cv-small-btn remove-row">Remove</button></div>
                         </div>
@@ -694,15 +711,15 @@
                                 </div>
                                 <div class="cv-field cv-full">
                                     <label>Project Description / Summary</label>
-                                    <textarea name="projects[{{ $index }}][description]" placeholder="Enterprise healthcare platform unifying clinical care, lab diagnostic modules...">{{ $project['description'] ?? '' }}</textarea>
+                                    <textarea class="cv-tinymce" name="projects[{{ $index }}][description]" placeholder="Enterprise healthcare platform unifying clinical care, lab diagnostic modules...">{{ $project['description'] ?? '' }}</textarea>
                                 </div>
                                 <div class="cv-field cv-full">
                                     <label>Problem Statement (Optional / Portfolio Details)</label>
-                                    <textarea name="projects[{{ $index }}][problem]" placeholder="What problem did this project address?">{{ $project['problem'] ?? '' }}</textarea>
+                                    <textarea class="cv-tinymce" name="projects[{{ $index }}][problem]" placeholder="What problem did this project address?">{{ $project['problem'] ?? '' }}</textarea>
                                 </div>
                                 <div class="cv-field cv-full">
                                     <label>Architecture & Solution (Optional / Portfolio Details)</label>
-                                    <textarea name="projects[{{ $index }}][solution]" placeholder="Modular micro-monolith architecture, performance tuning...">{{ $project['solution'] ?? '' }}</textarea>
+                                    <textarea class="cv-tinymce" name="projects[{{ $index }}][solution]" placeholder="Modular micro-monolith architecture, performance tuning...">{{ $project['solution'] ?? '' }}</textarea>
                                 </div>
                             </div>
 
@@ -747,7 +764,7 @@
                                 <div class="cv-field"><label>Institute</label><input type="text" name="trainings[{{ $index }}][institute]" value="{{ $training['institute'] ?? '' }}"></div>
                                 <div class="cv-field"><label>Duration</label><input type="text" name="trainings[{{ $index }}][duration]" value="{{ $training['duration'] ?? '' }}"></div>
                                 <div class="cv-field"><label>Year</label><input type="text" name="trainings[{{ $index }}][year]" value="{{ $training['year'] ?? '' }}"></div>
-                                <div class="cv-field cv-full"><label>Certificate Details</label><textarea name="trainings[{{ $index }}][certificate_details]">{{ $training['certificate_details'] ?? '' }}</textarea></div>
+                                <div class="cv-field cv-full"><label>Certificate Details</label><textarea class="cv-tinymce" name="trainings[{{ $index }}][certificate_details]">{{ $training['certificate_details'] ?? '' }}</textarea></div>
                             </div>
                             <div class="cv-repeat-actions"><button type="button" class="cv-small-btn remove-row">Remove</button></div>
                         </div>
@@ -767,7 +784,7 @@
                                 <div class="cv-field"><label>Institute / Authority</label><input type="text" name="professional_qualifications[{{ $index }}][authority]" value="{{ $qualification['authority'] ?? '' }}"></div>
                                 <div class="cv-field"><label>Result / Score</label><input type="text" name="professional_qualifications[{{ $index }}][result_or_score]" value="{{ $qualification['result_or_score'] ?? '' }}"></div>
                                 <div class="cv-field"><label>Year</label><input type="text" name="professional_qualifications[{{ $index }}][year]" value="{{ $qualification['year'] ?? '' }}"></div>
-                                <div class="cv-field cv-full"><label>Details</label><textarea name="professional_qualifications[{{ $index }}][details]">{{ $qualification['details'] ?? '' }}</textarea></div>
+                                <div class="cv-field cv-full"><label>Details</label><textarea class="cv-tinymce" name="professional_qualifications[{{ $index }}][details]">{{ $qualification['details'] ?? '' }}</textarea></div>
                             </div>
                             <div class="cv-repeat-actions"><button type="button" class="cv-small-btn remove-row">Remove</button></div>
                         </div>
@@ -852,7 +869,7 @@
             <section class="cv-tab-panel {{ $activeTab === 'declaration' ? 'active' : '' }}" data-tab-panel="declaration">
                 <h5 class="cv-section-title">Declaration / Signature</h5>
                 <div class="cv-grid">
-                    <div class="cv-field cv-full"><label>Declaration Text</label><textarea name="declaration">{{ old('declaration', $cv->declaration ?? 'I hereby declare that the information given above is true and correct to the best of my knowledge.') }}</textarea></div>
+                    <div class="cv-field cv-full"><label>Declaration Text</label><textarea class="cv-tinymce" name="declaration">{{ old('declaration', $cv->declaration ?? 'I hereby declare that the information given above is true and correct to the best of my knowledge.') }}</textarea></div>
                     <div class="cv-field"><label>Declaration Date</label><input type="date" name="declaration_date" value="{{ old('declaration_date', $dateValue($cv->declaration_date ?? now())) }}"></div>
                     <div class="cv-field">
                         <label>Signature Image (300*80)px</label>
@@ -872,13 +889,13 @@
                     {{-- Technical Challenge --}}
                     <div class="cv-field cv-full">
                         <label>🔧 Technical Challenge <small style="color:#64748b; font-weight:400;">(Describe a scalable solution you implemented in a mature codebase)</small></label>
-                        <textarea name="technical_challenge" rows="8" placeholder="Describe a technical challenge where you had to implement a scalable solution within an existing, mature codebase. How did you balance the need for high performance against the risk of creating technical debt or breaking existing functionality?">{{ old('technical_challenge', $cv->technical_challenge ?? '') }}</textarea>
+                        <textarea class="cv-tinymce" name="technical_challenge" rows="8" placeholder="Describe a technical challenge where you had to implement a scalable solution within an existing, mature codebase. How did you balance the need for high performance against the risk of creating technical debt or breaking existing functionality?">{{ old('technical_challenge', $cv->technical_challenge ?? '') }}</textarea>
                     </div>
 
                     {{-- Built from Scratch --}}
                     <div class="cv-field cv-full">
                         <label>🏗️ Built from Scratch <small style="color:#64748b; font-weight:400;">(Have you ever built a framework, library, or tool from scratch?)</small></label>
-                        <textarea name="built_from_scratch" rows="8" placeholder="Have you ever built a framework, library, or tool from scratch instead of using an existing one? If so, why did you choose to build one instead of using an existing one?">{{ old('built_from_scratch', $cv->built_from_scratch ?? '') }}</textarea>
+                        <textarea class="cv-tinymce" name="built_from_scratch" rows="8" placeholder="Have you ever built a framework, library, or tool from scratch instead of using an existing one? If so, why did you choose to build one instead of using an existing one?">{{ old('built_from_scratch', $cv->built_from_scratch ?? '') }}</textarea>
                     </div>
 
                     {{-- Proficiency Ratings --}}
@@ -915,7 +932,7 @@
                                         @endfor
                                         <span class="rating-value">{{ $currentRatings[$key] ?? 0 }}/5</span>
                                     </div>
-                                    <textarea name="proficiency_ratings[{{ $key }}_description]" rows="3" placeholder="Describe your experience with {{ $area['label'] }}...">{{ $currentRatings[$key . '_description'] ?? '' }}</textarea>
+                                    <textarea class="cv-tinymce" name="proficiency_ratings[{{ $key }}_description]" rows="3" placeholder="Describe your experience with {{ $area['label'] }}...">{{ $currentRatings[$key . '_description'] ?? '' }}</textarea>
                                 </div>
                             @endforeach
                         </div>
@@ -924,7 +941,7 @@
                     {{-- Sparks Joy --}}
                     <div class="cv-field cv-full">
                         <label>✨ What Sparks Joy? <small style="color:#64748b; font-weight:400;">(Share something that sparks joy in your life)</small></label>
-                        <textarea name="sparks_joy" rows="6" placeholder="Feel free to share something that sparks joy in your life. ✨ It can be a photo or a favorite song. If you want to make a whole film and share it, this is the right place. Go crazy!">{{ old('sparks_joy', $cv->sparks_joy ?? '') }}</textarea>
+                        <textarea class="cv-tinymce" name="sparks_joy" rows="6" placeholder="Feel free to share something that sparks joy in your life. ✨ It can be a photo or a favorite song. If you want to make a whole film and share it, this is the right place. Go crazy!">{{ old('sparks_joy', $cv->sparks_joy ?? '') }}</textarea>
                     </div>
 
                     {{-- Landing Page URL --}}
@@ -998,6 +1015,7 @@
 @endsection
 
 @push('js_section')
+    <script src="{{ asset('global/tinymce/js/tinymce/tinymce.min.js') }}"></script>
     <script>
         function copyToClipboard(text) {
             navigator.clipboard.writeText(text).then(() => {
@@ -1005,10 +1023,69 @@
             });
         }
 
+        // --- TinyMCE Initialization & Management ---
+        let cvEditorCounter = 0;
+        function getTinyMceConfig(textarea) {
+            let minHeight = 160;
+            const name = textarea.getAttribute('name') || '';
+            if (name.includes('description') || name.includes('challenge') || name.includes('scratch') || name.includes('summary') || name.includes('joy')) {
+                minHeight = 220;
+            } else if (name.includes('address') || name.includes('declaration')) {
+                minHeight = 140;
+            }
+
+            return {
+                target: textarea,
+                min_height: minHeight,
+                max_height: 550,
+                menubar: false,
+                branding: false,
+                promotion: false,
+                plugins: 'advlist autolink lists link charmap searchreplace visualblocks code wordcount',
+                toolbar: 'undo redo | blocks | bold italic underline | bullist numlist | align | link | removeformat | code',
+                content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 13.5px; line-height: 1.5; color: #1e293b; padding: 10px; } p { margin: 0 0 6px 0; } ul, ol { margin: 0 0 6px 0; padding-left: 20px; }',
+                setup: function(editor) {
+                    editor.on('change keyup input', function() {
+                        editor.save();
+                    });
+                }
+            };
+        }
+
+        function initSingleTinyMce(textarea) {
+            if (!textarea) return;
+            if (!textarea.id) {
+                cvEditorCounter++;
+                textarea.id = 'cv_editor_' + Date.now() + '_' + cvEditorCounter;
+            } else {
+                const existing = tinymce.get(textarea.id);
+                if (existing) {
+                    existing.remove();
+                }
+            }
+            tinymce.init(getTinyMceConfig(textarea));
+        }
+
+        function initAllTinyMceInContainer(container) {
+            const root = container || document;
+            root.querySelectorAll('textarea.cv-tinymce').forEach(function(textarea) {
+                initSingleTinyMce(textarea);
+            });
+        }
+
+        function syncAndSaveTinyMce() {
+            if (window.tinymce) {
+                tinymce.triggerSave();
+            }
+        }
+
         (function () {
             const form = document.getElementById('cvForm');
             const activeInput = document.getElementById('active_tab');
             const nextInput = document.getElementById('next_tab');
+
+            // Initialize TinyMCE for all CV textareas on load
+            initAllTinyMceInContainer(document);
 
             function showTab(tab) {
                 document.querySelectorAll('[data-tab-target]').forEach(function (button) {
@@ -1021,6 +1098,16 @@
 
                 activeInput.value = tab;
                 nextInput.value = '';
+
+                // Ensure TinyMCE editors in the activated tab are initialized and rendered properly
+                const activePanel = document.querySelector('[data-tab-panel="' + tab + '"]');
+                if (activePanel) {
+                    activePanel.querySelectorAll('textarea.cv-tinymce').forEach(function(textarea) {
+                        if (!textarea.id || !tinymce.get(textarea.id)) {
+                            initSingleTinyMce(textarea);
+                        }
+                    });
+                }
             }
 
             function reindex(section) {
@@ -1054,11 +1141,54 @@
                 });
             });
 
+            function moveRepeatRow(row, isUp) {
+                const target = isUp ? row.previousElementSibling : row.nextElementSibling;
+                if (!target || !target.matches('[data-repeat-row]')) return;
+
+                syncAndSaveTinyMce();
+
+                const rows = [row, target];
+                const contents = new Map();
+                rows.forEach(r => {
+                    r.querySelectorAll('textarea.cv-tinymce').forEach(t => {
+                        const ed = t.id ? tinymce.get(t.id) : null;
+                        contents.set(t, ed ? ed.getContent() : t.value);
+                        if (ed) ed.remove();
+                    });
+                    r.querySelectorAll('.tox, .tox-tinymce').forEach(el => el.remove());
+                    r.querySelectorAll('textarea.cv-tinymce').forEach(t => {
+                        t.style.display = '';
+                        t.removeAttribute('aria-hidden');
+                    });
+                });
+
+                if (isUp) {
+                    row.parentNode.insertBefore(row, target);
+                } else {
+                    row.parentNode.insertBefore(target, row);
+                }
+
+                reindex(row.closest('[data-repeater]'));
+
+                rows.forEach(r => {
+                    r.querySelectorAll('textarea.cv-tinymce').forEach(t => {
+                        t.value = contents.get(t) || '';
+                        initSingleTinyMce(t);
+                    });
+                });
+            }
+
             document.querySelectorAll('[data-repeater]').forEach(function (section) {
                 section.addEventListener('click', function (event) {
                     if (event.target.classList.contains('add-row')) {
+                        syncAndSaveTinyMce();
                         const list = section.querySelector('[data-repeat-list]');
-                        const clone = list.querySelector('[data-repeat-row]').cloneNode(true);
+                        const rows = list.querySelectorAll('[data-repeat-row]');
+                        const sourceRow = rows[rows.length - 1] || rows[0];
+                        const clone = sourceRow.cloneNode(true);
+
+                        // Clean up any cloned TinyMCE wrappers and reset IDs
+                        clone.querySelectorAll('.tox, .tox-tinymce').forEach(el => el.remove());
 
                         clone.querySelectorAll('input, textarea, select').forEach(function (field) {
                             if (field.type === 'checkbox') {
@@ -1066,44 +1196,58 @@
                             } else if (field.type !== 'hidden') {
                                 field.value = '';
                             }
+                            if (field.tagName.toLowerCase() === 'textarea') {
+                                field.style.display = '';
+                                field.removeAttribute('aria-hidden');
+                                cvEditorCounter++;
+                                field.id = 'cv_editor_' + Date.now() + '_' + cvEditorCounter;
+                            }
                         });
 
                         list.appendChild(clone);
                         reindex(section);
+
+                        // Initialize TinyMCE for the cloned row's textareas
+                        clone.querySelectorAll('textarea.cv-tinymce').forEach(function(textarea) {
+                            initSingleTinyMce(textarea);
+                        });
                     }
 
                     if (event.target.classList.contains('remove-row')) {
                         const list = section.querySelector('[data-repeat-list]');
                         if (list.querySelectorAll('[data-repeat-row]').length > 1) {
-                            event.target.closest('[data-repeat-row]').remove();
+                            const row = event.target.closest('[data-repeat-row]');
+                            row.querySelectorAll('textarea.cv-tinymce').forEach(function(textarea) {
+                                if (textarea.id && tinymce.get(textarea.id)) {
+                                    tinymce.get(textarea.id).remove();
+                                }
+                            });
+                            row.remove();
                             reindex(section);
                         }
                     }
 
                     if (event.target.closest('.move-up-row')) {
-                        const row = event.target.closest('[data-repeat-row]');
-                        const prev = row.previousElementSibling;
-                        if (prev && prev.matches('[data-repeat-row]')) {
-                            row.parentNode.insertBefore(row, prev);
-                            reindex(section);
-                        }
+                        moveRepeatRow(event.target.closest('[data-repeat-row]'), true);
                     }
 
                     if (event.target.closest('.move-down-row')) {
-                        const row = event.target.closest('[data-repeat-row]');
-                        const next = row.nextElementSibling;
-                        if (next && next.matches('[data-repeat-row]')) {
-                            row.parentNode.insertBefore(next, row);
-                            reindex(section);
-                        }
+                        moveRepeatRow(event.target.closest('[data-repeat-row]'), false);
                     }
                 });
             });
+
+            if (form) {
+                form.addEventListener('submit', function () {
+                    syncAndSaveTinyMce();
+                });
+            }
 
             document.querySelectorAll('[data-save-next]').forEach(function (button) {
                 button.addEventListener('click', function () {
                     activeInput.value = button.dataset.currentTab;
                     nextInput.value = button.dataset.saveNext;
+                    syncAndSaveTinyMce();
                     form.submit();
                 });
             });
@@ -1112,6 +1256,8 @@
                 button.addEventListener('click', function () {
                     activeInput.value = button.dataset.saveTab;
                     nextInput.value = '';
+                    syncAndSaveTinyMce();
+                    form.submit();
                 });
             });
         })();
@@ -1260,7 +1406,14 @@
                 // 5. Objective (Try to find a block after the word "Objective")
                 const objMatch = text.match(/(?:Objective|Profile|Summary)[:\s]+([\s\S]{20,300})/i);
                 if (objMatch && objMatch[1]) {
-                    document.querySelector('textarea[name="career_objective"]').value = objMatch[1].split('\n\n')[0].trim();
+                    const objText = objMatch[1].split('\n\n')[0].trim();
+                    const objTextarea = document.querySelector('textarea[name="career_objective"]');
+                    if (objTextarea) {
+                        objTextarea.value = objText;
+                        if (window.tinymce && objTextarea.id && tinymce.get(objTextarea.id)) {
+                            tinymce.get(objTextarea.id).setContent(objText);
+                        }
+                    }
                 }
             }
         })();

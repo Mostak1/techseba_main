@@ -216,6 +216,20 @@
             margin: 0;
         }
 
+        .contact-row p {
+            display: inline;
+            margin: 0;
+        }
+
+        .summary-text p {
+            margin: 0 0 4px;
+        }
+
+        .summary-text ul, .summary-text ol {
+            margin: 0 0 4px 16px;
+            padding: 0;
+        }
+
         /* Skills Table / Category Grid */
         .skills-grid {
             display: grid;
@@ -392,7 +406,7 @@
             <div class="headline">{{ $primaryRole ?? 'Senior Full-Stack Laravel Developer & Team Lead' }}</div>
             <div class="contact-row">
                 @if($cv->present_address || $cv->permanent_address)
-                    <div><i class="fa-solid fa-location-dot"></i> {{ $cv->present_address ?: $cv->permanent_address }}</div>
+                    <div><i class="fa-solid fa-location-dot"></i> {!! clean($cv->present_address ?: $cv->permanent_address) !!}</div>
                 @endif
                 @if($cv->mobile)
                     @if($cv->present_address || $cv->permanent_address)<span class="sep">•</span>@endif
@@ -426,9 +440,9 @@
     <!-- Professional Summary -->
     <section class="section">
         <h2 class="section-header">Professional Summary</h2>
-        <p class="summary-text">
-            {{ $cv->career_summary }}
-        </p>
+        <div class="summary-text">
+            {!! clean($cv->career_summary ?: $cv->career_objective) !!}
+        </div>
     </section>
 
     <!-- Categorized Technical Skills -->
@@ -460,11 +474,20 @@
             </div>
 
             @if($emp->responsibilities)
-                <ul class="bullet-list">
-                    @foreach(explode("\n", $emp->responsibilities) as $line)
-                        @if(trim($line))<li>{{ trim($line, "*- ") }}</li>@endif
-                    @endforeach
-                </ul>
+                @if(strip_tags($emp->responsibilities) !== $emp->responsibilities)
+                    <div class="summary-text" style="font-size: 10px; margin-top: 3px;">{!! clean($emp->responsibilities) !!}</div>
+                @else
+                    <ul class="bullet-list">
+                        @foreach(explode("\n", $emp->responsibilities) as $line)
+                            @if(trim($line))<li>{{ trim($line, "*- ") }}</li>@endif
+                        @endforeach
+                    </ul>
+                @endif
+            @endif
+            @if($emp->achievements)
+                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;">
+                    <strong>Key Achievements:</strong> {!! clean($emp->achievements) !!}
+                </div>
             @endif
         </div>
         @endforeach
@@ -496,7 +519,13 @@
             @endif
 
             @if($project->description)
-                <div class="summary-text" style="font-size: 10px;">{{ $project->description }}</div>
+                <div class="summary-text" style="font-size: 10px;">{!! clean($project->description) !!}</div>
+            @endif
+            @if($project->problem)
+                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>
+            @endif
+            @if($project->solution)
+                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>
             @endif
         </div>
         @endforeach
@@ -536,7 +565,13 @@
             @endif
 
             @if($project->description)
-                <div class="summary-text" style="font-size: 10px;">{{ $project->description }}</div>
+                <div class="summary-text" style="font-size: 10px;">{!! clean($project->description) !!}</div>
+            @endif
+            @if($project->problem)
+                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>
+            @endif
+            @if($project->solution)
+                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>
             @endif
         </div>
         @endforeach
@@ -563,7 +598,7 @@
         <div class="edu-entry">
             <strong>{{ $training->training_title }}</strong> — {{ $training->institute }} @if($training->year)({{ $training->year }})@endif
             @if($training->certificate_details)
-                <div class="summary-text" style="font-size: 9.5px; color: #475569; margin-left: 10px;">• {{ $training->certificate_details }}</div>
+                <div class="summary-text" style="font-size: 9.5px; color: #475569; margin-left: 10px;">• {!! clean($training->certificate_details) !!}</div>
             @endif
         </div>
         @endforeach
@@ -600,7 +635,7 @@
     <!-- Declaration -->
     <section class="section" style="margin-top: 10px;">
         <h2 class="section-header">Declaration</h2>
-        <p class="summary-text" style="font-size: 9.5px;">{{ $cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.' }}</p>
+        <div class="summary-text" style="font-size: 9.5px;">{!! clean($cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.') !!}</div>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px;">
             <div style="text-align: center; width: 140px;">

@@ -473,9 +473,9 @@
             <div>
                 <p class="label">{{ $primaryRole }}</p>
                 <h1>{{ $cv->full_name }}</h1>
-                <p class="lead">
-                    {{ $summary ? \Illuminate\Support\Str::limit($summary, 300) : 'A practical software professional focused on building reliable web applications and useful digital products.' }}
-                </p>
+                <div class="lead">
+                    {!! clean($summary ?: 'A practical software professional focused on building reliable web applications and useful digital products.') !!}
+                </div>
                 <div class="actions">
                     <a class="button" href="{{ $cvUrl }}">CV View</a>
                     @if($cv->email)
@@ -547,9 +547,9 @@
                                     <div class="meta">{{ $employment->company_name }}</div>
                                 @endif
                                 @if($employment->responsibilities)
-                                    <p>{{ \Illuminate\Support\Str::limit($employment->responsibilities, 220) }}</p>
+                                    <div>{!! clean($employment->responsibilities) !!}</div>
                                 @elseif($employment->achievements)
-                                    <p>{{ \Illuminate\Support\Str::limit($employment->achievements, 220) }}</p>
+                                    <div>{!! clean($employment->achievements) !!}</div>
                                 @endif
                             </div>
                         </article>
@@ -571,7 +571,7 @@
                                 <div>
                                     <h3>{{ $project->title }}</h3>
                                     @if($project->description)
-                                        <p>{{ \Illuminate\Support\Str::limit($project->description, 210) }}</p>
+                                        <div>{!! clean($project->description) !!}</div>
                                     @endif
                                 </div>
                                 @if($project->link)

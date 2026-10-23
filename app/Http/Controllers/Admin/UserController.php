@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
 use App\Models\AccountDeleteRequest;
+use App\Models\ProfileDomain;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Modules\Ecommerce\Entities\Order;
@@ -234,6 +235,41 @@ class UserController extends Controller
         $user->forceDelete();
 
         $notify_message = ['message' => 'User permanently deleted.', 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function user_domains()
+    {
+        $domains = ProfileDomain::with('user')->latest()->get();
+        $title = trans('translate.User Domains & Subdomains');
+
+        return view('admin.user.user_domains', [
+            'domains' => $domains,
+            'title' => $title,
+        ]);
+    }
+
+    public function toggle_domain_status($id)
+    {
+        $domain = ProfileDomain::findOrFail($id);
+        $domain->is_active = !$domain->is_active;
+        if ($domain->is_active && !$domain->verified_at) {
+            $domain->verified_at = now();
+        }
+        $domain->save();
+
+        $status = $domain->is_active ? 'activated' : 'deactivated';
+        $notify_message = ['message' => "Domain '{$domain->host}' has been {$status}.", 'alert-type' => 'success'];
+        return redirect()->back()->with($notify_message);
+    }
+
+    public function delete_domain($id)
+    {
+        $domain = ProfileDomain::findOrFail($id);
+        $host = $domain->host;
+        $domain->delete();
+
+        $notify_message = ['message' => "Domain '{$host}' removed successfully.", 'alert-type' => 'success'];
         return redirect()->back()->with($notify_message);
     }
 }

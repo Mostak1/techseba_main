@@ -148,6 +148,18 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('user.domain-settings.index') }}" class="{{ request()->routeIs('user.domain-settings.*') ? 'active' : '' }}">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M12 2C14.5 4.5 16 8 16 12C16 16 14.5 19.5 12 22C9.5 19.5 8 16 8 12C8 8 9.5 4.5 12 2Z" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M2.5 9H21.5M2.5 15H21.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    {{ __('translate.Domain Settings') }}
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('user.change-password') }}" class="{{ request()->routeIs('user.change-password') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

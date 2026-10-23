@@ -165,7 +165,7 @@
             @php
                 $pendingDeleteRequestsCount = \App\Models\AccountDeleteRequest::where('status', 'pending')->count();
             @endphp
-            <li class="{{ Route::is('admin.user-list') || Route::is('admin.pending-user') || Route::is('admin.user-show') || Route::is('admin.account-delete-requests*') || Route::is('admin.deleted-users*') ? 'active' : '' }}"><a href="#!" class="collapsed" data-bs-toggle="collapse" data-bs-target="#menu-item__users"><span class="menu-bar__text">
+            <li class="{{ Route::is('admin.user-list') || Route::is('admin.pending-user') || Route::is('admin.user-show') || Route::is('admin.account-delete-requests*') || Route::is('admin.deleted-users*') || Route::is('admin.user-domains*') ? 'active' : '' }}"><a href="#!" class="collapsed" data-bs-toggle="collapse" data-bs-target="#menu-item__users"><span class="menu-bar__text">
                 <span class="crancy-menu-icon crancy-svg-icon__v1">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M5.08069 15.2964C3.86241 16.0335 0.668176 17.5386 2.61368 19.422C3.56404 20.342 4.62251 21 5.95325 21H13.5468C14.8775 21 15.936 20.342 16.8863 19.422C18.8318 17.5386 15.6376 16.0335 14.4193 15.2964C11.5625 13.5679 7.93752 13.5679 5.08069 15.2964Z" stroke="currentcolor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -183,7 +183,7 @@
                 @endif
                 </span> <span class="crancy__toggle"></span></a></span>
                 <!-- Dropdown Menu -->
-                <div class="collapse crancy__dropdown {{ Route::is('admin.user-list') || Route::is('admin.pending-user')  || Route::is('admin.user-show') || Route::is('admin.account-delete-requests*') || Route::is('admin.deleted-users*') ? 'show' : '' }}" id="menu-item__users"  data-bs-parent="#CrancyMenu">
+                <div class="collapse crancy__dropdown {{ Route::is('admin.user-list') || Route::is('admin.pending-user')  || Route::is('admin.user-show') || Route::is('admin.account-delete-requests*') || Route::is('admin.deleted-users*') || Route::is('admin.user-domains*') ? 'show' : '' }}" id="menu-item__users"  data-bs-parent="#CrancyMenu">
                     <ul class="menu-bar__one-dropdown">
 
                         <li><a href="{{ route('admin.user-list') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.User List') }}</span></span></a></li>
@@ -197,6 +197,8 @@
                         </span></a></li>
 
                         <li><a href="{{ route('admin.deleted-users') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.Soft Deleted Users') }}</span></span></a></li>
+
+                        <li><a href="{{ route('admin.user-domains') }}"><span class="menu-bar__text"><span class="menu-bar__name">{{ __('translate.User Domains') }}</span></span></a></li>
                     </ul>
                 </div>
             </li>

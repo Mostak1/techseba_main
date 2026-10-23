@@ -15,6 +15,7 @@ use App\Http\Controllers\Auth\LoginController as UserLoginController;
 use App\Http\Controllers\Auth\RegisterController as UserRegisterController;
 use App\Http\Controllers\PublicCvController;
 use App\Http\Controllers\User\ProfileController as UserProfileController;
+use App\Http\Controllers\User\DomainSettingController;
 use App\Http\Controllers\User\UserCvController;
 use App\Http\Controllers\User\TemplateGalleryController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
@@ -245,6 +246,15 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
             Route::post('/cancel-account-delete-request', [UserProfileController::class, 'cancel_account_delete_request'])->name('cancel-account-delete-request');
             Route::match(['delete', 'post'], '/confirm-account-delete', [UserProfileController::class, 'confirm_account_delete'])->name('confirm-account-delete');
 
+            Route::controller(DomainSettingController::class)->prefix('domain-settings')->name('domain-settings.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/subdomain', 'updateSubdomain')->name('subdomain');
+                Route::post('/custom-domain', 'storeCustomDomain')->name('custom-domain');
+                Route::post('/custom-domain/{id}/verify', 'verifyCustomDomain')->name('verify');
+                Route::post('/custom-domain/{id}/primary', 'setPrimary')->name('primary');
+                Route::delete('/custom-domain/{id}', 'destroyCustomDomain')->name('destroy');
+            });
+
             Route::get('/orders', [UserProfileController::class, 'orders'])->name('orders');
             Route::get('/order/details/{order_id}', [UserProfileController::class, 'order_show'])->name('order_show');
             Route::get('/transactions/history', [UserProfileController::class, 'transactions'])->name('transactions');
@@ -308,6 +318,10 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
             Route::get('deleted-users', 'deleted_users')->name('deleted-users');
             Route::post('deleted-users/{id}/restore', 'restore_user')->name('deleted-users.restore');
             Route::delete('deleted-users/{id}/force-delete', 'force_delete_user')->name('deleted-users.force-delete');
+
+            Route::get('user-domains', 'user_domains')->name('user-domains');
+            Route::post('user-domains/{id}/toggle-status', 'toggle_domain_status')->name('user-domains.toggle-status');
+            Route::delete('user-domains/{id}', 'delete_domain')->name('user-domains.delete');
         });
 
         Route::get('cv-templates/{cv_template}/preview', [CvTemplateController::class, 'preview'])->name('cv-templates.preview');

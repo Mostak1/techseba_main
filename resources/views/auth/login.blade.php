@@ -1,53 +1,638 @@
 @extends('layout')
 
 @section('title')
-<title>{{ config('app.name', __('Sign In')) }}</title>
+<title>{{ config('app.name', __('Sign In')) }} | {{ __('translate.Login') }}</title>
 @endsection
+
+@push('style_section')
+<style>
+    /* =========================================================
+       SMART AUTH - TECHSEBA MODERN DARK THEME
+       ========================================================= */
+    :root {
+        --smart-bg: #070B19;
+        --smart-card: rgba(14, 22, 48, 0.82);
+        --smart-card-border: rgba(0, 212, 255, 0.18);
+        --smart-input-bg: rgba(9, 15, 33, 0.85);
+        --smart-input-border: rgba(255, 255, 255, 0.12);
+        --smart-accent-cyan: #00D4FF;
+        --smart-accent-purple: #7B4FFF;
+        --smart-accent-blue: #3B82F6;
+        --smart-text-white: #FFFFFF;
+        --smart-text-muted: #8E9EB8;
+    }
+
+    body {
+        background-color: var(--smart-bg) !important;
+        overflow-x: hidden;
+    }
+
+    /* Ambient Glow Canvas */
+    .smart-auth-wrapper {
+        min-height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 40px 20px;
+        background: radial-gradient(circle at 10% 20%, rgba(0, 212, 255, 0.08) 0%, transparent 45%),
+                    radial-gradient(circle at 90% 80%, rgba(123, 79, 255, 0.12) 0%, transparent 50%),
+                    #070B19;
+    }
+
+    .smart-auth-orb-1 {
+        position: absolute;
+        top: -80px;
+        left: -80px;
+        width: 420px;
+        height: 420px;
+        background: radial-gradient(circle, rgba(0, 212, 255, 0.14) 0%, transparent 70%);
+        filter: blur(80px);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .smart-auth-orb-2 {
+        position: absolute;
+        bottom: -80px;
+        right: -80px;
+        width: 460px;
+        height: 460px;
+        background: radial-gradient(circle, rgba(123, 79, 255, 0.18) 0%, transparent 70%);
+        filter: blur(90px);
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* Master Card */
+    .smart-auth-card {
+        width: 100%;
+        max-width: 1140px;
+        background: var(--smart-card);
+        backdrop-filter: blur(28px);
+        -webkit-backdrop-filter: blur(28px);
+        border: 1px solid var(--smart-card-border);
+        border-radius: 28px;
+        box-shadow: 0 30px 90px -15px rgba(0, 0, 0, 0.85),
+                    0 0 50px rgba(0, 212, 255, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: row;
+        transition: all 0.3s ease;
+    }
+
+    /* Left Hero Visual */
+    .smart-auth-visual {
+        flex: 1.05;
+        position: relative;
+        overflow: hidden;
+        min-height: 620px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 35px;
+        background: #090e21;
+    }
+
+    .smart-auth-visual-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        opacity: 0.95;
+        transition: transform 6s ease;
+    }
+
+    .smart-auth-card:hover .smart-auth-visual-img {
+        transform: scale(1.03);
+    }
+
+    .smart-auth-visual-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(7, 11, 25, 0.25) 0%, rgba(7, 11, 25, 0.7) 100%);
+        z-index: 1;
+    }
+
+    .smart-visual-top {
+        position: relative;
+        z-index: 2;
+    }
+
+    .smart-brand-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 16px;
+        background: rgba(7, 11, 25, 0.65);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50px;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .smart-brand-link:hover {
+        background: rgba(0, 212, 255, 0.15);
+        border-color: rgba(0, 212, 255, 0.4);
+        transform: translateY(-2px);
+    }
+
+    .smart-brand-link img {
+        height: 32px;
+        width: auto;
+    }
+
+    .smart-brand-link span {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .smart-visual-bottom {
+        position: relative;
+        z-index: 2;
+    }
+
+    .smart-visual-glass-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        background: rgba(14, 22, 48, 0.75);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(0, 212, 255, 0.25);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .smart-pulsing-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #10B981;
+        box-shadow: 0 0 10px #10B981;
+        animation: smartPulse 2s infinite;
+    }
+
+    @keyframes smartPulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .smart-visual-badge-text {
+        color: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.2px;
+    }
+
+    /* Right Form Area */
+    .smart-auth-form-wrap {
+        flex: 1.15;
+        padding: 50px 55px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(14, 22, 48, 0.65);
+    }
+
+    .smart-form-header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 24px;
+    }
+
+    .smart-auth-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 30px;
+        color: var(--smart-accent-cyan);
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .smart-home-link {
+        color: var(--smart-text-muted);
+        text-decoration: none;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.2s ease;
+    }
+
+    .smart-home-link:hover {
+        color: var(--smart-accent-cyan);
+        transform: translateX(-2px);
+    }
+
+    .smart-auth-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+        font-family: 'Space Grotesk', sans-serif;
+        line-height: 1.25;
+    }
+
+    .smart-auth-title .gradient-text {
+        background: linear-gradient(135deg, #00D4FF, #9055FF);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .smart-auth-subtitle {
+        color: var(--smart-text-muted);
+        font-size: 14px;
+        margin-bottom: 32px;
+        line-height: 1.5;
+    }
+
+    /* Input Field Styling */
+    .smart-form-group {
+        margin-bottom: 22px;
+    }
+
+    .smart-form-label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #CCD6E5;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        letter-spacing: 0.2px;
+    }
+
+    .smart-form-label i {
+        color: var(--smart-accent-cyan);
+        font-size: 15px;
+    }
+
+    .smart-form-label .required-star {
+        color: #FF5E5E;
+    }
+
+    .smart-input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .smart-input-icon {
+        position: absolute;
+        left: 16px;
+        color: #6C7D9C;
+        font-size: 18px;
+        pointer-events: none;
+        transition: color 0.25s ease;
+    }
+
+    .smart-input {
+        width: 100% !important;
+        height: 52px !important;
+        background: var(--smart-input-bg) !important;
+        border: 1px solid var(--smart-input-border) !important;
+        border-radius: 12px !important;
+        padding: 12px 18px 12px 48px !important;
+        color: #FFFFFF !important;
+        font-size: 14.5px !important;
+        font-family: 'Inter', sans-serif !important;
+        transition: all 0.25s ease !important;
+        outline: none !important;
+    }
+
+    .smart-input::placeholder {
+        color: #5D6F8F !important;
+        font-size: 14px !important;
+    }
+
+    .smart-input:focus {
+        border-color: var(--smart-accent-cyan) !important;
+        background: rgba(14, 23, 50, 0.95) !important;
+        box-shadow: 0 0 16px rgba(0, 212, 255, 0.28) !important;
+    }
+
+    .smart-input:focus + .smart-input-icon,
+    .smart-input-container:focus-within .smart-input-icon {
+        color: var(--smart-accent-cyan);
+    }
+
+    /* Chrome/Safari Autofill Fix */
+    .smart-input:-webkit-autofill,
+    .smart-input:-webkit-autofill:hover, 
+    .smart-input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #FFFFFF !important;
+        -webkit-box-shadow: 0 0 0px 1000px #090F21 inset !important;
+        transition: background-color 5000s ease-in-out 0s;
+        border-color: rgba(0, 212, 255, 0.3) !important;
+    }
+
+    /* Password Toggle Button */
+    .smart-password-toggle-btn {
+        position: absolute;
+        right: 14px;
+        background: transparent;
+        border: none;
+        color: #7A8CA8;
+        font-size: 18px;
+        cursor: pointer;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .smart-password-toggle-btn:hover {
+        color: var(--smart-accent-cyan);
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Remember & Forgot Flex */
+    .smart-extra-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: -4px;
+        margin-bottom: 26px;
+    }
+
+    .smart-checkbox-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        user-select: none;
+        margin: 0;
+    }
+
+    .smart-checkbox {
+        width: 17px !important;
+        height: 17px !important;
+        accent-color: var(--smart-accent-cyan) !important;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 0;
+    }
+
+    .smart-checkbox-text {
+        color: #A3B3CC;
+        font-size: 13.5px;
+    }
+
+    .smart-forgot-link {
+        color: var(--smart-accent-cyan);
+        font-size: 13.5px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .smart-forgot-link:hover {
+        color: #6fe5ff;
+        text-decoration: underline;
+        text-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+    }
+
+    /* Main Submit Button */
+    .smart-submit-btn {
+        width: 100%;
+        height: 52px;
+        background: linear-gradient(135deg, #00D4FF 0%, #3B82F6 50%, #7B4FFF 100%);
+        border: none;
+        border-radius: 12px;
+        color: #FFFFFF;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'Space Grotesk', sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 6px 20px rgba(0, 212, 255, 0.35);
+    }
+
+    .smart-submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 212, 255, 0.55), 0 0 20px rgba(123, 79, 255, 0.35);
+        color: #FFFFFF;
+    }
+
+    .smart-submit-btn:active {
+        transform: translateY(1px);
+    }
+
+    .smart-submit-btn i {
+        font-size: 18px;
+        transition: transform 0.2s ease;
+    }
+
+    .smart-submit-btn:hover i {
+        transform: translateX(4px);
+    }
+
+    /* Divider */
+    .smart-divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 26px 0 22px 0;
+    }
+
+    .smart-divider-line {
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.12), transparent);
+    }
+
+    .smart-divider-text {
+        color: #7284A3;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+    }
+
+    /* Social Buttons */
+    .smart-social-wrap {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .smart-social-btn {
+        width: 100%;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        color: #FFFFFF !important;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+    .smart-social-btn:hover {
+        background: rgba(255, 255, 255, 0.09);
+        border-color: rgba(0, 212, 255, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+        color: #FFFFFF !important;
+    }
+
+    /* Footer Sign Up Link */
+    .smart-auth-footer {
+        text-align: center;
+        margin-top: 26px;
+    }
+
+    .smart-auth-footer p {
+        color: var(--smart-text-muted);
+        font-size: 14px;
+        margin: 0;
+    }
+
+    .smart-auth-signup-link {
+        color: var(--smart-accent-cyan);
+        font-weight: 600;
+        text-decoration: none;
+        margin-left: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .smart-auth-signup-link:hover {
+        color: #78e5ff;
+        text-decoration: underline;
+        transform: translateX(2px);
+    }
+
+    /* Modal Dark Overrides */
+    .smart-dark-modal .modal-content {
+        background: #0D142E !important;
+        border: 1px solid rgba(0, 212, 255, 0.25) !important;
+        border-radius: 20px !important;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8) !important;
+        color: #fff !important;
+    }
+
+    .smart-dark-modal .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        padding: 20px 25px !important;
+    }
+
+    .smart-dark-modal .modal-body {
+        padding: 25px !important;
+    }
+
+    .smart-dark-modal .btn-close {
+        filter: invert(1) brightness(200%);
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+        .smart-auth-card {
+            flex-direction: column;
+            max-width: 540px;
+        }
+
+        .smart-auth-visual {
+            min-height: 260px;
+            padding: 25px;
+        }
+
+        .smart-auth-form-wrap {
+            padding: 35px 25px;
+        }
+
+        .smart-auth-title {
+            font-size: 26px;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .smart-auth-wrapper {
+            padding: 15px;
+        }
+
+        .smart-auth-card {
+            border-radius: 20px;
+        }
+
+        .smart-auth-form-wrap {
+            padding: 25px 20px;
+        }
+    }
+</style>
+@endpush
+
 @section('front-content')
 <!-- forget password modal -->
-<div class="modal forget_pass_modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal forget_pass_modal smart-dark-modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header d-flex justify-content-between align-items-center">
                 <a href="{{ route('home') }}">
-                    <img src="{{ asset($general_setting->logo) }}" alt="logo" />
+                    <img src="{{ asset($general_setting->white_logo ?? $general_setting->logo) }}" alt="logo" style="height: 32px;" />
                 </a>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span>
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M13.8284 8.17157L8.17158 13.8284M13.8284 13.8284L8.17158 8.17158M17 1H5C2.79086 1 1 2.79086 1 5V17C1 19.2091 2.79086 21 5 21H17C19.2091 21 21 19.2091 21 17V5C21 2.79086 19.2091 1 17 1Z"
-                                stroke="#FF6625" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                    </span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h5>{{ __('translate.Reset your password') }}</h5>
-                <p>
+                <h4 class="text-white mb-2" style="font-family: 'Space Grotesk', sans-serif;">{{ __('translate.Reset your password') }}</h4>
+                <p class="text-muted small mb-4">
                     {{ __('translate.Forgot password? Enter your email for reset link.') }}
                 </p>
 
-                <form class="d_change_password_box_form" method="POST" action="{{ route('user.send-forget-password') }}">
+                <form method="POST" action="{{ route('user.send-forget-password') }}">
                     @csrf
-                    <div class="d_profile_setting_from_item">
-                        <div class="optech-checkout-field">
-                            <label>{{ __('translate.Email Address*') }}</label>
-                            <input type="text" placeholder="Email Address" name="email"/>
+                    <div class="smart-form-group">
+                        <label class="smart-form-label">{{ __('translate.Email Address*') }}</label>
+                        <div class="smart-input-container">
+                            <span class="smart-input-icon"><i class="ri-mail-line"></i></span>
+                            <input type="email" class="smart-input" placeholder="name@example.com" name="email" required />
                         </div>
                     </div>
                     @if($general_setting->recaptcha_status==1)
-                        <div class="sign_up_form_item">
+                        <div class="mb-3">
                             <div class="g-recaptcha" data-sitekey="{{ $general_setting->recaptcha_site_key }}"></div>
                         </div>
                     @endif
-                    <a href="{{ route('user.login') }}" data-bs-dismiss="modal">
-                        {{ __('translate.Back to login') }}
-                    </a>
-                    <div class="d_profile_setting_from_btn">
-                        <button class="optech-default-btn" data-text="{{ __('translate.Continue') }}">
-                            <span class="btn-wraper">{{ __('translate.Continue') }}</span>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="javascript:;" data-bs-dismiss="modal" class="text-muted small text-decoration-none">
+                            <i class="ri-arrow-left-line"></i> {{ __('translate.Back to login') }}
+                        </a>
+                        <button type="submit" class="smart-submit-btn" style="width: auto; padding: 10px 24px; font-size: 14px;">
+                            <span>{{ __('translate.Continue') }}</span>
+                            <i class="ri-arrow-right-line"></i>
                         </button>
                     </div>
                 </form>
@@ -56,249 +641,192 @@
     </div>
 </div>
 
-<header class="site-header signup_header optech-header-section" id="sticky-menu">
-    <div class="optech-header-top bg-light1">
-        <div class="container">
-            <div class="optech-header-info-wrap">
-                <div class="optech-header-info dark-color">
-                    <ul>
-                        <li><i class="ri-map-pin-2-fill"></i>{{ $footer->address }}</li>
-                        <li><a href="tel:{{ $footer->phone }}"><i class="ri-phone-fill"></i>{{ $footer->phone }}</a>
-                        </li>
-                        <li><a href="mailto:{{ $footer->email }}"><i class="ri-mail-fill"></i> {{ $footer->email }}</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="optech-header-info-right two">
-                    <div class="cur_lun_login_item">
-                        <span>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM12 11.25C11.3096 11.25 10.75 10.6904 10.75 10C10.75 9.30964 11.3096 8.75 12 8.75C12.6904 8.75 13.25 9.30964 13.25 10C13.25 10.4142 13.5858 10.75 14 10.75C14.4142 10.75 14.75 10.4142 14.75 10C14.75 8.74122 13.9043 7.67998 12.75 7.35352V6.5C12.75 6.08579 12.4142 5.75 12 5.75C11.5858 5.75 11.25 6.08579 11.25 6.5V7.35352C10.0957 7.67998 9.25 8.74122 9.25 10C9.25 11.5188 10.4812 12.75 12 12.75C12.6904 12.75 13.25 13.3096 13.25 14C13.25 14.6904 12.6904 15.25 12 15.25C11.3096 15.25 10.75 14.6904 10.75 14C10.75 13.5858 10.4142 13.25 10 13.25C9.58579 13.25 9.25 13.5858 9.25 14C9.25 15.2588 10.0957 16.32 11.25 16.6465V17.5C11.25 17.9142 11.5858 18.25 12 18.25C12.4142 18.25 12.75 17.9142 12.75 17.5V16.6465C13.9043 16.32 14.75 15.2588 14.75 14C14.75 12.4812 13.5188 11.25 12 11.25Z"
-                                    fill="#0a165e" />
-                            </svg>
-                        </span>
-                        <form action="{{ route('currency-switcher') }}" id="currency_form">
-                            <select id="currency_dropdown" class="js-example-basic-single" name="currency_code">
-                                @foreach ($currency_list as $currency_item)
-                                    <option
-                                        {{ Session::get('currency_code') == $currency_item->currency_code ? 'selected' : '' }} value="{{ $currency_item->currency_code }}">{{ $currency_item->currency_name }}</option>
-                                @endforeach
-                            </select>
-                        </form>
-                    </div>
-
-                    <div class="cur_lun_login_item">
-                        <span>
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M7.87643 2.47813C7.18954 4.3671 6.75001 7.02637 6.75001 10C6.75001 10.3796 6.75718 10.754 6.7711 11.1224C7.79627 11.2054 8.87923 11.25 10 11.25C11.1208 11.25 12.2038 11.2054 13.2289 11.1224C13.2429 10.754 13.25 10.3796 13.25 10C13.25 7.02637 12.8105 4.3671 12.1236 2.47813C11.779 1.53057 11.3865 0.816517 10.9883 0.353377C10.8696 0.215345 10.7565 0.106123 10.6496 0.0207619C10.4349 0.00699121 10.2183 0 10 0C9.78177 0 9.56516 0.00699124 9.3504 0.020762C9.24349 0.106123 9.13042 0.215345 9.01175 0.353377C8.61357 0.816517 8.221 1.53057 7.87643 2.47813ZM13.1315 12.6346C12.1291 12.71 11.0797 12.75 10 12.75C8.92028 12.75 7.87096 12.71 6.86854 12.6346C7.04293 14.5326 7.40024 16.2123 7.87643 17.5219C8.221 18.4694 8.61357 19.1835 9.01175 19.6466C9.13042 19.7847 9.24348 19.8939 9.35039 19.9792C9.56516 19.993 9.78177 20 10 20C10.2183 20 10.4349 19.993 10.6496 19.9792C10.7565 19.8939 10.8696 19.7847 10.9883 19.6466C11.3865 19.1835 11.779 18.4694 12.1236 17.5219C12.5998 16.2123 12.9571 14.5326 13.1315 12.6346ZM5.26493 10.968C5.25504 10.6486 5.25001 10.3257 5.25001 10C5.25001 6.8985 5.70592 4.05777 6.46674 1.96552C6.67341 1.39719 6.90681 0.872262 7.16688 0.407001C3.12245 1.59958 0.144576 5.28026 0.00512695 9.67717C0.882073 10.0753 2.09222 10.433 3.56698 10.7066C4.104 10.8062 4.67155 10.8938 5.26493 10.968ZM0.0879116 11.3317C1.0045 11.6736 2.09274 11.9587 3.29339 12.1814C3.94235 12.3018 4.63038 12.4051 5.3503 12.4893C5.5238 14.6072 5.91514 16.5176 6.46674 18.0345C6.67341 18.6028 6.90681 19.1277 7.16688 19.593C3.43599 18.4929 0.612705 15.2755 0.0879116 11.3317ZM14.6497 12.4893C15.3697 12.4051 16.0577 12.3018 16.7066 12.1814C17.9073 11.9587 18.9955 11.6736 19.9121 11.3317C19.3873 15.2755 16.564 18.4929 12.8332 19.593C13.0932 19.1277 13.3266 18.6028 13.5333 18.0345C14.0849 16.5176 14.4762 14.6072 14.6497 12.4893ZM19.9949 9.67717C19.118 10.0753 17.9078 10.433 16.4331 10.7066C15.896 10.8062 15.3285 10.8938 14.7351 10.968C14.745 10.6486 14.75 10.3257 14.75 10C14.75 6.8985 14.2941 4.05777 13.5333 1.96552C13.3266 1.39719 13.0932 0.872265 12.8332 0.407004C16.8776 1.59958 19.8555 5.28026 19.9949 9.67717Z"
-                                    fill="#0a165e" />
-                            </svg>
-                        </span>
-
-                        <form action="{{ route('language-switcher') }}" id="language_form">
-                            <select id="language_dropdown" class="js-example-basic-single" name="lang_code">
-                                @foreach ($language_list as $language_item)
-                                <option {{ Session::get('front_lang') == $language_item->lang_code ? 'selected' : '' }}
-                                    value="{{ $language_item->lang_code }}">{{ $language_item->lang_name }}</option>
-                                @endforeach
-                            </select>
-                        </form>
-
-                    </div>
-                    <div class="cur_lun_login_item">
-                        <span>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd"
-                                    d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11ZM12 21C15.866 21 19 19.2091 19 17C19 14.7909 15.866 13 12 13C8.13401 13 5 14.7909 5 17C5 19.2091 8.13401 21 12 21Z"
-                                    fill="#0a165e" />
-                            </svg>
-                        </span>
-                        <a href="{{ route('user.login') }}" class="login-btn">{{ __('translate.Login') }}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="optech-header-bottom bg-white">
-        <div class="container">
-            <nav class="navbar site-navbar">
-                <!-- Brand Logo-->
-                <div class="brand-logo">
-                    <a href="{{ route('home') }}">
-                        <img src="{{ asset($general_setting->logo) }}" alt="logo" class="light-version-logo">
-                    </a>
-                </div>
-
-                @include('frontend.templates.layouts._menu_nav')
-
-                <div class="header-btn header-btn-l1 ms-auto d-none d-xs-inline-flex">
-                    <div class="optech-header-icon">
-
-                        <div class="optech-header-search">
-                            <i class="ri-search-line"></i>
-                        </div>
-
-                        @include('frontend.templates.layouts._cart')
-
-
-                        <a class="optech-default-btn optech-header-btn" href="{{ route('contact-us') }}"
-                            data-text="Get in Touch"><span class="btn-wraper">{{ __('translate.Get in Touch') }}</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="mobile-menu-trigger">
-                    <span></span>
-                </div>
-            </nav>
-        </div>
-    </div>
-</header>
-
-<div class="optech-header-search-section">
-    <div class="container">
-        <div class="optech-header-search-box">
-            <input type="search" placeholder="Search here..." />
-            <button id="header-search" type="button">
-                <i class="ri-search-line"></i>
-            </button>
-            <p>{{ __('translate.Type above and press Enter to search. Press Close to cancel.') }}</p>
-        </div>
-    </div>
-    <div class="optech-header-search-close">
-        <i class="ri-close-line"></i>
-    </div>
-</div>
-<div class="search-overlay"></div>
-<!--End landex-header-section -->
 @php
  $currentLang = session()->get('front_lang');
  $loginContent = getContent('login_section.content', true);
- @endphp
-<!-- sign up start  -->
-<section class="sign_up">
-    <div class="sign_up_df">
-        <div class="sign_up_thumb">
-            <img src="{{ asset($general_setting->login_page_bg) }}" alt="thumb" />
-            <a href="{{ route('home') }}" class="signup_logo">
-                <img src="{{ asset($general_setting->white_logo) }}" alt="logo" />
-            </a>
+ $heading = getTranslatedValue($loginContent, 'heading', $currentLang);
+ $description = getTranslatedValue($loginContent, 'description', $currentLang);
+@endphp
+
+<!-- Smart Auth Section Start -->
+<div class="smart-auth-wrapper">
+    <div class="smart-auth-orb-1"></div>
+    <div class="smart-auth-orb-2"></div>
+
+    <div class="smart-auth-card">
+        <!-- Left Side: Visual & Brand Showcase -->
+        <div class="smart-auth-visual">
+            <img src="{{ asset($general_setting->login_page_bg) }}" alt="TechSeba Auth Visual" class="smart-auth-visual-img" />
+            <div class="smart-auth-visual-overlay"></div>
+
+            <div class="smart-visual-top">
+                <a href="{{ route('home') }}" class="smart-brand-link">
+                    <img src="{{ asset($general_setting->white_logo) }}" alt="{{ config('app.name') }}" />
+                    <span>One Click Solution</span>
+                </a>
+            </div>
+
+            <div class="smart-visual-bottom">
+                <div class="smart-visual-glass-badge">
+                    <div class="smart-pulsing-dot"></div>
+                    <span class="smart-visual-badge-text">Secure Access • One Click Solution</span>
+                </div>
+            </div>
         </div>
 
-        <div class="sign_up_right">
-            <div class="signup_text">
-                <h3>{{ getTranslatedValue($loginContent, 'heading', $currentLang) }}</h3>
-                <p>{{ getTranslatedValue($loginContent, 'description', $currentLang) }}</p>
+        <!-- Right Side: Login Form -->
+        <div class="smart-auth-form-wrap">
+            <div class="smart-form-header-bar">
+                <span class="smart-auth-badge">
+                    <i class="ri-shield-keyhole-line"></i> {{ __('translate.User Login') }}
+                </span>
+                <a href="{{ route('home') }}" class="smart-home-link">
+                    <i class="ri-home-4-line"></i> {{ __('translate.Home') }}
+                </a>
             </div>
-            <form class="sign_up_form seller_login" action="{{ route('user.store-login') }}" method="POST">
+
+            <h2 class="smart-auth-title">
+                {{ $heading ?: __('translate.Login for an account') }}
+            </h2>
+            <p class="smart-auth-subtitle">
+                {{ $description ?: __('translate.Welcome to TechSeba. Please enter your credentials to access your dashboard.') }}
+            </p>
+
+            <form class="seller_login" action="{{ route('user.store-login') }}" method="POST">
                 @csrf
-                <div class="d_profile_setting_from_item">
-                    <div class="optech-checkout-field">
-                        <label>{{ __('translate.Email* ') }}</label>
-                        <input type="email" id="email" placeholder="{{ __('translate.Email') }}" name="email" value="{{ old('email') }}"/>
+                
+                <!-- Email Field -->
+                <div class="smart-form-group">
+                    <label class="smart-form-label" for="email">
+                        <i class="ri-mail-line"></i> {{ __('translate.Email Address') }} <span class="required-star">*</span>
+                    </label>
+                    <div class="smart-input-container">
+                        <span class="smart-input-icon"><i class="ri-at-line"></i></span>
+                        <input type="email" id="email" name="email" class="smart-input" placeholder="name@example.com" value="{{ old('email') }}" required autocomplete="email" />
                     </div>
                 </div>
-                <div class="d_profile_setting_from_item mb-0">
-                    <div class="optech-checkout-field">
-                        <label>{{ __('translate.Password*') }}</label>
-                        <input type="password" id="password" placeholder="**********"  name="password"/>
 
+                <!-- Password Field -->
+                <div class="smart-form-group">
+                    <label class="smart-form-label" for="password">
+                        <i class="ri-lock-2-line"></i> {{ __('translate.Password') }} <span class="required-star">*</span>
+                    </label>
+                    <div class="smart-input-container">
+                        <span class="smart-input-icon"><i class="ri-key-2-line"></i></span>
+                        <input type="password" id="password" name="password" class="smart-input" placeholder="••••••••••••" required autocomplete="current-password" />
+                        <button type="button" class="smart-password-toggle-btn" id="togglePasswordBtn" title="Toggle password visibility">
+                            <i class="ri-eye-line" id="togglePasswordIcon"></i>
+                        </button>
                     </div>
                 </div>
 
-                <div class="sign_up_form_item">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-                        <label class="form-check-label" for="flexCheckDefault">
-                            {{ __('translate.Remember me') }}
-                        </label>
-                    </div>
+                <!-- Remember Me & Forgot Password -->
+                <div class="smart-extra-row">
+                    <label class="smart-checkbox-label" for="rememberMe">
+                        <input type="checkbox" name="remember" class="smart-checkbox" id="rememberMe">
+                        <span class="smart-checkbox-text">{{ __('translate.Remember me') }}</span>
+                    </label>
 
-                    <a href="{{ route('user.reset-password') }}" class="forgot_pass" data-bs-toggle="modal" data-bs-target="#exampleModal">{{ __('translate.Forgot Password?') }}</a>
-
+                    <a href="{{ route('user.reset-password') }}" class="smart-forgot-link" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        {{ __('translate.Forgot Password?') }}
+                    </a>
                 </div>
+
+                <!-- reCAPTCHA if enabled -->
                 @if($general_setting->recaptcha_status==1)
-                    <div class="sign_up_form_item">
+                    <div class="mb-3">
                         <div class="g-recaptcha" data-sitekey="{{ $general_setting->recaptcha_site_key }}"></div>
                     </div>
                 @endif
 
-                <div class="sign_up_form_btm">
-                    <button class="optech-default-btn" data-text="{{ __('translate.Login') }}" type="submit">
-                        <span class="btn-wraper">{{ __('translate.Login') }}</span>
-                    </button>
-                </div>
-                <div class="sign_up_form_df">
-                    @if ($general_setting->is_facebook == 1)
-                    <a href="{{ route('user.login-facebook') }}" class="sign_up_form_btn">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M18 3H15C12.2386 3 10 5.23858 10 8V10H6V14H10V21H14V14H18V10H14V8C14 7.44772 14.4477 7 15 7H18V3Z" fill="#405FF2"/>
-                        </svg>
-                        {{ __('translate.Sign In with Facebook') }}
-                    </a>
-                    @endif
+                <!-- Submit Button -->
+                <button type="submit" class="smart-submit-btn">
+                    <span>{{ __('translate.Login') }}</span>
+                    <i class="ri-arrow-right-line"></i>
+                </button>
 
-                    @if ($general_setting->is_gmail == 1)
-                    <a href="{{ route('user.login-google') }}" class="sign_up_form_btn">
-                        <span>
-                            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M20.6258 11.2139C20.6258 10.4225 20.5603 9.84497 20.4185 9.24609H11.1973V12.818H16.6099C16.5008 13.7057 15.9115 15.0425 14.602 15.9408L14.5836 16.0603L17.4992 18.2738L17.7012 18.2936C19.5563 16.6145 20.6258 14.1441 20.6258 11.2139Z"
-                                    fill="#4285F4" />
-                                <path
-                                    d="M11.1976 20.6248C13.8494 20.6248 16.0755 19.7692 17.7016 18.2934L14.6024 15.9405C13.773 16.5073 12.6599 16.903 11.1976 16.903C8.60043 16.903 6.39609 15.224 5.61031 12.9033L5.49513 12.9129L2.46347 15.2122L2.42383 15.3202C4.03888 18.4644 7.35634 20.6248 11.1976 20.6248Z"
-                                    fill="#34A853" />
-                                <path
-                                    d="M5.60908 12.9038C5.40174 12.305 5.28175 11.6632 5.28175 11.0002C5.28175 10.3371 5.40174 9.69549 5.59817 9.09661L5.59268 8.96906L2.52303 6.63281L2.42259 6.67963C1.75695 7.98437 1.375 9.44953 1.375 11.0002C1.375 12.5509 1.75695 14.016 2.42259 15.3207L5.60908 12.9038Z"
-                                    fill="#FBBC05" />
-                                <path
-                                    d="M11.1977 5.09664C13.0419 5.09664 14.2859 5.87733 14.9953 6.52974L17.7671 3.8775C16.0648 2.32681 13.8494 1.375 11.1977 1.375C7.35637 1.375 4.03889 3.53526 2.42383 6.6794L5.59942 9.09638C6.39612 6.77569 8.60047 5.09664 11.1977 5.09664Z"
-                                    fill="#EB4335" />
+                <!-- Social Sign In Options -->
+                @if ($general_setting->is_facebook == 1 || $general_setting->is_gmail == 1)
+                    <div class="smart-divider">
+                        <span class="smart-divider-line"></span>
+                        <span class="smart-divider-text">OR SIGN IN WITH</span>
+                        <span class="smart-divider-line"></span>
+                    </div>
+
+                    <div class="smart-social-wrap">
+                        @if ($general_setting->is_gmail == 1)
+                        <a href="{{ route('user.login-google') }}" class="smart-social-btn">
+                            <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20.6258 11.2139C20.6258 10.4225 20.5603 9.84497 20.4185 9.24609H11.1973V12.818H16.6099C16.5008 13.7057 15.9115 15.0425 14.602 15.9408L14.5836 16.0603L17.4992 18.2738L17.7012 18.2936C19.5563 16.6145 20.6258 14.1441 20.6258 11.2139Z" fill="#4285F4" />
+                                <path d="M11.1976 20.6248C13.8494 20.6248 16.0755 19.7692 17.7016 18.2934L14.6024 15.9405C13.773 16.5073 12.6599 16.903 11.1976 16.903C8.60043 16.903 6.39609 15.224 5.61031 12.9033L5.49513 12.9129L2.46347 15.2122L2.42383 15.3202C4.03888 18.4644 7.35634 20.6248 11.1976 20.6248Z" fill="#34A853" />
+                                <path d="M5.60908 12.9038C5.40174 12.305 5.28175 11.6632 5.28175 11.0002C5.28175 10.3371 5.40174 9.69549 5.59817 9.09661L5.59268 8.96906L2.52303 6.63281L2.42259 6.67963C1.75695 7.98437 1.375 9.44953 1.375 11.0002C1.375 12.5509 1.75695 14.016 2.42259 15.3207L5.60908 12.9038Z" fill="#FBBC05" />
+                                <path d="M11.1977 5.09664C13.0419 5.09664 14.2859 5.87733 14.9953 6.52974L17.7671 3.8775C16.0648 2.32681 13.8494 1.375 11.1977 1.375C7.35637 1.375 4.03889 3.53526 2.42383 6.6794L5.59942 9.09638C6.39612 6.77569 8.60047 5.09664 11.1977 5.09664Z" fill="#EB4335" />
                             </svg>
-                        </span>
-                        {{ __('translate.Sign In with Google') }}
-                    </a>
-                    @endif
-                </div>
+                            <span>{{ __('translate.Sign In with Google') }}</span>
+                        </a>
+                        @endif
 
-                <div class="sign_up_form_btm_text">
+                        @if ($general_setting->is_facebook == 1)
+                        <a href="{{ route('user.login-facebook') }}" class="smart-social-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18 3H15C12.2386 3 10 5.23858 10 8V10H6V14H10V21H14V14H18V10H14V8C14 7.44772 14.4477 7 15 7H18V3Z" fill="#1877F2"/>
+                            </svg>
+                            <span>{{ __('translate.Sign In with Facebook') }}</span>
+                        </a>
+                        @endif
+                    </div>
+                @endif
+
+                <!-- Sign Up Footer -->
+                <div class="smart-auth-footer">
                     <p>
                         {{ __('translate.Don’t have an account yet?') }}
-                        <span>
-                            <a href="{{ route('user.register') }}">{{ __('translate.Sign Up') }}</a>
-                        </span>
+                        <a href="{{ route('user.register') }}" class="smart-auth-signup-link">
+                            {{ __('translate.Sign Up') }} <i class="ri-arrow-right-line"></i>
+                        </a>
                     </p>
                 </div>
             </form>
         </div>
     </div>
-</section>
-<!-- sign up end -->
+</div>
+<!-- Smart Auth Section End -->
 @endsection
 
 @push('js_section')
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-@endpush
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('togglePasswordBtn');
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = document.getElementById('togglePasswordIcon');
+
+        if (toggleBtn && passwordInput && toggleIcon) {
+            toggleBtn.addEventListener('click', function() {
+                const isPassword = passwordInput.getAttribute('type') === 'password';
+                passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+                toggleIcon.classList.toggle('ri-eye-line', !isPassword);
+                toggleIcon.classList.toggle('ri-eye-off-line', isPassword);
+            });
+        }
+    });
+</script>
 
 @if (env('APP_MODE') == 'DEMO')
-@push('js_section')
 <script>
     (function($) {
-        "use strict"
+        "use strict";
         $(document).ready(function() {
-
             $(".seller_login").on("click", function(e) {
-                $("#email").val('seller@gmail.com')
-                $("#password").val(1234)
-            })
+                if ($("#email").val() === '') {
+                    $("#email").val('seller@gmail.com');
+                }
+                if ($("#password").val() === '') {
+                    $("#password").val('1234');
+                }
+            });
         });
     })(jQuery);
 </script>
-@endpush
 @endif
+@endpush

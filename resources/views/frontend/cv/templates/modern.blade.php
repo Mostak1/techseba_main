@@ -39,7 +39,7 @@
     <style>
         @page {
             size: A4 portrait;
-            margin: 8mm 10mm 8mm 10mm;
+            margin: 6mm 8mm 6mm 8mm;
         }
 
         * {
@@ -54,13 +54,13 @@
             background: #f8fafc;
             color: #1e293b;
             font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 10.5px;
-            line-height: 1.45;
+            font-size: 9.5px;
+            line-height: 1.36;
         }
 
         .no-print-area {
             max-width: 210mm;
-            margin: 12px auto 0;
+            margin: 10px auto 0;
             display: flex;
             justify-content: flex-end;
             gap: 10px;
@@ -68,18 +68,18 @@
         }
 
         .btn {
-            padding: 7px 16px;
-            border-radius: 5px;
+            padding: 6px 14px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 700;
             color: #ffffff;
             background: #0f172a;
             border: none;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.12);
         }
 
@@ -89,12 +89,13 @@
         .resume-page {
             width: 210mm;
             min-height: 297mm;
-            margin: 12px auto 24px;
-            padding: 10mm 12mm;
+            margin: 10px auto 20px;
+            padding: 7mm 9mm;
             background: #ffffff;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
             border-radius: 2px;
             position: relative;
+            box-sizing: border-box;
         }
 
         /* Modern Header Section with Photo Support */
@@ -102,10 +103,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
+            gap: 14px;
             border-bottom: 2px solid #0f172a;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
+            padding-bottom: 5px;
+            margin-bottom: 6px;
         }
 
         .header.no-photo {
@@ -129,31 +130,31 @@
         }
 
         .name {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 800;
             color: #0f172a;
             letter-spacing: -0.3px;
-            margin: 0 0 2px 0;
+            margin: 0 0 1px 0;
             text-transform: uppercase;
-            line-height: 1.15;
+            line-height: 1.1;
         }
 
         .headline {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
             color: #2563eb;
-            margin-bottom: 8px;
-            line-height: 1.25;
+            margin-bottom: 4px;
+            line-height: 1.2;
         }
 
         .contact-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px 12px;
-            font-size: 10px;
+            gap: 3px 9px;
+            font-size: 8.5px;
             color: #334155;
             font-weight: 500;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         .header.no-photo .contact-row {
@@ -182,37 +183,37 @@
         }
 
         .header-photo {
-            width: 88px;
-            height: 104px;
+            width: 72px;
+            height: 86px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 4px;
             border: 2px solid #0f172a;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+            box-shadow: 0 2px 6px rgba(15, 23, 42, 0.12);
             display: block;
             background: #f1f5f9;
         }
 
         /* Section Styling */
         .section {
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .section-header {
-            font-size: 12px;
+            font-size: 10.5px;
             font-weight: 800;
             color: #0f172a;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
+            letter-spacing: 0.5px;
             border-bottom: 1.5px solid #cbd5e1;
-            padding-bottom: 3px;
-            margin-bottom: 8px;
+            padding-bottom: 1.5px;
+            margin-bottom: 4px;
         }
 
         .summary-text {
-            font-size: 10.5px;
+            font-size: 9.5px;
             color: #334155;
             text-align: justify;
-            line-height: 1.48;
+            line-height: 1.36;
             margin: 0;
         }
 
@@ -222,11 +223,11 @@
         }
 
         .summary-text p {
-            margin: 0 0 4px;
+            margin: 0 0 3px;
         }
 
         .summary-text ul, .summary-text ol {
-            margin: 0 0 4px 16px;
+            margin: 0 0 3px 14px;
             padding: 0;
         }
 
@@ -234,11 +235,12 @@
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px 12px;
+            gap: 2.5px 8px;
         }
 
         .skill-cat {
-            font-size: 10px;
+            font-size: 9px;
+            line-height: 1.3;
         }
 
         .skill-cat-name {
@@ -252,110 +254,113 @@
 
         /* Experience Entry */
         .job-entry {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .job-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .job-company {
-            font-size: 12px;
+            font-size: 10.5px;
             font-weight: 800;
             color: #0f172a;
         }
 
         .job-role {
-            font-size: 11px;
+            font-size: 9.5px;
             font-weight: 700;
             color: #2563eb;
         }
 
         .job-date {
-            font-size: 10px;
+            font-size: 8.5px;
             font-weight: 700;
             color: #475569;
         }
 
         .bullet-list {
-            margin: 3px 0 0 16px;
+            margin: 2px 0 0 14px;
             padding: 0;
             color: #334155;
-            font-size: 10px;
-            line-height: 1.42;
+            font-size: 9px;
+            line-height: 1.34;
         }
 
         .bullet-list li {
-            margin-bottom: 3px;
+            margin-bottom: 1.5px;
         }
 
         /* Portfolio Project Case Study Styling */
         .project-card {
             border: 1px solid #e2e8f0;
-            border-left: 3.5px solid #1e3a8a;
+            border-left: 3px solid #1e3a8a;
             background: #f8fafc;
-            padding: 7px 10px;
+            padding: 4px 7px;
             border-radius: 3px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .project-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .project-title {
-            font-size: 11.5px;
+            font-size: 10px;
             font-weight: 800;
             color: #0f172a;
         }
 
         .project-role {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 700;
             color: #2563eb;
         }
 
         .tech-line {
-            font-size: 9.5px;
+            font-size: 8.5px;
             color: #475569;
-            margin-bottom: 3px;
+            margin-bottom: 1.5px;
+            line-height: 1.3;
         }
 
         .demo-bar {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
             color: #15803d;
-            padding: 2.5px 6px;
-            border-radius: 3px;
-            font-size: 9.5px;
-            margin: 3px 0;
+            padding: 1.5px 5px;
+            border-radius: 2px;
+            font-size: 8px;
+            margin: 1.5px 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 7px;
         }
 
         /* Education & Certification Lists */
         .edu-entry {
-            margin-bottom: 4px;
-            font-size: 10.5px;
+            margin-bottom: 3px;
+            font-size: 9px;
+            line-height: 1.35;
         }
 
         .page-break {
+            height: 12px;
             page-break-before: always;
             break-before: page;
         }
 
         .page-num {
             position: absolute;
-            bottom: 10px;
-            right: 25px;
-            font-size: 9px;
+            bottom: 8px;
+            right: 20px;
+            font-size: 8px;
             color: #94a3b8;
         }
 
@@ -373,18 +378,67 @@
 
             .resume-page {
                 width: 100% !important;
-                min-height: 297mm !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
+                height: auto !important;
                 margin: 0 !important;
-                padding: 8mm 10mm !important;
+                padding: 0 !important;
                 box-shadow: none !important;
+                border: none !important;
+                page-break-after: avoid;
+                break-after: avoid;
             }
 
             .page-break {
+                display: block !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 0 !important;
+                border: none !important;
                 page-break-before: always !important;
                 break-before: page !important;
+                clear: both;
+            }
+
+            .section,
+            .job-entry,
+            .project-card,
+            .edu-entry {
+                page-break-inside: avoid;
+                break-inside: avoid;
             }
         }
     </style>
+    @if(!empty($forPdf))
+    <style>
+        body {
+            background: #ffffff !important;
+            font-size: 9px !important;
+            line-height: 1.32 !important;
+        }
+        .resume-page {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        .page-break {
+            display: block !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 0 !important;
+            border: none !important;
+            page-break-before: always !important;
+            clear: both;
+        }
+    </style>
+    @endif
 </head>
 <body>
 
@@ -519,13 +573,9 @@
             @endif
 
             @if($project->description)
-                <div class="summary-text" style="font-size: 10px;">{!! clean($project->description) !!}</div>
-            @endif
-            @if($project->problem)
-                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>
-            @endif
-            @if($project->solution)
-                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->description) !!}</div>
+            @elseif($project->solution)
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->solution) !!}</div>
             @endif
         </div>
         @endforeach
@@ -565,13 +615,9 @@
             @endif
 
             @if($project->description)
-                <div class="summary-text" style="font-size: 10px;">{!! clean($project->description) !!}</div>
-            @endif
-            @if($project->problem)
-                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>
-            @endif
-            @if($project->solution)
-                <div class="summary-text" style="font-size: 9.5px; margin-top: 2px;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->description) !!}</div>
+            @elseif($project->solution)
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->solution) !!}</div>
             @endif
         </div>
         @endforeach
@@ -598,7 +644,7 @@
         <div class="edu-entry">
             <strong>{{ $training->training_title }}</strong> — {{ $training->institute }} @if($training->year)({{ $training->year }})@endif
             @if($training->certificate_details)
-                <div class="summary-text" style="font-size: 9.5px; color: #475569; margin-left: 10px;">• {!! clean($training->certificate_details) !!}</div>
+                <div class="summary-text" style="font-size: 8.5px; color: #475569; margin-left: 8px;">• {!! clean($training->certificate_details) !!}</div>
             @endif
         </div>
         @endforeach
@@ -613,14 +659,16 @@
             <li><strong>Enterprise Solution Delivery:</strong> Successfully engineered 5+ commercial enterprise applications across ERP, POS, Healthcare, and EdTech domains with zero floating-point accounting errors.</li>
             <li><strong>Community Welfare & Voluntary Initiative:</strong> Organized community relief distribution for 525 flood-affected victims in 2019.</li>
         </ul>
+    </section>
+
     <!-- References -->
     @if($cv->references->isNotEmpty())
     <section class="section">
         <h2 class="section-header">Professional References</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
             @foreach($cv->references as $ref)
-            <div style="border-left: 3px solid #1e3a8a; background: #f8fafc; padding: 6px 10px; border-radius: 0 3px 3px 0; font-size: 10px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 11px;">{{ $ref->name }}</div>
+            <div style="border-left: 2.5px solid #1e3a8a; background: #f8fafc; padding: 4px 8px; border-radius: 0 3px 3px 0; font-size: 8.5px; line-height: 1.34;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 9.5px;">{{ $ref->name }}</div>
                 <div><strong>Designation:</strong> {{ $ref->designation }}</div>
                 <div><strong>Organization:</strong> {{ $ref->organization }}</div>
                 @if($ref->phone)<div><strong>Phone:</strong> {{ $ref->phone }}</div>@endif
@@ -633,21 +681,23 @@
     @endif
 
     <!-- Declaration -->
-    <section class="section" style="margin-top: 10px;">
+    <section class="section" style="margin-top: 6px;">
         <h2 class="section-header">Declaration</h2>
-        <div class="summary-text" style="font-size: 9.5px;">{!! clean($cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.') !!}</div>
+        <div class="summary-text" style="font-size: 8.5px; line-height: 1.3;">{!! clean($cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.') !!}</div>
 
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px;">
-            <div style="text-align: center; width: 140px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 10px;">
+            <div style="text-align: center; width: 130px;">
                 @if($signatureSrc)
-                    <img src="{{ $signatureSrc }}" style="max-height: 40px; margin-bottom: 2px;" alt="Signature">
+                    <img src="{{ $signatureSrc }}" style="max-height: 32px; margin-bottom: 2px;" alt="Signature">
+                @else
+                    <div style="height: 22px;"></div>
                 @endif
-                <div style="border-top: 1px solid #334155; padding-top: 2px; font-weight: 700; font-size: 10px;">{{ $cv->full_name }}</div>
-                <div style="font-size: 8.5px; color: #64748b;">Signature</div>
+                <div style="border-top: 1px solid #334155; padding-top: 2px; font-weight: 700; font-size: 9px;">{{ $cv->full_name }}</div>
+                <div style="font-size: 8px; color: #64748b;">Signature</div>
             </div>
-            <div style="text-align: center; width: 140px;">
-                <div style="margin-bottom: 18px; font-weight: 700; font-size: 10px;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
-                <div style="border-top: 1px solid #334155; padding-top: 2px; font-weight: 700; font-size: 10px;">Date</div>
+            <div style="text-align: center; width: 130px;">
+                <div style="margin-bottom: 10px; font-weight: 700; font-size: 9px;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
+                <div style="border-top: 1px solid #334155; padding-top: 2px; font-weight: 700; font-size: 9px;">Date</div>
             </div>
         </div>
     </section>

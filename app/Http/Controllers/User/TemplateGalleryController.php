@@ -88,9 +88,21 @@ class TemplateGalleryController extends Controller
      * GET /user/cv/templates/{slug}/preview
      * Preview shell page (toolbar + device frame). Does NOT change the user's selection.
      */
-    public function preview(string $type, string $slug)
+    public function preview(Request $request, string $slug = '', string $type = 'cv')
     {
-        $template = $this->registry->findActiveBySlug($type, $slug);
+        // Normalize parameter order: route parameter is {slug}, defaults provide 'type'
+        if (in_array($slug, ['cv', 'portfolio']) && ! in_array($type, ['cv', 'portfolio'])) {
+            [$type, $slug] = [$slug, $type];
+        }
+        $type = in_array($type, ['cv', 'portfolio']) ? $type : ($request->route('type') ?? 'cv');
+        if (empty($slug)) {
+            $slug = (string) $request->route('slug');
+        }
+
+        $template = $this->registry->findActiveBySlug($type, $slug)
+            ?? $this->registry->effectiveTemplate($type, null)
+            ?? $this->registry->activeQuery($type)->first();
+
         abort_unless($template, 404);
 
         $cv = $this->currentCv();
@@ -109,9 +121,25 @@ class TemplateGalleryController extends Controller
      * GET /user/cv/templates/{slug}/render
      * Renders the whitelisted Blade view with the centralized DUMMY dataset (inside the preview iframe).
      */
-    public function render(Request $request, string $type, string $slug)
+    public function render(Request $request, string $slug = '', string $type = 'cv')
     {
+        // Normalize parameter order: route parameter is {slug}, defaults provide 'type'
+        if (in_array($slug, ['cv', 'portfolio']) && ! in_array($type, ['cv', 'portfolio'])) {
+            [$type, $slug] = [$slug, $type];
+        }
+        $type = in_array($type, ['cv', 'portfolio']) ? $type : ($request->route('type') ?? 'cv');
+        if (empty($slug)) {
+            $slug = (string) $request->route('slug');
+        }
+
         $template = $this->registry->findActiveBySlug($type, $slug);
+
+        // Graceful fallback: If requested slug doesn't exist, fallback to first active or default template
+        if (! $template) {
+            $template = $this->registry->effectiveTemplate($type, null)
+                ?? $this->registry->activeQuery($type)->first();
+        }
+
         abort_unless($template, 404);
 
         $view = $this->registry->resolveView($type, $template, ['context' => 'gallery-preview']);

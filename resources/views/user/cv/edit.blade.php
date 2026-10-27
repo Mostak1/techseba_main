@@ -1777,7 +1777,7 @@
                     <!-- Scrollable Canvas Viewport -->
                     <div class="flowcv-canvas-scrollbox" style="padding: 0; background: #eaeff5; border-radius: 8px; border: 1px solid #e2e8f0; width: 100%; height: calc(100vh - 160px); display: flex; justify-content: center; overflow: auto;">
                         <iframe id="contentPreviewIframe"
-                                src="{{ profile_route('user.cv.templates.render', ['slug' => $selectedCvTemplate?->slug ?? 'modern']) }}?user_data=1"
+                                src="{{ profile_route('user.cv.templates.render', ['slug' => $selectedCvTemplate?->slug ?? $templates->first()?->slug ?? 'bdjobs']) }}?user_data=1"
                                 style="width: 100%; min-width: 630px; height: 100%; min-height: 900px; border: none; background: #eaeff5; transition: transform 0.2s;"
                                 title="Content Real-Time Selected Template Preview">
                         </iframe>
@@ -1895,7 +1895,7 @@
                     <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <span class="flowcv-live-badge"><span class="flowcv-pulse-dot"></span> Live Template Preview</span>
                         <span id="activePreviewTemplateBadge" style="font-size: 11.5px; font-weight: 700; color: #172c47; background: #e2e8f0; padding: 3px 10px; border-radius: 6px;">
-                            {{ $selectedCvTemplate?->name ?? 'Modern Professional' }}
+                            {{ $selectedCvTemplate?->name ?? $templates->first()?->name ?? 'BD Jobs Standard' }}
                         </span>
                         <div class="flowcv-preview-mode-switch" title="Toggle between your data and full sample dummy data">
                             <button type="button" class="flowcv-mode-btn js-mode-user active" onclick="switchPreviewDataMode('user')">
@@ -1937,7 +1937,7 @@
 
                 <div class="flowcv-canvas-scrollbox" style="padding: 0; background: #eaeff5; border-radius: 8px; border: 1px solid #e2e8f0; width: 100%; height: calc(100vh - 160px); display: flex; justify-content: center; overflow: auto;">
                     <iframe id="templatePreviewIframe"
-                            src="{{ profile_route('user.cv.templates.render', ['slug' => $selectedCvTemplate?->slug ?? 'modern']) }}?user_data=1"
+                            src="{{ profile_route('user.cv.templates.render', ['slug' => $selectedCvTemplate?->slug ?? $templates->first()?->slug ?? 'bdjobs']) }}?user_data=1"
                             style="width: 100%; min-width: 630px; height: 100%; min-height: 900px; border: none; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: transform 0.2s;"
                             title="Template Real-Time Preview">
                     </iframe>

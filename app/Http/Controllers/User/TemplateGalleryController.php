@@ -105,17 +105,28 @@ class TemplateGalleryController extends Controller
      * GET /user/cv/templates/{slug}/render
      * Renders the whitelisted Blade view with the centralized DUMMY dataset (inside the preview iframe).
      */
-    public function render(string $type, string $slug)
+    public function render(Request $request, string $type, string $slug)
     {
         $template = $this->registry->findActiveBySlug($type, $slug);
         abort_unless($template, 404);
 
         $view = $this->registry->resolveView($type, $template, ['context' => 'gallery-preview']);
-        $demoCv = $this->previewData->make();
+
+        $useUserData = $request->boolean('user_data', true);
+        $userCv = null;
+        if ($useUserData && Auth::guard('web')->check()) {
+            $userCv = Auth::guard('web')->user()->userCv()->with([
+                'employments', 'academics', 'trainings', 'professionalQualifications',
+                'skills', 'languages', 'references', 'projects', 'user', 'template', 'portfolioTemplate'
+            ])->first();
+        }
+
+        $cvToRender = $userCv ?: $this->previewData->make();
+        $username = $userCv ? ($userCv->user->username ?? 'user') : CvPreviewDataService::DEMO_USERNAME;
 
         $data = [
-            'cv' => $demoCv,
-            'username' => CvPreviewDataService::DEMO_USERNAME,
+            'cv' => $cvToRender,
+            'username' => $username,
             'isTemplatePreview' => true,
             'showActions' => false,
             'printEnabled' => false,

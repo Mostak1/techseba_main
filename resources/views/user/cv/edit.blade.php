@@ -972,30 +972,122 @@
         display: block;
     }
 
-    /* Customize Tab Styling */
-    .flowcv-customize-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+    /* Choose Template Split-View Styling */
+    .flowcv-template-list-card {
         background: #ffffff;
-        padding: 24px;
-        border-radius: var(--fcv-radius);
-        border: 1px solid var(--fcv-border);
-    }
-
-    .flowcv-template-card {
         border: 2px solid var(--fcv-border);
-        border-radius: 10px;
+        border-radius: 12px;
         padding: 16px;
+        display: flex;
+        gap: 16px;
+        align-items: center;
         cursor: pointer;
-        transition: all 0.2s;
-        text-align: center;
+        transition: all 0.2s ease;
+        position: relative;
     }
 
-    .flowcv-template-card.active {
+    .flowcv-template-list-card:hover {
+        border-color: #94a3b8;
+        box-shadow: var(--fcv-shadow-md);
+        transform: translateY(-1px);
+    }
+
+    .flowcv-template-list-card.active {
         border-color: #172c47;
         background: #f8fafc;
-        box-shadow: var(--fcv-shadow-md);
+        box-shadow: 0 4px 14px rgba(23, 44, 71, 0.12);
+    }
+
+    .flowcv-template-badge-selected {
+        display: none;
+        position: absolute;
+        top: 12px;
+        right: 14px;
+        background: #172c47;
+        color: #ffffff !important;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 999px;
+    }
+
+    .flowcv-template-list-card.active .flowcv-template-badge-selected {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .flowcv-template-thumb-box {
+        width: 84px;
+        height: 110px;
+        border-radius: 8px;
+        background: #e2e8f0;
+        flex-shrink: 0;
+        border: 1px solid #cbd5e1;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .flowcv-template-thumb-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .flowcv-template-card-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .flowcv-template-card-title {
+        font-size: 15.5px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+        margin: 0 0 4px !important;
+    }
+
+    .flowcv-template-card-desc {
+        font-size: 12px;
+        color: #64748b;
+        margin: 0 0 10px;
+        line-height: 1.4;
+    }
+
+    .flowcv-template-card-tags {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .flowcv-template-tag {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 5px;
+        background: #e2e8f0;
+        color: #334155 !important;
+    }
+
+    .flowcv-category-pill {
+        padding: 6px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--fcv-border);
+        background: #ffffff;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.15s;
+    }
+
+    .flowcv-category-pill:hover,
+    .flowcv-category-pill.active {
+        background: #172c47;
+        color: #ffffff;
+        border-color: #172c47;
     }
 
     /* AI Tools Tab Styling */
@@ -1090,8 +1182,8 @@
                 <button type="button" class="flowcv-nav-tab active" data-nav-target="content">
                     <i class="far fa-file-alt"></i> Content
                 </button>
-                <button type="button" class="flowcv-nav-tab" data-nav-target="customize">
-                    <i class="fas fa-sliders-h"></i> Customize
+                <button type="button" class="flowcv-nav-tab" data-nav-target="templates">
+                    <i class="fas fa-th-large"></i> Choose Template
                 </button>
                 <button type="button" class="flowcv-nav-tab" data-nav-target="ai-tools">
                     <i class="fas fa-magic"></i> AI Tools
@@ -1770,27 +1862,100 @@
         </form>
     </div>
 
-    <!-- TAB 3: CUSTOMIZE PANEL -->
-    <div class="flowcv-tab-panel" id="panel-customize" style="padding: 30px; max-width: 1000px; margin: 0 auto;">
-        <div style="background: #fff; padding: 28px; border-radius: 12px; border: 1px solid #e2e8f0;">
-            <h3 style="margin: 0 0 10px; font-size: 20px; color: #0f172a;">Resume Template & Theme Customizer</h3>
-            <p style="color: #64748b; font-size: 13.5px; margin-bottom: 24px;">Select the layout style and color accents that fit your industry standards.</p>
-
-            <div class="flowcv-customize-grid">
-                <div class="flowcv-template-card active" onclick="selectTemplate(1, this)">
-                    <div style="height: 140px; background: #172c47; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 28px;">
-                        <i class="fas fa-columns"></i>
+    <!-- TAB 3: CHOOSE TEMPLATE SPLIT-VIEW PANEL -->
+    <div class="flowcv-tab-panel" id="panel-templates">
+        <div class="flowcv-workspace">
+            <!-- ================= LEFT COLUMN: TEMPLATE GALLERY & PAGINATION ================= -->
+            <div class="flowcv-editor-col">
+                <div class="flowcv-identity-card" style="display: block; padding: 20px;">
+                    <div style="margin-bottom: 16px;">
+                        <h3 style="margin: 0 0 4px; font-size: 19px; font-weight: 800; color: #0f172a !important;">Choose CV Template</h3>
+                        <p style="margin: 0; font-size: 13px; color: #64748b;">Click on any template below to immediately preview your real CV data on the right.</p>
                     </div>
-                    <strong style="font-size: 15px; color: #0f172a;">FlowCV Modern Two-Tone (Active)</strong>
-                    <p style="font-size: 12px; color: #64748b; margin: 4px 0 0;">Left navy sidebar with right content column. Maximum ATS and executive readability.</p>
+
+                    <!-- Search & Filter Controls -->
+                    <div style="display: flex; gap: 10px; margin-bottom: 14px;">
+                        <div style="position: relative; flex: 1;">
+                            <i class="fas fa-search" style="position: absolute; left: 12px; top: 12px; color: #94a3b8; font-size: 13px;"></i>
+                            <input type="text" id="templateSearchInput" class="flowcv-input" placeholder="Search templates by name..." style="padding-left: 34px;">
+                        </div>
+                    </div>
+
+                    <!-- Category Pills -->
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="templateCategoryPills">
+                        <button type="button" class="flowcv-category-pill active" data-cat="all">All</button>
+                        @foreach($cvTemplateCategories as $cat)
+                            <button type="button" class="flowcv-category-pill" data-cat="{{ $cat }}">{{ $cat }}</button>
+                        @endforeach
+                    </div>
                 </div>
 
-                <div class="flowcv-template-card" onclick="selectTemplate(2, this)">
-                    <div style="height: 140px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; color: #172c47; font-size: 28px;">
-                        <i class="fas fa-file-alt"></i>
+                <!-- Template Cards List -->
+                <div id="templateGalleryCards" style="display: flex; flex-direction: column; gap: 14px;">
+                    @foreach($templates as $tpl)
+                        @php
+                            $isSelected = ($selectedCvTemplate?->id ?? 1) == $tpl->id;
+                            $thumb = $tpl->thumbnail_url ?: asset('uploads/website-images/templates/' . $tpl->slug . '.webp');
+                        @endphp
+                        <div class="flowcv-template-list-card {{ $isSelected ? 'active' : '' }}"
+                             onclick="selectTemplateFromGallery({{ $tpl->id }}, '{{ $tpl->slug }}', '{{ addslashes($tpl->name) }}', this)">
+                            <div class="flowcv-template-thumb-box">
+                                <img src="{{ $thumb }}" alt="{{ $tpl->name }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <i class="fas fa-file-alt" style="display: none; font-size: 28px; color: #64748b;"></i>
+                            </div>
+
+                            <div class="flowcv-template-card-info">
+                                <h4 class="flowcv-template-card-title">{{ $tpl->name }}</h4>
+                                <p class="flowcv-template-card-desc">{{ $tpl->description ?: 'Clean professional resume layout designed for maximum interview callbacks.' }}</p>
+                                <div class="flowcv-template-card-tags">
+                                    @if($tpl->category)<span class="flowcv-template-tag">{{ $tpl->category }}</span>@endif
+                                    @if($tpl->style)<span class="flowcv-template-tag" style="background: #f1f5f9; color: #64748b;">{{ $tpl->style }}</span>@endif
+                                </div>
+                            </div>
+
+                            <span class="flowcv-template-badge-selected"><i class="fas fa-check"></i> Selected</span>
+                        </div>
+                    @endforeach
+                </div>
+
+                <!-- Pagination Bar -->
+                <div id="templatePaginationControls" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; background: #ffffff; border-radius: 10px; border: 1px solid var(--fcv-border); margin-top: 8px;">
+                    <button type="button" id="btnPrevTemplatesPage" class="flowcv-zoom-btn" style="padding: 7px 16px; font-weight: 700;" disabled onclick="changeTemplatePage(-1)">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="templatePageStatus" style="font-size: 13px; font-weight: 700; color: #334155;">Page 1 of 1</span>
+                    <button type="button" id="btnNextTemplatesPage" class="flowcv-zoom-btn" style="padding: 7px 16px; font-weight: 700;" disabled onclick="changeTemplatePage(1)">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ================= RIGHT COLUMN: LIVE TEMPLATE PREVIEW ================= -->
+            <div class="flowcv-preview-col">
+                <div class="flowcv-preview-toolbar">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="flowcv-live-badge"><span class="flowcv-pulse-dot"></span> Live Template Preview</span>
+                        <span id="activePreviewTemplateBadge" style="font-size: 11.5px; font-weight: 700; color: #172c47; background: #e2e8f0; padding: 3px 10px; border-radius: 6px;">
+                            {{ $selectedCvTemplate?->name ?? 'Modern Professional' }}
+                        </span>
                     </div>
-                    <strong style="font-size: 15px; color: #0f172a;">BD Jobs Standard</strong>
-                    <p style="font-size: 12px; color: #64748b; margin: 4px 0 0;">Traditional single-column corporate layout preferred by enterprise recruiters.</p>
+
+                    <div class="flowcv-zoom-controls">
+                        <button type="button" class="flowcv-zoom-btn" onclick="zoomTemplateIframe(0.9)"><i class="fas fa-minus"></i></button>
+                        <span style="font-size: 11px; font-weight: 700; color: #475569;" id="templateZoomLabel">100%</span>
+                        <button type="button" class="flowcv-zoom-btn" onclick="zoomTemplateIframe(1.1)"><i class="fas fa-plus"></i></button>
+                        <button type="button" class="flowcv-btn-save" style="padding: 6px 14px; font-size: 12px;" onclick="document.querySelector('[data-nav-target=content]').click()">
+                            <i class="fas fa-check"></i> Use & Edit Content
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flowcv-canvas-scrollbox" style="padding: 0; background: #eaeff5; border-radius: 8px; border: 1px solid #e2e8f0; width: 100%; height: calc(100vh - 160px); display: flex; justify-content: center; overflow: auto;">
+                    <iframe id="templatePreviewIframe"
+                            src="{{ profile_route('user.cv.templates.render', ['slug' => $selectedCvTemplate?->slug ?? 'modern']) }}?user_data=1"
+                            style="width: 100%; min-width: 630px; height: 100%; min-height: 900px; border: none; background: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 4px; transition: transform 0.2s;"
+                            title="Template Real-Time Preview">
+                    </iframe>
                 </div>
             </div>
         </div>
@@ -2327,12 +2492,176 @@
         });
     }
 
-    // Template selection
-    function selectTemplate(id, card) {
-        document.querySelectorAll('.flowcv-template-card').forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
-        document.getElementById('input_template_id').value = id;
-        triggerAutoSave();
+    // ==========================================
+    // 11. CHOOSE TEMPLATE GALLERY & LIVE PREVIEW
+    // ==========================================
+    const renderUrlPattern = "{{ profile_route('user.cv.templates.render', ['slug' => ':slug']) }}";
+    const selectTemplateUrl = "{{ profile_route('user.cv.templates.select') }}";
+    const indexTemplatesUrl = "{{ profile_route('user.cv.templates.index') }}";
+
+    let templateCurrentPage = 1;
+    let templateCurrentCat = 'all';
+    let templateSearchTerm = '';
+    let templateTotalPages = 1;
+
+    function selectTemplateFromGallery(id, slug, name, cardEl) {
+        // 1. Update active card highlight
+        document.querySelectorAll('.flowcv-template-list-card').forEach(c => c.classList.remove('active'));
+        if (cardEl) cardEl.classList.add('active');
+
+        // 2. Update hidden form input & navbar selector
+        const inputTpl = document.getElementById('input_template_id');
+        if (inputTpl) inputTpl.value = id;
+
+        // 3. Update right side preview badge & iframe source
+        const badge = document.getElementById('activePreviewTemplateBadge');
+        if (badge) badge.innerText = name;
+
+        const iframe = document.getElementById('templatePreviewIframe');
+        if (iframe) {
+            iframe.src = renderUrlPattern.replace(':slug', slug) + '?user_data=1';
+        }
+
+        // 4. Save template selection immediately via AJAX
+        fetch(selectTemplateUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ template_id: id })
+        })
+        .then(res => res.json())
+        .then(data => {
+            const statusEl = document.getElementById('saveStatusIndicator');
+            if (statusEl) {
+                statusEl.className = 'flowcv-save-status saved';
+                statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Template Applied';
+            }
+        })
+        .catch(err => console.error('Template Select Error:', err));
+    }
+
+    // Zoom Template Iframe
+    let templateIframeScale = 1.0;
+    function zoomTemplateIframe(factor) {
+        templateIframeScale = Math.min(Math.max(templateIframeScale * factor, 0.6), 1.6);
+        const iframe = document.getElementById('templatePreviewIframe');
+        const label = document.getElementById('templateZoomLabel');
+        if (iframe) {
+            iframe.style.transform = `scale(${templateIframeScale})`;
+            iframe.style.transformOrigin = 'top center';
+        }
+        if (label) {
+            label.innerText = Math.round(templateIframeScale * 100) + '%';
+        }
+    }
+
+    // AJAX Template Gallery Loader
+    function loadTemplatesGallery(page = 1, category = 'all', search = '') {
+        const container = document.getElementById('templateGalleryCards');
+        if (!container) return;
+
+        let url = `${indexTemplatesUrl}?type=cv&page=${page}`;
+        if (category && category !== 'all') url += `&category=${encodeURIComponent(category)}`;
+        if (search) url += `&search=${encodeURIComponent(search)}`;
+
+        container.style.opacity = '0.5';
+
+        fetch(url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(res => {
+            container.style.opacity = '1';
+            if (!res.success) return;
+
+            const selectedId = parseInt(document.getElementById('input_template_id')?.value || 1);
+            templateCurrentPage = res.pagination.current_page;
+            templateTotalPages = res.pagination.last_page || 1;
+
+            // Render cards
+            let html = '';
+            if (res.data.length === 0) {
+                html = '<div style="padding: 30px; text-align: center; color: #64748b; background: #fff; border-radius: 10px; border: 1px solid #e2e8f0;">No templates found matching your search.</div>';
+            } else {
+                res.data.forEach(t => {
+                    const isSel = parseInt(t.id) === selectedId;
+                    const thumb = t.thumbnail || `/uploads/website-images/templates/${t.slug}.webp`;
+                    html += `
+                        <div class="flowcv-template-list-card ${isSel ? 'active' : ''}"
+                             onclick="selectTemplateFromGallery(${t.id}, '${t.slug}', '${escapeHtml(t.name)}', this)">
+                            <div class="flowcv-template-thumb-box">
+                                <img src="${thumb}" alt="${escapeHtml(t.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                <i class="fas fa-file-alt" style="display: none; font-size: 28px; color: #64748b;"></i>
+                            </div>
+
+                            <div class="flowcv-template-card-info">
+                                <h4 class="flowcv-template-card-title">${escapeHtml(t.name)}</h4>
+                                <p class="flowcv-template-card-desc">${escapeHtml(t.description || 'Clean professional resume layout designed for maximum interview callbacks.')}</p>
+                                <div class="flowcv-template-card-tags">
+                                    ${t.category ? `<span class="flowcv-template-tag">${escapeHtml(t.category)}</span>` : ''}
+                                    ${t.style ? `<span class="flowcv-template-tag" style="background: #f1f5f9; color: #64748b;">${escapeHtml(t.style)}</span>` : ''}
+                                </div>
+                            </div>
+
+                            <span class="flowcv-template-badge-selected"><i class="fas fa-check"></i> Selected</span>
+                        </div>
+                    `;
+                });
+            }
+            container.innerHTML = html;
+
+            // Update Pagination
+            const pageStatus = document.getElementById('templatePageStatus');
+            if (pageStatus) {
+                pageStatus.innerText = `Page ${templateCurrentPage} of ${templateTotalPages}`;
+            }
+
+            const btnPrev = document.getElementById('btnPrevTemplatesPage');
+            const btnNext = document.getElementById('btnNextTemplatesPage');
+            if (btnPrev) btnPrev.disabled = (templateCurrentPage <= 1);
+            if (btnNext) btnNext.disabled = (templateCurrentPage >= templateTotalPages);
+        })
+        .catch(err => {
+            container.style.opacity = '1';
+            console.error('Gallery Load Error:', err);
+        });
+    }
+
+    function changeTemplatePage(delta) {
+        const targetPage = templateCurrentPage + delta;
+        if (targetPage >= 1 && targetPage <= templateTotalPages) {
+            loadTemplatesGallery(targetPage, templateCurrentCat, templateSearchTerm);
+        }
+    }
+
+    // Category pills click handler
+    document.querySelectorAll('#templateCategoryPills .flowcv-category-pill').forEach(pill => {
+        pill.addEventListener('click', function() {
+            document.querySelectorAll('#templateCategoryPills .flowcv-category-pill').forEach(p => p.classList.remove('active'));
+            this.classList.add('active');
+            templateCurrentCat = this.getAttribute('data-cat');
+            loadTemplatesGallery(1, templateCurrentCat, templateSearchTerm);
+        });
+    });
+
+    // Search input handler (debounced 350ms)
+    let searchDebounce = null;
+    const searchInput = document.getElementById('templateSearchInput');
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            clearTimeout(searchDebounce);
+            templateSearchTerm = this.value.trim();
+            searchDebounce = setTimeout(() => {
+                loadTemplatesGallery(1, templateCurrentCat, templateSearchTerm);
+            }, 350);
+        });
     }
 </script>
 @endpush

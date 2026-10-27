@@ -228,6 +228,7 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
             // Template gallery + live preview engine (type is fixed by route defaults, never by input)
             Route::get('/cv/templates', [TemplateGalleryController::class, 'index'])->defaults('type', 'cv')->name('cv.templates.index');
             Route::post('/cv/templates/select', [TemplateGalleryController::class, 'select'])->defaults('type', 'cv')->name('cv.templates.select');
+            Route::post('/cv/templates/request-access', [TemplateGalleryController::class, 'requestAccess'])->defaults('type', 'cv')->name('cv.templates.request-access');
             Route::get('/cv/templates/{slug}/preview', [TemplateGalleryController::class, 'preview'])->defaults('type', 'cv')->where('slug', '[A-Za-z0-9_-]+')->name('cv.templates.preview');
             Route::get('/cv/templates/{slug}/render', [TemplateGalleryController::class, 'render'])->defaults('type', 'cv')->where('slug', '[A-Za-z0-9_-]+')->name('cv.templates.render');
             Route::get('/portfolio/templates', [TemplateGalleryController::class, 'index'])->defaults('type', 'portfolio')->name('cv.portfolio-templates.index');
@@ -327,6 +328,13 @@ Route::group(['as' => 'admin.', 'prefix' => 'admin'], function () {
         });
 
         Route::get('cv-templates/{cv_template}/preview', [CvTemplateController::class, 'preview'])->name('cv-templates.preview');
+        Route::post('cv-templates/sync-json', [CvTemplateController::class, 'syncJson'])->name('cv-templates.sync-json');
+        Route::get('cv-templates/permissions', [CvTemplateController::class, 'permissions'])->name('cv-templates.permissions');
+        Route::post('cv-templates/permissions/grant', [CvTemplateController::class, 'grantPermission'])->name('cv-templates.permissions.grant');
+        Route::delete('cv-templates/permissions/{id}', [CvTemplateController::class, 'revokePermission'])->name('cv-templates.permissions.revoke');
+        Route::post('cv-templates/permissions/{id}/approve', [CvTemplateController::class, 'approvePermission'])->name('cv-templates.permissions.approve');
+        Route::post('cv-templates/permissions/{id}/reject', [CvTemplateController::class, 'rejectPermission'])->name('cv-templates.permissions.reject');
+        Route::post('cv-templates/{cv_template}/toggle-premium', [CvTemplateController::class, 'togglePremium'])->name('cv-templates.toggle-premium');
         Route::resource('cv-templates', CvTemplateController::class)->except(['show']);
 
         Route::controller(OrderController::class)->group(function () {

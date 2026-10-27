@@ -55,6 +55,8 @@ class TemplateGalleryController extends Controller
             ])->render();
         }
 
+        $user = Auth::guard('web')->user();
+
         return response()->json([
             'success' => true,
             'data' => collect($paginator->items())->map(fn ($t) => [
@@ -65,6 +67,8 @@ class TemplateGalleryController extends Controller
                 'category' => $t->category,
                 'style' => $t->style,
                 'is_premium' => (bool) $t->is_premium,
+                'has_access' => $user ? $user->hasAccessToCvTemplate($t) : ! $t->is_premium,
+                'access_status' => $user ? optional($user->cvTemplatePermissions()->where('cv_template_id', $t->id)->first())->status : null,
                 'thumbnail' => $t->thumbnail_url,
                 'preview_url' => $this->previewUrl($type, $t->slug),
                 'selected' => (int) $t->id === (int) $selectedId,
@@ -172,6 +176,15 @@ class TemplateGalleryController extends Controller
             ], 422);
         }
 
+        $user = Auth::guard('web')->user();
+        if ($type === 'cv' && ! $user->hasAccessToCvTemplate($template)) {
+            return response()->json([
+                'success' => false,
+                'is_locked' => true,
+                'message' => 'This is a premium template. You must have permission to use it.',
+            ], 403);
+        }
+
         $cv = $this->currentCv(createIfMissing: true);
         $cv->{TemplateRegistry::FOREIGN_KEYS[$type]} = $template->id;
         $cv->save();
@@ -184,6 +197,33 @@ class TemplateGalleryController extends Controller
                 'name' => $template->name,
                 'slug' => $template->slug,
             ],
+        ]);
+    }
+
+    /**
+     * POST /user/cv/templates/request-access { template_id }
+     */
+    public function requestAccess(Request $request, string $type): JsonResponse
+    {
+        $validated = $request->validate([
+            'template_id' => ['required', 'integer', 'exists:cv_templates,id'],
+        ]);
+
+        $user = Auth::guard('web')->user();
+        \App\Models\UserCvTemplatePermission::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'cv_template_id' => $validated['template_id'],
+            ],
+            [
+                'status' => 'pending',
+                'notes' => 'Requested by user ' . $user->name . ' (' . $user->email . ')',
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Your access request has been sent to admin for approval.',
         ]);
     }
 

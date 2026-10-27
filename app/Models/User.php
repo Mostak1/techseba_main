@@ -93,5 +93,32 @@ class User extends Authenticatable
     {
         return $this->hasOne(AccountDeleteRequest::class)->where('status', 'pending');
     }
+
+    public function cvTemplatePermissions()
+    {
+        return $this->hasMany(UserCvTemplatePermission::class);
+    }
+
+    public function hasAccessToCvTemplate($template): bool
+    {
+        $templateModel = $template instanceof CvTemplate 
+            ? $template 
+            : CvTemplate::find($template);
+
+        if (! $templateModel) {
+            return false;
+        }
+
+        // Free templates are accessible to all users
+        if (! $templateModel->is_premium) {
+            return true;
+        }
+
+        // For paid / premium templates, check active permission
+        return $this->cvTemplatePermissions()
+            ->where('cv_template_id', $templateModel->id)
+            ->where('status', 'active')
+            ->exists();
+    }
 }
 

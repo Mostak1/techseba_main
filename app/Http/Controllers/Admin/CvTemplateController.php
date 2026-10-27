@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CvTemplate;
+use App\Models\User;
+use App\Models\UserCvTemplatePermission;
+use App\Services\CvTemplateSyncService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -13,9 +16,10 @@ class CvTemplateController extends Controller
 {
     public function index()
     {
-        $templates = CvTemplate::withCount('cvs')->latest()->paginate(20);
+        $templates = CvTemplate::withCount('cvs')->orderBy('id')->paginate(20);
+        $pendingRequestsCount = UserCvTemplatePermission::where('status', 'pending')->count();
 
-        return view('admin.cv-templates.index', compact('templates'));
+        return view('admin.cv-templates.index', compact('templates', 'pendingRequestsCount'));
     }
 
     public function create()
@@ -220,6 +224,98 @@ class CvTemplateController extends Controller
             ->with(['message' => 'CV template deleted successfully', 'alert-type' => 'success']);
     }
 
+    public function syncJson(CvTemplateSyncService $syncService)
+    {
+        $result = $syncService->syncFromJson();
+
+        return redirect()
+            ->back()
+            ->with([
+                'message' => $result['message'],
+                'alert-type' => $result['success'] ? 'success' : 'error',
+            ]);
+    }
+
+    public function permissions(Request $request)
+    {
+        $users = User::orderBy('name')->get(['id', 'name', 'email']);
+        $templates = CvTemplate::orderBy('name')->get(['id', 'name', 'is_premium']);
+
+        $query = UserCvTemplatePermission::with(['user', 'template'])->latest();
+
+        if ($status = $request->query('status')) {
+            $query->where('status', $status);
+        }
+
+        $permissions = $query->paginate(20);
+        $pendingCount = UserCvTemplatePermission::where('status', 'pending')->count();
+
+        return view('admin.cv-templates.permissions', compact('permissions', 'users', 'templates', 'pendingCount'));
+    }
+
+    public function grantPermission(Request $request)
+    {
+        $validated = $request->validate([
+            'user_id' => ['required', 'exists:users,id'],
+            'cv_template_id' => ['required', 'exists:cv_templates,id'],
+            'notes' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        UserCvTemplatePermission::updateOrCreate(
+            [
+                'user_id' => $validated['user_id'],
+                'cv_template_id' => $validated['cv_template_id'],
+            ],
+            [
+                'status' => 'active',
+                'notes' => $validated['notes'] ?? 'Granted manually by Admin',
+            ]
+        );
+
+        return redirect()
+            ->back()
+            ->with(['message' => 'Template permission granted successfully.', 'alert-type' => 'success']);
+    }
+
+    public function approvePermission($id)
+    {
+        $permission = UserCvTemplatePermission::findOrFail($id);
+        $permission->update(['status' => 'active']);
+
+        return redirect()
+            ->back()
+            ->with(['message' => 'Permission request approved successfully.', 'alert-type' => 'success']);
+    }
+
+    public function rejectPermission($id)
+    {
+        $permission = UserCvTemplatePermission::findOrFail($id);
+        $permission->update(['status' => 'rejected']);
+
+        return redirect()
+            ->back()
+            ->with(['message' => 'Permission request rejected.', 'alert-type' => 'info']);
+    }
+
+    public function revokePermission($id)
+    {
+        $permission = UserCvTemplatePermission::findOrFail($id);
+        $permission->delete();
+
+        return redirect()
+            ->back()
+            ->with(['message' => 'Permission revoked successfully.', 'alert-type' => 'success']);
+    }
+
+    public function togglePremium(CvTemplate $cvTemplate)
+    {
+        $cvTemplate->update(['is_premium' => ! $cvTemplate->is_premium]);
+
+        return redirect()
+            ->back()
+            ->with(['message' => 'Template pricing status updated.', 'alert-type' => 'success']);
+    }
+
     private function validated(Request $request, ?CvTemplate $template = null): array
     {
         $request->merge([
@@ -238,6 +334,7 @@ class CvTemplateController extends Controller
             'view_path' => ['required', 'string', 'max:255'],
             'preview_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'is_active' => ['nullable', 'boolean'],
+            'is_premium' => ['nullable', 'boolean'],
         ]);
     }
 

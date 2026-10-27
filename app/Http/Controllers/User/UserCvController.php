@@ -65,9 +65,9 @@ class UserCvController extends Controller
     public function edit(TemplateRegistry $registry)
     {
         $user = Auth::guard('web')->user();
-        // Gallery cards are loaded via AJAX (TemplateGalleryController); only lightweight data here.
-        $templates = $registry->activeQuery('cv')->get(['id', 'name', 'slug']);
-        $portfolioTemplates = $registry->activeQuery('portfolio')->get(['id', 'name', 'slug']);
+        // Gallery cards have full metadata (premium, thumbnail, tags)
+        $templates = $registry->activeQuery('cv')->get();
+        $portfolioTemplates = $registry->activeQuery('portfolio')->get();
         $cv = $user->userCv()->with($this->relations)->first();
 
         if (! $cv) {

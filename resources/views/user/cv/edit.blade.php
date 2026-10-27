@@ -1018,6 +1018,7 @@
     }
 
     .flowcv-template-thumb-box {
+        position: relative;
         width: 84px;
         height: 110px;
         border-radius: 8px;
@@ -1896,12 +1897,43 @@
                         @php
                             $isSelected = ($selectedCvTemplate?->id ?? 1) == $tpl->id;
                             $thumb = $tpl->thumbnail_url ?: asset('uploads/website-images/templates/' . $tpl->slug . '.webp');
+                            $hasAccess = $user->hasAccessToCvTemplate($tpl);
+                            $userPerm = $user->cvTemplatePermissions()->where('cv_template_id', $tpl->id)->first();
+                            $status = $userPerm?->status;
                         @endphp
                         <div class="flowcv-template-list-card {{ $isSelected ? 'active' : '' }}"
-                             onclick="selectTemplateFromGallery({{ $tpl->id }}, '{{ $tpl->slug }}', '{{ addslashes($tpl->name) }}', this)">
+                             data-id="{{ $tpl->id }}"
+                             data-slug="{{ $tpl->slug }}"
+                             data-name="{{ $tpl->name }}"
+                             data-premium="{{ $tpl->is_premium ? 1 : 0 }}"
+                             data-has-access="{{ $hasAccess ? 1 : 0 }}"
+                             data-status="{{ $status ?? '' }}"
+                             onclick="selectTemplateFromGallery({{ $tpl->id }}, '{{ $tpl->slug }}', '{{ addslashes($tpl->name) }}', {{ $tpl->is_premium ? 1 : 0 }}, {{ $hasAccess ? 1 : 0 }}, '{{ $status ?? '' }}', this)">
                             <div class="flowcv-template-thumb-box">
                                 <img src="{{ $thumb }}" alt="{{ $tpl->name }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-file-alt" style="display: none; font-size: 28px; color: #64748b;"></i>
+
+                                @if($tpl->is_premium)
+                                    <span style="position: absolute; top: 6px; left: 6px; background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.06);">
+                                        <i class="fas fa-crown"></i> Paid
+                                    </span>
+                                @else
+                                    <span style="position: absolute; top: 6px; left: 6px; background: #ecfdf5; color: #047857; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #a7f3d0; display: flex; align-items: center; gap: 3px;">
+                                        <i class="fas fa-check-circle"></i> Free
+                                    </span>
+                                @endif
+
+                                @if($tpl->is_premium && !$hasAccess)
+                                    @if($status === 'pending')
+                                        <span style="position: absolute; bottom: 6px; right: 6px; background: #e0e7ff; color: #4338ca; font-size: 9.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #c7d2fe; display: flex; align-items: center; gap: 3px;">
+                                            <i class="fas fa-clock"></i> Pending
+                                        </span>
+                                    @else
+                                        <span style="position: absolute; bottom: 6px; right: 6px; background: #fee2e2; color: #b91c1c; font-size: 9.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #fecaca; display: flex; align-items: center; gap: 3px;">
+                                            <i class="fas fa-lock"></i> Locked
+                                        </span>
+                                    @endif
+                                @endif
                             </div>
 
                             <div class="flowcv-template-card-info">
@@ -1910,6 +1942,9 @@
                                 <div class="flowcv-template-card-tags">
                                     @if($tpl->category)<span class="flowcv-template-tag">{{ $tpl->category }}</span>@endif
                                     @if($tpl->style)<span class="flowcv-template-tag" style="background: #f1f5f9; color: #64748b;">{{ $tpl->style }}</span>@endif
+                                    @if($tpl->is_premium && $hasAccess)
+                                        <span class="flowcv-template-tag" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;"><i class="fas fa-unlock"></i> Unlocked</span>
+                                    @endif
                                 </div>
                             </div>
 
@@ -1944,9 +1979,27 @@
                         <button type="button" class="flowcv-zoom-btn" onclick="zoomTemplateIframe(0.9)"><i class="fas fa-minus"></i></button>
                         <span style="font-size: 11px; font-weight: 700; color: #475569;" id="templateZoomLabel">100%</span>
                         <button type="button" class="flowcv-zoom-btn" onclick="zoomTemplateIframe(1.1)"><i class="fas fa-plus"></i></button>
-                        <button type="button" class="flowcv-btn-save" style="padding: 6px 14px; font-size: 12px;" onclick="document.querySelector('[data-nav-target=content]').click()">
-                            <i class="fas fa-check"></i> Use & Edit Content
-                        </button>
+                        <div id="templateActionBtnContainer" style="display: inline-flex; align-items: center;">
+                            @php
+                                $selectedTplHasAccess = $selectedCvTemplate ? $user->hasAccessToCvTemplate($selectedCvTemplate) : true;
+                                $selectedTplPerm = $selectedCvTemplate ? $user->cvTemplatePermissions()->where('cv_template_id', $selectedCvTemplate->id)->first() : null;
+                            @endphp
+                            @if($selectedCvTemplate && $selectedCvTemplate->is_premium && !$selectedTplHasAccess)
+                                @if($selectedTplPerm?->status === 'pending')
+                                    <button type="button" class="flowcv-zoom-btn" style="background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; padding: 6px 14px; font-weight: 700; cursor: not-allowed;" disabled>
+                                        <i class="fas fa-clock"></i> Access Request Pending
+                                    </button>
+                                @else
+                                    <button type="button" class="flowcv-btn-save" style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 6px 14px; font-size: 12px; font-weight: 700;" onclick="requestTemplateAccess({{ $selectedCvTemplate->id }}, this)">
+                                        <i class="fas fa-crown"></i> Request Access (Paid)
+                                    </button>
+                                @endif
+                            @else
+                                <button type="button" class="flowcv-btn-save" style="padding: 6px 14px; font-size: 12px;" onclick="document.querySelector('[data-nav-target=content]').click()">
+                                    <i class="fas fa-check"></i> Use & Edit Content
+                                </button>
+                            @endif
+                        </div>
                     </div>
                 </div>
 
@@ -2498,31 +2551,71 @@
     const renderUrlPattern = "{{ profile_route('user.cv.templates.render', ['slug' => ':slug']) }}";
     const selectTemplateUrl = "{{ profile_route('user.cv.templates.select') }}";
     const indexTemplatesUrl = "{{ profile_route('user.cv.templates.index') }}";
+    const requestAccessUrl = "{{ profile_route('user.cv.templates.request-access') }}";
 
     let templateCurrentPage = 1;
     let templateCurrentCat = 'all';
     let templateSearchTerm = '';
     let templateTotalPages = 1;
 
-    function selectTemplateFromGallery(id, slug, name, cardEl) {
-        // 1. Update active card highlight
-        document.querySelectorAll('.flowcv-template-list-card').forEach(c => c.classList.remove('active'));
-        if (cardEl) cardEl.classList.add('active');
-
-        // 2. Update hidden form input & navbar selector
-        const inputTpl = document.getElementById('input_template_id');
-        if (inputTpl) inputTpl.value = id;
-
-        // 3. Update right side preview badge & iframe source
+    function selectTemplateFromGallery(id, slug, name, isPremium = 0, hasAccess = 1, accessStatus = '', cardEl = null) {
+        // 1. Update preview badge & iframe source (users can preview any template!)
         const badge = document.getElementById('activePreviewTemplateBadge');
-        if (badge) badge.innerText = name;
+        if (badge) {
+            badge.innerText = name + (isPremium ? (hasAccess ? ' (Paid - Unlocked)' : ' (Paid - Locked)') : ' (Free)');
+        }
 
         const iframe = document.getElementById('templatePreviewIframe');
         if (iframe) {
             iframe.src = renderUrlPattern.replace(':slug', slug) + '?user_data=1';
         }
 
-        // 4. Save template selection immediately via AJAX
+        // 2. Update action button container based on access
+        const actionBtnContainer = document.getElementById('templateActionBtnContainer');
+        if (isPremium && !hasAccess) {
+            // User does NOT have permission for this paid template
+            if (actionBtnContainer) {
+                if (accessStatus === 'pending') {
+                    actionBtnContainer.innerHTML = `
+                        <button type="button" class="flowcv-zoom-btn" style="background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; padding: 6px 14px; font-weight: 700; cursor: not-allowed;" disabled>
+                            <i class="fas fa-clock"></i> Access Request Pending
+                        </button>
+                    `;
+                } else {
+                    actionBtnContainer.innerHTML = `
+                        <button type="button" class="flowcv-btn-save" style="background: linear-gradient(135deg, #f59e0b, #d97706); padding: 6px 14px; font-size: 12px; font-weight: 700;" onclick="requestTemplateAccess(${id}, this)">
+                            <i class="fas fa-crown"></i> Request Access (Paid)
+                        </button>
+                    `;
+                }
+            }
+
+            const statusEl = document.getElementById('saveStatusIndicator');
+            if (statusEl) {
+                statusEl.className = 'flowcv-save-status saving';
+                statusEl.innerHTML = '<i class="fas fa-lock"></i> Paid Template - Request Access Required';
+            }
+            return;
+        }
+
+        // User has access (Free template OR Paid template with granted permission)
+        if (actionBtnContainer) {
+            actionBtnContainer.innerHTML = `
+                <button type="button" class="flowcv-btn-save" style="padding: 6px 14px; font-size: 12px;" onclick="document.querySelector('[data-nav-target=content]').click()">
+                    <i class="fas fa-check"></i> Use & Edit Content
+                </button>
+            `;
+        }
+
+        // Highlight card
+        document.querySelectorAll('.flowcv-template-list-card').forEach(c => c.classList.remove('active'));
+        if (cardEl) cardEl.classList.add('active');
+
+        // Update hidden form input & navbar selector
+        const inputTpl = document.getElementById('input_template_id');
+        if (inputTpl) inputTpl.value = id;
+
+        // Save template selection immediately via AJAX
         fetch(selectTemplateUrl, {
             method: 'POST',
             headers: {
@@ -2536,12 +2629,66 @@
         .then(res => res.json())
         .then(data => {
             const statusEl = document.getElementById('saveStatusIndicator');
-            if (statusEl) {
-                statusEl.className = 'flowcv-save-status saved';
-                statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Template Applied';
+            if (data.success) {
+                if (statusEl) {
+                    statusEl.className = 'flowcv-save-status saved';
+                    statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Template Applied';
+                }
+            } else {
+                if (statusEl) {
+                    statusEl.className = 'flowcv-save-status error';
+                    statusEl.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${data.message || 'Error selecting template'}`;
+                }
+                alert(data.message || 'Could not select template.');
             }
         })
         .catch(err => console.error('Template Select Error:', err));
+    }
+
+    // Request Access for Paid Template
+    function requestTemplateAccess(id, btnEl) {
+        if (!confirm('Would you like to send an access request to the admin for this paid template?')) return;
+
+        if (btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Requesting...';
+        }
+
+        fetch(requestAccessUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ template_id: id })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                if (btnEl) {
+                    btnEl.className = 'flowcv-zoom-btn';
+                    btnEl.style = 'background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; padding: 6px 14px; font-weight: 700; cursor: not-allowed;';
+                    btnEl.innerHTML = '<i class="fas fa-clock"></i> Request Sent (Pending Admin Approval)';
+                }
+                alert(data.message || 'Access request sent successfully! Admin will review and grant permission.');
+                loadTemplatesGallery(templateCurrentPage, templateCurrentCat, templateSearchTerm);
+            } else {
+                alert(data.message || 'Failed to send access request.');
+                if (btnEl) {
+                    btnEl.disabled = false;
+                    btnEl.innerHTML = '<i class="fas fa-crown"></i> Request Access (Paid)';
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Request Access Error:', err);
+            if (btnEl) {
+                btnEl.disabled = false;
+                btnEl.innerHTML = '<i class="fas fa-crown"></i> Request Access (Paid)';
+            }
+        });
     }
 
     // Zoom Template Iframe
@@ -2593,12 +2740,37 @@
                 res.data.forEach(t => {
                     const isSel = parseInt(t.id) === selectedId;
                     const thumb = t.thumbnail || `/uploads/website-images/templates/${t.slug}.webp`;
+                    const isPrem = !!t.is_premium;
+                    const hasAcc = !!t.has_access;
+                    const status = t.access_status || '';
+
+                    let typeBadge = isPrem
+                        ? `<span style="position: absolute; top: 6px; left: 6px; background: #fef3c7; color: #b45309; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #fde68a; display: flex; align-items: center; gap: 3px; box-shadow: 0 2px 4px rgba(0,0,0,0.06);"><i class="fas fa-crown"></i> Paid</span>`
+                        : `<span style="position: absolute; top: 6px; left: 6px; background: #ecfdf5; color: #047857; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #a7f3d0; display: flex; align-items: center; gap: 3px;"><i class="fas fa-check-circle"></i> Free</span>`;
+
+                    let lockBadge = '';
+                    if (isPrem && !hasAcc) {
+                        if (status === 'pending') {
+                            lockBadge = `<span style="position: absolute; bottom: 6px; right: 6px; background: #e0e7ff; color: #4338ca; font-size: 9.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #c7d2fe; display: flex; align-items: center; gap: 3px;"><i class="fas fa-clock"></i> Pending</span>`;
+                        } else {
+                            lockBadge = `<span style="position: absolute; bottom: 6px; right: 6px; background: #fee2e2; color: #b91c1c; font-size: 9.5px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #fecaca; display: flex; align-items: center; gap: 3px;"><i class="fas fa-lock"></i> Locked</span>`;
+                        }
+                    }
+
                     html += `
                         <div class="flowcv-template-list-card ${isSel ? 'active' : ''}"
-                             onclick="selectTemplateFromGallery(${t.id}, '${t.slug}', '${escapeHtml(t.name)}', this)">
+                             data-id="${t.id}"
+                             data-slug="${t.slug}"
+                             data-name="${escapeHtml(t.name)}"
+                             data-premium="${isPrem ? 1 : 0}"
+                             data-has-access="${hasAcc ? 1 : 0}"
+                             data-status="${status}"
+                             onclick="selectTemplateFromGallery(${t.id}, '${t.slug}', '${escapeHtml(t.name)}', ${isPrem ? 1 : 0}, ${hasAcc ? 1 : 0}, '${status}', this)">
                             <div class="flowcv-template-thumb-box">
                                 <img src="${thumb}" alt="${escapeHtml(t.name)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                                 <i class="fas fa-file-alt" style="display: none; font-size: 28px; color: #64748b;"></i>
+                                ${typeBadge}
+                                ${lockBadge}
                             </div>
 
                             <div class="flowcv-template-card-info">
@@ -2607,6 +2779,7 @@
                                 <div class="flowcv-template-card-tags">
                                     ${t.category ? `<span class="flowcv-template-tag">${escapeHtml(t.category)}</span>` : ''}
                                     ${t.style ? `<span class="flowcv-template-tag" style="background: #f1f5f9; color: #64748b;">${escapeHtml(t.style)}</span>` : ''}
+                                    ${isPrem && hasAcc ? `<span class="flowcv-template-tag" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0;"><i class="fas fa-unlock"></i> Unlocked</span>` : ''}
                                 </div>
                             </div>
 

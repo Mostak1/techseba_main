@@ -82,7 +82,7 @@
                                             All Permissions
                                         </a>
                                         <a href="{{ route('admin.cv-templates.permissions', ['status' => 'pending']) }}" class="btn btn-sm {{ request('status') === 'pending' ? 'btn-warning text-dark' : 'btn-outline-warning' }}">
-                                            Pending Requests ({{ $pendingCount }})
+                                            Pending Requests ({{ $pendingCount ?? 0 }})
                                         </a>
                                         <a href="{{ route('admin.cv-templates.permissions', ['status' => 'active']) }}" class="btn btn-sm {{ request('status') === 'active' ? 'btn-success' : 'btn-outline-success' }}">
                                             Active

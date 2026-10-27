@@ -9,6 +9,7 @@
     <p class="crancy-header__text">Digital CV >> Templates</p>
 @endsection
 
+@section('body-content')
     <form id="syncJsonForm" action="{{ route('admin.cv-templates.sync-json') }}" method="POST" style="display: none;">
         @csrf
     </form>

@@ -39,8 +39,8 @@ Route::get('/clear-cache', function () {
             $message .= "Migration failed with exit code: {$exitCode}<br>";
         }
         
-        Artisan::call('db:seed', ['--class' => 'UserCvSeeder', '--force' => true]);
-        $message .= "CV Data seeded successfully!<br>";
+        // Artisan::call('db:seed', ['--class' => 'UserCvSeeder', '--force' => true]);
+        // $message .= "CV Data seeded successfully!<br>";
 
         $message .= '<pre>' . e($output) . '</pre>';
     } catch (Throwable $e) {
@@ -74,11 +74,11 @@ Route::get('/run-scraper-migrations', function () {
         $message .= '<pre>' . e(Artisan::output()) . '</pre>';
 
         $message .= "Seeding Scraper Database...<br>";
-        Artisan::call('db:seed', [
-            '--class' => 'Modules\\Scraper\\Database\\Seeders\\ScraperDatabaseSeeder',
-            '--force' => true
-        ]);
-        $message .= '<pre>' . e(Artisan::output()) . '</pre>';
+        // Artisan::call('db:seed', [
+        //     '--class' => 'Modules\\Scraper\\Database\\Seeders\\ScraperDatabaseSeeder',
+        //     '--force' => true
+        // ]);
+        // $message .= '<pre>' . e(Artisan::output()) . '</pre>';
 
         $message .= "Clearing caches...<br>";
         Artisan::call('optimize:clear');

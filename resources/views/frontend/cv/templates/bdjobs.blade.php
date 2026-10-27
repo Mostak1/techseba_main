@@ -144,6 +144,19 @@
             color: #374151;
         }
 
+        .section p, .job-item p {
+            margin: 0 0 6px;
+        }
+
+        .section ul, .section ol, .job-item ul, .job-item ol {
+            margin: 0 0 6px 18px;
+            padding: 0;
+        }
+
+        .info-grid td p, .cv-table td p {
+            margin: 0;
+        }
+
         .cv-table {
             width: 100%;
             border-collapse: collapse;
@@ -322,15 +335,15 @@
             <tr><th>Nationality</th><td>{{ $cv->nationality }}</td></tr>
             <tr><th>Religion</th><td>{{ $cv->religion }}</td></tr>
             <tr><th>National ID / Passport</th><td>{{ $cv->nid_or_passport }}</td></tr>
-            <tr><th>Present Address</th><td>{{ $cv->present_address }}</td></tr>
-            <tr><th>Permanent Address</th><td>{{ $cv->permanent_address }}</td></tr>
+            <tr><th>Present Address</th><td>{!! clean($cv->present_address) !!}</td></tr>
+            <tr><th>Permanent Address</th><td>{!! clean($cv->permanent_address) !!}</td></tr>
         </table>
     </section>
 
     @if($cv->career_objective)
         <section class="section">
             <h2 class="section-title">Career Objective</h2>
-            <p>{!! nl2br(e($cv->career_objective)) !!}</p>
+            <div>{!! clean($cv->career_objective) !!}</div>
         </section>
     @endif
 
@@ -338,7 +351,7 @@
         <section class="section">
             <h2 class="section-title">Career Summary / Profile Summary</h2>
             @if($cv->formatted_total_experience)<p><strong>Total Experience:</strong> {{ $cv->formatted_total_experience }}</p>@endif
-            @if($cv->career_summary)<p>{!! nl2br(e($cv->career_summary)) !!}</p>@endif
+            @if($cv->career_summary)<div>{!! clean($cv->career_summary) !!}</div>@endif
         </section>
     @endif
 
@@ -358,8 +371,8 @@
                     @if($employment->company_location || $employment->business_type)
                         <div class="muted">{{ $employment->company_location }}{{ $employment->business_type ? ' | '.$employment->business_type : '' }}</div>
                     @endif
-                    @if($employment->responsibilities)<p><strong>Responsibilities:</strong><br>{!! nl2br(e($employment->responsibilities)) !!}</p>@endif
-                    @if($employment->achievements)<p><strong>Major Achievements:</strong><br>{!! nl2br(e($employment->achievements)) !!}</p>@endif
+                    @if($employment->responsibilities)<div><strong>Responsibilities:</strong><br>{!! clean($employment->responsibilities) !!}</div>@endif
+                    @if($employment->achievements)<div style="margin-top: 4px;"><strong>Major Achievements:</strong><br>{!! clean($employment->achievements) !!}</div>@endif
                 </div>
             @endforeach
         </section>
@@ -407,7 +420,7 @@
                         <td>{{ $training->institute }}</td>
                         <td>{{ $training->duration }}</td>
                         <td>{{ $training->year }}</td>
-                        <td>{{ $training->certificate_details }}</td>
+                        <td>{!! clean($training->certificate_details) !!}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -427,7 +440,7 @@
                         <td>{{ $qualification->authority }}</td>
                         <td>{{ $qualification->result_or_score }}</td>
                         <td>{{ $qualification->year }}</td>
-                        <td>{{ $qualification->details }}</td>
+                        <td>{!! clean($qualification->details) !!}</td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -467,7 +480,9 @@
                         </div>
                     @endif
                     @if($project->technologies)<div style="font-size: 11px; color: #333; margin-top: 2px;"><strong>Technologies:</strong> {{ $project->technologies }}</div>@endif
-                    @if($project->description)<p style="margin-top: 3px; font-size: 11px; color: #444;">{{ $project->description }}</p>@endif
+                    @if($project->description)<div style="margin-top: 3px; font-size: 11px; color: #444;">{!! clean($project->description) !!}</div>@endif
+                    @if($project->problem)<div style="margin-top: 2px; font-size: 11px; color: #555;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>@endif
+                    @if($project->solution)<div style="margin-top: 2px; font-size: 11px; color: #555;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>@endif
                 </div>
             @endforeach
         </section>
@@ -513,8 +528,8 @@
     @if($cv->declaration || $signatureSrc || $cv->declaration_date)
         <section class="section">
             <h2 class="section-title">Declaration</h2>
-            @if($cv->declaration)<p>{!! nl2br(e($cv->declaration)) !!}</p>@endif
-            @if($cv->declaration_date)<p><strong>Date:</strong> {{ $formatDate($cv->declaration_date) }}</p>@endif
+            @if($cv->declaration)<div>{!! clean($cv->declaration) !!}</div>@endif
+            @if($cv->declaration_date)<p style="margin-top: 4px;"><strong>Date:</strong> {{ $formatDate($cv->declaration_date) }}</p>@endif
             <div class="signature">
                 @if($signatureSrc)<img src="{{ $signatureSrc }}" alt="Signature">@endif
                 <div class="signature-line">Signature</div>

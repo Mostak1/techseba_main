@@ -34,12 +34,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $cv->full_name }} — Senior Software Engineer Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ $fontAwesomeHref }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @page {
             size: A4 portrait;
-            margin: 8mm 10mm 8mm 10mm;
+            margin: 8mm 12mm 8mm 12mm;
         }
 
         * {
@@ -51,11 +54,12 @@
         html, body {
             margin: 0;
             padding: 0;
-            background: #f8fafc;
+            background: #f1f5f9;
             color: #1e293b;
-            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            font-size: 10.5px;
-            line-height: 1.45;
+            font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+            font-size: 9.8px;
+            line-height: 1.4;
+            -webkit-font-smoothing: antialiased;
         }
 
         .no-print-area {
@@ -69,18 +73,19 @@
 
         .btn {
             padding: 7px 16px;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
             font-weight: 700;
             color: #ffffff;
             background: #0f172a;
             border: none;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.12);
+            box-shadow: 0 2px 4px rgba(15, 23, 42, 0.15);
+            transition: all 0.2s ease;
         }
 
         .btn-secondary { background: #475569; }
@@ -89,23 +94,24 @@
         .resume-page {
             width: 210mm;
             min-height: 297mm;
-            margin: 12px auto 24px;
-            padding: 10mm 12mm;
+            margin: 14px auto 24px;
+            padding: 8mm 12mm;
             background: #ffffff;
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-            border-radius: 2px;
+            border-radius: 4px;
             position: relative;
+            box-sizing: border-box;
         }
 
-        /* Modern Header Section with Photo Support */
+        /* Modern Executive Header */
         .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 16px;
             border-bottom: 2px solid #0f172a;
-            padding-bottom: 10px;
-            margin-bottom: 12px;
+            padding-bottom: 6px;
+            margin-bottom: 7px;
         }
 
         .header.no-photo {
@@ -129,31 +135,32 @@
         }
 
         .name {
-            font-size: 24px;
+            font-size: 21px;
             font-weight: 800;
             color: #0f172a;
             letter-spacing: -0.3px;
-            margin: 0 0 2px 0;
+            margin: 0 0 1px 0;
             text-transform: uppercase;
-            line-height: 1.15;
+            line-height: 1.1;
         }
 
         .headline {
-            font-size: 13px;
+            font-size: 11.5px;
             font-weight: 700;
-            color: #2563eb;
-            margin-bottom: 8px;
-            line-height: 1.25;
+            color: #1d4ed8;
+            margin-bottom: 5px;
+            line-height: 1.2;
+            letter-spacing: 0.1px;
         }
 
         .contact-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px 12px;
-            font-size: 10px;
+            gap: 3px 10px;
+            font-size: 8.5px;
             color: #334155;
             font-weight: 500;
-            line-height: 1.4;
+            line-height: 1.35;
         }
 
         .header.no-photo .contact-row {
@@ -170,8 +177,19 @@
             font-weight: 600;
         }
 
+        .contact-row a:hover {
+            color: #1d4ed8;
+        }
+
         .contact-row span.sep {
-            color: #94a3b8;
+            color: #cbd5e1;
+            font-weight: 700;
+        }
+
+        .contact-icon {
+            color: #2563eb;
+            margin-right: 2px;
+            font-size: 8.5px;
         }
 
         .header-photo-wrap {
@@ -182,49 +200,83 @@
         }
 
         .header-photo {
-            width: 88px;
-            height: 104px;
+            width: 76px;
+            height: 90px;
             object-fit: cover;
             border-radius: 6px;
-            border: 2px solid #0f172a;
-            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+            border: 2px solid #cbd5e1;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.1);
             display: block;
-            background: #f1f5f9;
+            background: #f8fafc;
         }
 
         /* Section Styling */
         .section {
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .section-header {
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            font-size: 10.5px;
             font-weight: 800;
             color: #0f172a;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
-            border-bottom: 1.5px solid #cbd5e1;
-            padding-bottom: 3px;
-            margin-bottom: 8px;
+            letter-spacing: 0.7px;
+            border-bottom: 1.5px solid #e2e8f0;
+            padding-bottom: 2px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .section-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1.5px;
+            left: 0;
+            width: 28px;
+            height: 2px;
+            background: #2563eb;
+            border-radius: 1px;
         }
 
         .summary-text {
-            font-size: 10.5px;
+            font-size: 9.5px;
             color: #334155;
             text-align: justify;
-            line-height: 1.48;
+            line-height: 1.38;
             margin: 0;
         }
 
-        /* Skills Table / Category Grid */
+        .contact-row p {
+            display: inline;
+            margin: 0;
+        }
+
+        .summary-text p {
+            margin: 0 0 3px;
+        }
+
+        .summary-text ul, .summary-text ol {
+            margin: 0 0 3px 14px;
+            padding: 0;
+        }
+
+        /* Skills Matrix */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 6px 12px;
+            gap: 3px 10px;
         }
 
         .skill-cat {
-            font-size: 10px;
+            font-size: 9px;
+            line-height: 1.32;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-left: 2.5px solid #2563eb;
+            padding: 2.5px 6px;
+            border-radius: 3px;
         }
 
         .skill-cat-name {
@@ -238,110 +290,139 @@
 
         /* Experience Entry */
         .job-entry {
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
         .job-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 2px;
+            margin-bottom: 1px;
         }
 
         .job-company {
-            font-size: 12px;
+            font-size: 10.5px;
             font-weight: 800;
             color: #0f172a;
         }
 
         .job-role {
-            font-size: 11px;
+            font-size: 9.5px;
             font-weight: 700;
             color: #2563eb;
         }
 
         .job-date {
-            font-size: 10px;
+            font-size: 8.5px;
             font-weight: 700;
             color: #475569;
+            background: #f1f5f9;
+            padding: 1px 5px;
+            border-radius: 3px;
+            white-space: nowrap;
         }
 
         .bullet-list {
-            margin: 3px 0 0 16px;
+            margin: 2px 0 0 14px;
             padding: 0;
             color: #334155;
-            font-size: 10px;
-            line-height: 1.42;
+            font-size: 9px;
+            line-height: 1.34;
         }
 
         .bullet-list li {
-            margin-bottom: 3px;
+            margin-bottom: 1.5px;
         }
 
-        /* Portfolio Project Case Study Styling */
+        .achievement-highlight {
+            font-size: 8.5px;
+            margin-top: 2px;
+            background: #f0fdf4;
+            border-left: 2.5px solid #16a34a;
+            padding: 1.5px 6px;
+            border-radius: 0 3px 3px 0;
+            color: #166534;
+            line-height: 1.32;
+        }
+
+        /* Project Cards */
         .project-card {
             border: 1px solid #e2e8f0;
-            border-left: 3.5px solid #1e3a8a;
+            border-left: 3px solid #2563eb;
             background: #f8fafc;
-            padding: 7px 10px;
+            padding: 4px 7px;
             border-radius: 3px;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .project-header {
             display: flex;
             justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 2px;
+            align-items: center;
+            margin-bottom: 1.5px;
         }
 
         .project-title {
-            font-size: 11.5px;
+            font-size: 10px;
             font-weight: 800;
             color: #0f172a;
         }
 
         .project-role {
-            font-size: 10px;
+            font-size: 8.5px;
             font-weight: 700;
-            color: #2563eb;
+            color: #1d4ed8;
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            padding: 1px 6px;
+            border-radius: 9999px;
+            white-space: nowrap;
         }
 
         .tech-line {
-            font-size: 9.5px;
+            font-size: 8.5px;
             color: #475569;
-            margin-bottom: 3px;
+            margin-bottom: 1.5px;
+            line-height: 1.3;
         }
 
         .demo-bar {
             background: #f0fdf4;
             border: 1px solid #bbf7d0;
             color: #15803d;
-            padding: 2.5px 6px;
-            border-radius: 3px;
-            font-size: 9.5px;
-            margin: 3px 0;
+            padding: 1.5px 6px;
+            border-radius: 2px;
+            font-size: 8px;
+            margin: 2px 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
+        }
+
+        .demo-bar a {
+            color: #15803d;
+            text-decoration: underline;
+            font-weight: 600;
         }
 
         /* Education & Certification Lists */
         .edu-entry {
-            margin-bottom: 4px;
-            font-size: 10.5px;
+            margin-bottom: 3.5px;
+            font-size: 9px;
+            line-height: 1.35;
         }
 
         .page-break {
+            height: 12px;
             page-break-before: always;
             break-before: page;
         }
 
         .page-num {
             position: absolute;
-            bottom: 10px;
-            right: 25px;
-            font-size: 9px;
+            bottom: 8px;
+            right: 20px;
+            font-size: 8px;
             color: #94a3b8;
         }
 
@@ -359,18 +440,67 @@
 
             .resume-page {
                 width: 100% !important;
-                min-height: 297mm !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
+                height: auto !important;
                 margin: 0 !important;
-                padding: 8mm 10mm !important;
+                padding: 0 !important;
                 box-shadow: none !important;
+                border: none !important;
+                page-break-after: avoid;
+                break-after: avoid;
             }
 
             .page-break {
+                display: block !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                line-height: 0 !important;
+                border: none !important;
                 page-break-before: always !important;
                 break-before: page !important;
+                clear: both;
+            }
+
+            .section,
+            .job-entry,
+            .project-card,
+            .edu-entry {
+                page-break-inside: avoid;
+                break-inside: avoid;
             }
         }
     </style>
+    @if(!empty($forPdf))
+    <style>
+        body {
+            background: #ffffff !important;
+            font-size: 9.2px !important;
+            line-height: 1.34 !important;
+        }
+        .resume-page {
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            height: auto !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        .page-break {
+            display: block !important;
+            height: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 0 !important;
+            border: none !important;
+            page-break-before: always !important;
+            clear: both;
+        }
+    </style>
+    @endif
 </head>
 <body>
 
@@ -392,27 +522,27 @@
             <div class="headline">{{ $primaryRole ?? 'Senior Full-Stack Laravel Developer & Team Lead' }}</div>
             <div class="contact-row">
                 @if($cv->present_address || $cv->permanent_address)
-                    <div><i class="fa-solid fa-location-dot"></i> {{ $cv->present_address ?: $cv->permanent_address }}</div>
+                    <div><i class="fa-solid fa-location-dot contact-icon"></i> {!! clean($cv->present_address ?: $cv->permanent_address) !!}</div>
                 @endif
                 @if($cv->mobile)
                     @if($cv->present_address || $cv->permanent_address)<span class="sep">•</span>@endif
-                    <div><i class="fa-solid fa-phone"></i> {{ $cv->mobile }}</div>
+                    <div><i class="fa-solid fa-phone contact-icon"></i> {{ $cv->mobile }}</div>
                 @endif
                 @if($cv->email)
                     @if($cv->mobile || $cv->present_address || $cv->permanent_address)<span class="sep">•</span>@endif
-                    <div><i class="fa-solid fa-envelope"></i> <a href="mailto:{{ $cv->email }}">{{ $cv->email }}</a></div>
+                    <div><i class="fa-solid fa-envelope contact-icon"></i> <a href="mailto:{{ $cv->email }}">{{ $cv->email }}</a></div>
                 @endif
                 @if($cv->website_url)
                     @if($cv->email || $cv->mobile)<span class="sep">•</span>@endif
-                    <div><i class="fa-solid fa-globe"></i> <a href="{{ $cv->website_url }}" target="_blank">{{ $cv->website_url }}</a></div>
+                    <div><i class="fa-solid fa-globe contact-icon"></i> <a href="{{ $cv->website_url }}" target="_blank">{{ $cv->website_url }}</a></div>
                 @endif
                 @if($cv->linkedin_url)
                     @if($cv->website_url || $cv->email)<span class="sep">•</span>@endif
-                    <div><i class="fa-brands fa-linkedin"></i> <a href="{{ $cv->linkedin_url }}" target="_blank">{{ $cv->linkedin_url }}</a></div>
+                    <div><i class="fa-brands fa-linkedin contact-icon"></i> <a href="{{ $cv->linkedin_url }}" target="_blank">{{ $cv->linkedin_url }}</a></div>
                 @endif
                 @if($cv->github_url)
                     @if($cv->linkedin_url || $cv->website_url || $cv->email)<span class="sep">•</span>@endif
-                    <div><i class="fa-brands fa-github"></i> <a href="{{ $cv->github_url }}" target="_blank">{{ $cv->github_url }}</a></div>
+                    <div><i class="fa-brands fa-github contact-icon"></i> <a href="{{ $cv->github_url }}" target="_blank">{{ $cv->github_url }}</a></div>
                 @endif
             </div>
         </div>
@@ -426,9 +556,9 @@
     <!-- Professional Summary -->
     <section class="section">
         <h2 class="section-header">Professional Summary</h2>
-        <p class="summary-text">
-            {{ $cv->career_summary }}
-        </p>
+        <div class="summary-text">
+            {!! clean($cv->career_summary ?: $cv->career_objective) !!}
+        </div>
     </section>
 
     <!-- Categorized Technical Skills -->
@@ -460,11 +590,20 @@
             </div>
 
             @if($emp->responsibilities)
-                <ul class="bullet-list">
-                    @foreach(explode("\n", $emp->responsibilities) as $line)
-                        @if(trim($line))<li>{{ trim($line, "*- ") }}</li>@endif
-                    @endforeach
-                </ul>
+                @if(strip_tags($emp->responsibilities) !== $emp->responsibilities)
+                    <div class="summary-text" style="font-size: 9px; margin-top: 1px;">{!! clean($emp->responsibilities) !!}</div>
+                @else
+                    <ul class="bullet-list">
+                        @foreach(explode("\n", $emp->responsibilities) as $line)
+                            @if(trim($line))<li>{{ trim($line, "*- ") }}</li>@endif
+                        @endforeach
+                    </ul>
+                @endif
+            @endif
+            @if($emp->achievements)
+                <div class="achievement-highlight">
+                    <strong><i class="fa-solid fa-trophy" style="font-size: 7.5px;"></i> Key Achievement:</strong> {!! clean(ltrim(trim($emp->achievements), "*•- \t\n\r")) !!}
+                </div>
             @endif
         </div>
         @endforeach
@@ -489,14 +628,16 @@
 
             @if($project->link || $project->demo_user || $project->demo_password)
                 <div class="demo-bar">
-                    @if($project->link)<span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Live Demo:</strong> {{ $project->link }}</span>@endif
+                    @if($project->link)<span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Live Demo:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a></span>@endif
                     @if($project->demo_user)<span><i class="fa-solid fa-user"></i> <strong>User:</strong> {{ $project->demo_user }}</span>@endif
                     @if($project->demo_password)<span><i class="fa-solid fa-key"></i> <strong>Pass:</strong> {{ $project->demo_password }}</span>@endif
                 </div>
             @endif
 
             @if($project->description)
-                <div class="summary-text" style="font-size: 10px;">{{ $project->description }}</div>
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->description) !!}</div>
+            @elseif($project->solution)
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->solution) !!}</div>
             @endif
         </div>
         @endforeach
@@ -529,14 +670,16 @@
 
             @if($project->link || $project->demo_user || $project->demo_password)
                 <div class="demo-bar">
-                    @if($project->link)<span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Live Demo:</strong> {{ $project->link }}</span>@endif
+                    @if($project->link)<span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Live Demo:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a></span>@endif
                     @if($project->demo_user)<span><i class="fa-solid fa-user"></i> <strong>User:</strong> {{ $project->demo_user }}</span>@endif
                     @if($project->demo_password)<span><i class="fa-solid fa-key"></i> <strong>Pass:</strong> {{ $project->demo_password }}</span>@endif
                 </div>
             @endif
 
             @if($project->description)
-                <div class="summary-text" style="font-size: 10px;">{{ $project->description }}</div>
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->description) !!}</div>
+            @elseif($project->solution)
+                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->solution) !!}</div>
             @endif
         </div>
         @endforeach
@@ -548,8 +691,13 @@
     <section class="section">
         <h2 class="section-header">Education</h2>
         @foreach($cv->academics as $academic)
-        <div class="edu-entry">
-            <strong>{{ $academic->degree_name }}</strong> @if($academic->group_or_major)({{ $academic->group_or_major }})@endif — {{ $academic->institution }}, {{ $academic->board_or_university }} | <strong>Result:</strong> {{ $academic->result }} @if($academic->passing_year)({{ $academic->passing_year }})@endif
+        <div class="edu-entry" style="display: flex; justify-content: space-between; align-items: baseline;">
+            <div>
+                <strong>{{ $academic->degree_name }}</strong> @if($academic->group_or_major)<span style="color: #475569;">({{ $academic->group_or_major }})</span>@endif — {{ $academic->institution }}, {{ $academic->board_or_university }}
+            </div>
+            <div style="font-weight: 700; color: #0f172a; white-space: nowrap; margin-left: 10px;">
+                Result: {{ $academic->result }} @if($academic->passing_year)({{ $academic->passing_year }})@endif
+            </div>
         </div>
         @endforeach
     </section>
@@ -561,9 +709,14 @@
         <h2 class="section-header">Certifications & Professional Training</h2>
         @foreach($cv->trainings as $training)
         <div class="edu-entry">
-            <strong>{{ $training->training_title }}</strong> — {{ $training->institute }} @if($training->year)({{ $training->year }})@endif
-            @if($training->certificate_details)
-                <div class="summary-text" style="font-size: 9.5px; color: #475569; margin-left: 10px;">• {{ $training->certificate_details }}</div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <strong>{{ $training->training_title }}</strong>
+                <span style="font-size: 8.5px; color: #475569; font-weight: 600;">{{ $training->institute }} @if($training->year)({{ $training->year }})@endif</span>
+            </div>
+            @if($training->certificate_details && trim($training->certificate_details) !== '*')
+                <div class="summary-text" style="font-size: 8.5px; color: #475569; margin-left: 8px;">
+                    • {!! clean(ltrim(trim($training->certificate_details), "*•- \t\n\r")) !!}
+                </div>
             @endif
         </div>
         @endforeach
@@ -578,14 +731,16 @@
             <li><strong>Enterprise Solution Delivery:</strong> Successfully engineered 5+ commercial enterprise applications across ERP, POS, Healthcare, and EdTech domains with zero floating-point accounting errors.</li>
             <li><strong>Community Welfare & Voluntary Initiative:</strong> Organized community relief distribution for 525 flood-affected victims in 2019.</li>
         </ul>
+    </section>
+
     <!-- References -->
     @if($cv->references->isNotEmpty())
     <section class="section">
         <h2 class="section-header">Professional References</h2>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             @foreach($cv->references as $ref)
-            <div style="border-left: 3px solid #1e3a8a; background: #f8fafc; padding: 6px 10px; border-radius: 0 3px 3px 0; font-size: 10px;">
-                <div style="font-weight: 800; color: #0f172a; font-size: 11px;">{{ $ref->name }}</div>
+            <div style="border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; background: #f8fafc; padding: 5px 8px; border-radius: 4px; font-size: 8.5px; line-height: 1.35;">
+                <div style="font-weight: 800; color: #0f172a; font-size: 10px;">{{ $ref->name }}</div>
                 <div><strong>Designation:</strong> {{ $ref->designation }}</div>
                 <div><strong>Organization:</strong> {{ $ref->organization }}</div>
                 @if($ref->phone)<div><strong>Phone:</strong> {{ $ref->phone }}</div>@endif
@@ -598,21 +753,23 @@
     @endif
 
     <!-- Declaration -->
-    <section class="section" style="margin-top: 10px;">
+    <section class="section" style="margin-top: 8px;">
         <h2 class="section-header">Declaration</h2>
-        <p class="summary-text" style="font-size: 9.5px;">{{ $cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.' }}</p>
+        <div class="summary-text" style="font-size: 8.5px; line-height: 1.35;">{!! clean($cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.') !!}</div>
 
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 18px;">
-            <div style="text-align: center; width: 140px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 14px;">
+            <div style="text-align: center; width: 150px;">
                 @if($signatureSrc)
-                    <img src="{{ $signatureSrc }}" style="max-height: 40px; margin-bottom: 2px;" alt="Signature">
+                    <img src="{{ $signatureSrc }}" style="max-height: 34px; margin-bottom: 2px;" alt="Signature">
+                @else
+                    <div style="height: 24px;"></div>
                 @endif
-                <div style="border-top: 1px solid #334155; padding-top: 2px; font-weight: 700; font-size: 10px;">{{ $cv->full_name }}</div>
-                <div style="font-size: 8.5px; color: #64748b;">Signature</div>
+                <div style="border-top: 1.5px solid #334155; padding-top: 3px; font-weight: 700; font-size: 9.5px; color: #0f172a;">{{ $cv->full_name }}</div>
+                <div style="font-size: 8px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Signature</div>
             </div>
-            <div style="text-align: center; width: 140px;">
-                <div style="margin-bottom: 18px; font-weight: 700; font-size: 10px;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
-                <div style="border-top: 1px solid #334155; padding-top: 2px; font-weight: 700; font-size: 10px;">Date</div>
+            <div style="text-align: center; width: 150px;">
+                <div style="margin-bottom: 6px; font-weight: 700; font-size: 9.5px; color: #0f172a;">{{ $formatFullDate($cv->declaration_date ?: now()) }}</div>
+                <div style="border-top: 1.5px solid #334155; padding-top: 3px; font-weight: 700; font-size: 8px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">Date</div>
             </div>
         </div>
     </section>

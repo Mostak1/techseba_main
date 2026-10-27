@@ -64,10 +64,11 @@
         .resume-page {
             width: 210mm;
             min-height: 297mm;
-            margin: 0 auto;
+            margin: 14px auto 24px;
             background: #ffffff;
             display: flex;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border-radius: 4px;
             position: relative;
         }
 
@@ -382,5 +383,6 @@
             @endif
         </main>
     </div>
+    <script src="{{ asset('frontend/assets/js/cv-a4-paginator.js') }}"></script>
 </body>
 </html>

@@ -1713,150 +1713,31 @@
                 <div class="flowcv-preview-col">
                     <!-- Preview Toolbar -->
                     <div class="flowcv-preview-toolbar">
-                        <div class="flowcv-live-badge">
-                            <span class="flowcv-pulse-dot"></span> Real-Time Live Preview
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="flowcv-live-badge">
+                                <span class="flowcv-pulse-dot"></span> Real-Time Live Preview
+                            </span>
+                            <span id="activeContentTemplateBadge" style="font-size: 11.5px; font-weight: 700; color: #172c47; background: #e2e8f0; padding: 3px 10px; border-radius: 6px;">
+                                {{ $selectedCvTemplate?->name ?? 'Modern Professional' }}
+                            </span>
                         </div>
 
                         <div class="flowcv-zoom-controls">
-                            <button type="button" class="flowcv-zoom-btn" onclick="zoomCanvas(0.9)"><i class="fas fa-minus"></i></button>
-                            <span style="font-size: 11px; font-weight: 700; color: #475569;" id="zoomLabel">100%</span>
-                            <button type="button" class="flowcv-zoom-btn" onclick="zoomCanvas(1.1)"><i class="fas fa-plus"></i></button>
-                            <button type="button" class="flowcv-zoom-btn" onclick="resetZoom()">Fit</button>
+                            <button type="button" class="flowcv-zoom-btn" title="Refresh Live Preview" onclick="refreshContentPreview()"><i class="fas fa-sync-alt"></i></button>
+                            <button type="button" class="flowcv-zoom-btn" onclick="zoomContentIframe(0.9)"><i class="fas fa-minus"></i></button>
+                            <span style="font-size: 11px; font-weight: 700; color: #475569;" id="contentZoomLabel">100%</span>
+                            <button type="button" class="flowcv-zoom-btn" onclick="zoomContentIframe(1.1)"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="flowcv-zoom-btn" onclick="resetContentZoom()">Fit</button>
                         </div>
                     </div>
 
                     <!-- Scrollable Canvas Viewport -->
-                    <div class="flowcv-canvas-scrollbox">
-                        <!-- THE A4 CANVAS (Dual-Column Modern FlowCV Layout) -->
-                        <div class="flowcv-paper-sheet" id="liveCvSheet">
-                            <!-- Left Dark Navy Column -->
-                            <div class="fcv-side">
-                                <div class="fcv-side-header">
-                                    <h1 class="fcv-side-name" id="cv_view_name">{{ $cv?->full_name ?: $user->name }}</h1>
-                                    <div class="fcv-side-title" id="cv_view_headline">{{ $headline }}</div>
-                                    <img src="{{ $photoUrl }}" alt="Profile" class="fcv-side-avatar" id="cv_view_avatar">
-
-                                    <div class="fcv-side-contacts">
-                                        <div class="fcv-side-contact-item">
-                                            <i class="fas fa-envelope"></i>
-                                            <span id="cv_view_email">{{ $cv?->email ?: $user->email }}</span>
-                                        </div>
-                                        <div class="fcv-side-contact-item">
-                                            <i class="fas fa-phone"></i>
-                                            <span id="cv_view_mobile">{{ $cv?->mobile ?: ($user->phone ?: '+880...') }}</span>
-                                        </div>
-                                        <div class="fcv-side-contact-item">
-                                            <i class="fas fa-map-marker-alt"></i>
-                                            <span id="cv_view_address">{{ $cv?->present_address ?: 'Panthapath, Dhanmondi, Dhaka-1208' }}</span>
-                                        </div>
-                                        <div class="fcv-side-contact-item" id="cv_view_linkedin_wrap" style="{{ empty($cv?->linkedin_url) ? 'display:none;' : '' }}">
-                                            <i class="fab fa-linkedin"></i>
-                                            <span id="cv_view_linkedin">{{ $cv?->linkedin_url }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Side Section 1: Profile -->
-                                <div>
-                                    <div class="fcv-side-section-title"><i class="fas fa-user-circle"></i> Profile</div>
-                                    <p class="fcv-side-summary" id="cv_view_summary">
-                                        {{ $cv?->career_summary ?: 'Senior Full-Stack Software Engineer with strong experience in Laravel, Vue.js, Python and scalable architectures.' }}
-                                    </p>
-                                </div>
-
-                                <!-- Side Section 2: Education -->
-                                <div>
-                                    <div class="fcv-side-section-title"><i class="fas fa-graduation-cap"></i> Education</div>
-                                    <div id="cv_view_education">
-                                        @foreach($academics as $edu)
-                                            @if(!empty($edu['degree_name']) || !empty($edu['institution']))
-                                                <div class="fcv-side-edu-item">
-                                                    <p class="fcv-side-edu-degree">{{ $edu['degree_name'] }}</p>
-                                                    <p class="fcv-side-edu-inst">{{ $edu['institution'] }}</p>
-                                                    <p class="fcv-side-edu-meta">{{ $edu['passing_year'] }} {{ !empty($edu['board_or_university']) ? '| '.$edu['board_or_university'] : '' }}</p>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Side Section 3: Training -->
-                                <div>
-                                    <div class="fcv-side-section-title"><i class="fas fa-certificate"></i> Training</div>
-                                    <div id="cv_view_training">
-                                        @foreach($trainings as $tr)
-                                            @if(!empty($tr['training_title']))
-                                                <div class="fcv-side-edu-item">
-                                                    <p class="fcv-side-edu-degree">{{ $tr['training_title'] }}</p>
-                                                    <p class="fcv-side-edu-inst">{{ $tr['institute'] }}</p>
-                                                    <p class="fcv-side-edu-meta">{{ $tr['duration'] }}</p>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right White Main Column -->
-                            <div class="fcv-main">
-                                <!-- Main Section 1: Professional Experience -->
-                                <div>
-                                    <div class="fcv-main-section-title"><i class="fas fa-briefcase"></i> Professional Experience</div>
-                                    <div id="cv_view_experience">
-                                        @foreach($employments as $emp)
-                                            @if(!empty($emp['company_name']) || !empty($emp['designation']))
-                                                <div class="fcv-job-item">
-                                                    <div class="fcv-job-head">
-                                                        <span class="fcv-job-company">{{ $emp['company_name'] }}</span>
-                                                        <span class="fcv-job-dates">
-                                                            {{ $emp['start_date'] ? \Illuminate\Support\Carbon::parse($emp['start_date'])->format('Y') : '' }} - 
-                                                            {{ !empty($emp['is_current']) ? 'Present' : ($emp['end_date'] ? \Illuminate\Support\Carbon::parse($emp['end_date'])->format('Y') : '') }}
-                                                            {{ !empty($emp['company_location']) ? '| '.$emp['company_location'] : '' }}
-                                                        </span>
-                                                    </div>
-                                                    <div class="fcv-job-role">{{ $emp['designation'] }}</div>
-                                                    <p class="fcv-job-desc">{{ $emp['responsibilities'] }}</p>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Main Section 2: Technical Skills -->
-                                <div>
-                                    <div class="fcv-main-section-title"><i class="fas fa-laptop-code"></i> Technical Skills</div>
-                                    <div class="fcv-skills-grid" id="cv_view_skills">
-                                        @php
-                                            $skillsByType = collect($skills)->groupBy('skill_type');
-                                        @endphp
-                                        @foreach($skillsByType as $type => $group)
-                                            <div class="fcv-skill-row">
-                                                <span class="fcv-skill-tag-name">{{ $type ?: 'Skills' }}:</span>
-                                                <span class="fcv-skill-tag-val">{{ $group->pluck('skill_name')->filter()->implode(', ') }}</span>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <!-- Main Section 3: Projects -->
-                                <div>
-                                    <div class="fcv-main-section-title"><i class="fas fa-tasks"></i> Projects</div>
-                                    <div id="cv_view_projects">
-                                        @foreach($projects as $proj)
-                                            @if(!empty($proj['title']))
-                                                <div class="fcv-proj-item">
-                                                    <div class="fcv-proj-title">{{ $proj['title'] }}</div>
-                                                    @if(!empty($proj['technologies']))
-                                                        <div class="fcv-proj-stack">{{ $proj['technologies'] }}</div>
-                                                    @endif
-                                                    <p class="fcv-proj-desc">{{ $proj['description'] }}</p>
-                                                </div>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="flowcv-canvas-scrollbox" style="padding: 0; background: #eaeff5; border-radius: 8px; border: 1px solid #e2e8f0; width: 100%; height: calc(100vh - 160px); display: flex; justify-content: center; overflow: auto;">
+                        <iframe id="contentPreviewIframe"
+                                src="{{ profile_route('user.cv.templates.render', ['slug' => $selectedCvTemplate?->slug ?? 'modern']) }}?user_data=1"
+                                style="width: 100%; min-width: 630px; height: 100%; min-height: 900px; border: none; background: #eaeff5; transition: transform 0.2s;"
+                                title="Content Real-Time Selected Template Preview">
+                        </iframe>
                     </div>
                 </div>
             </div>
@@ -2134,8 +2015,10 @@
             if (this.files && this.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('identityAvatarPreview').src = e.target.result;
-                    document.getElementById('cv_view_avatar').src = e.target.result;
+                    const idAvatar = document.getElementById('identityAvatarPreview');
+                    if (idAvatar) idAvatar.src = e.target.result;
+                    const cvAvatar = document.getElementById('cv_view_avatar');
+                    if (cvAvatar) cvAvatar.src = e.target.result;
                 };
                 reader.readAsDataURL(this.files[0]);
                 triggerAutoSave();
@@ -2493,6 +2376,8 @@
                 statusEl.className = 'flowcv-save-status saved';
                 statusEl.innerHTML = '<i class="fas fa-check-circle"></i> Saved';
             }
+            // Refresh Real-Time Live Preview with latest data
+            refreshContentPreview();
         })
         .catch(err => {
             console.error('AutoSave Error:', err);
@@ -2511,24 +2396,37 @@
         });
     }
 
-    // 9. Zoom Canvas Controls
-    let currentScale = 1.0;
-    function zoomCanvas(factor) {
-        currentScale = Math.min(Math.max(currentScale * factor, 0.6), 1.6);
-        applyScale();
+    // 9. Zoom Canvas Controls for Content Preview Iframe
+    let contentScale = 1.0;
+    function zoomContentIframe(factor) {
+        contentScale = Math.min(Math.max(contentScale * factor, 0.6), 1.6);
+        applyContentScale();
     }
-    function resetZoom() {
-        currentScale = 1.0;
-        applyScale();
+    function resetContentZoom() {
+        contentScale = 1.0;
+        applyContentScale();
     }
-    function applyScale() {
-        const sheet = document.getElementById('liveCvSheet');
-        const label = document.getElementById('zoomLabel');
-        if (sheet) {
-            sheet.style.transform = `scale(${currentScale})`;
+    function applyContentScale() {
+        const iframe = document.getElementById('contentPreviewIframe');
+        const label = document.getElementById('contentZoomLabel');
+        if (iframe) {
+            iframe.style.transform = `scale(${contentScale})`;
+            iframe.style.transformOrigin = 'top center';
         }
         if (label) {
-            label.innerText = Math.round(currentScale * 100) + '%';
+            label.innerText = Math.round(contentScale * 100) + '%';
+        }
+    }
+    // Backward compatibility aliases
+    function zoomCanvas(factor) { zoomContentIframe(factor); }
+    function resetZoom() { resetContentZoom(); }
+
+    function refreshContentPreview() {
+        const iframe = document.getElementById('contentPreviewIframe');
+        if (iframe && iframe.src) {
+            const url = new URL(iframe.src);
+            url.searchParams.set('_t', new Date().getTime());
+            iframe.src = url.toString();
         }
     }
 
@@ -2559,7 +2457,7 @@
     let templateTotalPages = 1;
 
     function selectTemplateFromGallery(id, slug, name, isPremium = 0, hasAccess = 1, accessStatus = '', cardEl = null) {
-        // 1. Update preview badge & iframe source (users can preview any template!)
+        // 1. Update preview badge & iframe source in Choose Template
         const badge = document.getElementById('activePreviewTemplateBadge');
         if (badge) {
             badge.innerText = name + (isPremium ? (hasAccess ? ' (Paid - Unlocked)' : ' (Paid - Locked)') : ' (Free)');
@@ -2568,6 +2466,16 @@
         const iframe = document.getElementById('templatePreviewIframe');
         if (iframe) {
             iframe.src = renderUrlPattern.replace(':slug', slug) + '?user_data=1';
+        }
+
+        // Also update Content tab preview iframe and badge so both stay in sync!
+        const contentIframe = document.getElementById('contentPreviewIframe');
+        if (contentIframe) {
+            contentIframe.src = renderUrlPattern.replace(':slug', slug) + '?user_data=1';
+        }
+        const contentBadge = document.getElementById('activeContentTemplateBadge');
+        if (contentBadge) {
+            contentBadge.innerText = name;
         }
 
         // 2. Update action button container based on access

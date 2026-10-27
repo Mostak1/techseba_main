@@ -784,5 +784,6 @@
         });
     </script>
 @endif
+<script src="{{ asset('frontend/assets/js/cv-a4-paginator.js') }}"></script>
 </body>
 </html>

@@ -71,10 +71,19 @@
             width: 210mm;
             max-width: 100%;
             min-height: 297mm;
-            margin: 0 auto 24px;
-            padding: 18mm;
+            margin: 14px auto 24px;
+            padding: 16mm 18mm;
             background: #fff;
             box-shadow: 0 8px 28px rgba(15, 23, 42, .12);
+            position: relative;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        .page-break {
+            height: 20px;
+            page-break-before: always;
+            break-before: page;
         }
 
         .cv-header {
@@ -229,25 +238,36 @@
 
         @media print {
             body {
-                background: #fff;
+                background: #fff !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
 
-            .no-print {
+            .no-print, .cv-actions {
                 display: none !important;
             }
 
             .cv-page {
-                width: auto;
-                min-height: auto;
-                margin: 0;
-                padding: 0;
-                box-shadow: none;
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 10mm 14mm !important;
+                box-shadow: none !important;
+                page-break-after: always !important;
+                break-after: page !important;
+            }
+
+            .page-break {
+                display: none !important;
             }
 
             .section,
             .job-item,
             table {
                 page-break-inside: avoid;
+                break-inside: avoid;
             }
         }
 
@@ -545,5 +565,6 @@
         });
     </script>
 @endif
+<script src="{{ asset('frontend/assets/js/cv-a4-paginator.js') }}"></script>
 </body>
 </html>

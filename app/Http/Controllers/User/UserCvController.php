@@ -139,6 +139,15 @@ class UserCvController extends Controller
             return $this->extractSourceAndRedirect($cv, $extractor);
         }
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => trans('translate.Updated successfully'),
+                'photo_url' => $cv->photo ? asset($cv->photo) : null,
+                'cv' => $cv->load($this->relations),
+            ]);
+        }
+
         $tab = $request->input('next_tab') ?: $request->input('active_tab', 'personal');
 
         return redirect()

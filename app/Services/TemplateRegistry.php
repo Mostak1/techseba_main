@@ -105,7 +105,16 @@ class TemplateRegistry
 
     public function findActiveBySlug(string $type, string $slug): ?Model
     {
-        return $this->activeQuery($type)->where('slug', $slug)->first();
+        $normalizedSlug = str_replace('_', '-', $slug);
+        $altSlug = str_replace('-', '_', $slug);
+
+        return $this->activeQuery($type)
+            ->where(function (Builder $q) use ($slug, $normalizedSlug, $altSlug) {
+                $q->where('slug', $slug)
+                    ->orWhere('slug', $normalizedSlug)
+                    ->orWhere('slug', $altSlug);
+            })
+            ->first();
     }
 
     public function findActiveById(string $type, int $id): ?Model

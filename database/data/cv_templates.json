@@ -37,5 +37,18 @@
     "preview_image": "uploads/website-images/templates/creative.webp",
     "is_paid": true,
     "is_active": true
+  },
+  {
+    "id": 4,
+    "title": "CV IT",
+    "slug": "cv-it",
+    "blade_name": "cv_it.blade.php",
+    "path": "frontend.cv.templates.cv_it",
+    "category": "IT & Software",
+    "style": "Navy Dual-Column Professional",
+    "description": "Clean professional 2-column IT & Software Engineering resume layout designed for maximum interview callbacks.",
+    "preview_image": "uploads/website-images/templates/cv_it.webp",
+    "is_paid": false,
+    "is_active": true
   }
 ]

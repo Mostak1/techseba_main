@@ -1,0 +1,263 @@
+{
+  "basic": {
+    "full_name": "Abdul Alim",
+    "father_name": "Abdul Hamid",
+    "mother_name": "Zahida Begum",
+    "date_of_birth": "1996-08-15",
+    "gender": "Male",
+    "marital_status": "Married",
+    "nationality": "Bangladeshi",
+    "religion": "Islam",
+    "nid_or_passport": "5509238471",
+    "present_address": "Dhanmondi, Dhaka-1209",
+    "permanent_address": "Village: Kaliganj, Post: Kaliganj-5540, District: Dhaka",
+    "mobile": "+8801752222222",
+    "email": "info@techseba.com",
+    "website_url": "https://techseba.com",
+    "github_url": "https://github.com/Mostak1",
+    "linkedin_url": "https://linkedin.com/in/mostaksarker",
+    "photo": "uploads/website-images/avatar-image-2024-07-02-10-08-24-5849.png",
+    "signature": "uploads/cv/signatures/signature-sample.png",
+    "career_objective": "Results-driven Senior Full-Stack Software Engineer with 6+ years of specialized experience in architecting robust SaaS applications, high-throughput microservices, and modern responsive web systems. Committed to engineering clean, maintainable codebases with extreme scalability.",
+    "career_summary": "Seasoned Lead Software Engineer with deep expertise across Laravel 11, PHP 8.3, MySQL, Redis, Docker, and Vue.js. Proven track record in orchestrating multi-tenant architecture, designing high-volume payment integrations, and leading agile engineering squads towards zero-downtime releases.",
+    "technical_challenge": "Re-engineered a monolithic healthcare billing engine into queue-driven asynchronous workers using Redis and Laravel Horizon, reducing peak invoice generation latency from 45 minutes to 90 seconds under 20k concurrent requests.",
+    "built_from_scratch": "Spearheaded the ground-up architecture of a multi-tenant hospital ERP managing 15+ diagnostic clinics, online telemedicine, real-time lab analyzers, and automated pharmacy POS with dual-entry accounting.",
+    "sparks_joy": "Refactoring complex monolithic legacy bottlenecks into elegant, self-documenting domain services with sub-50ms API responses.",
+    "total_experience": "6 Years 4 Months",
+    "declaration": "I hereby solemnly declare that all particulars furnished in this resume are true, complete, and authentic to the best of my knowledge and belief.",
+    "declaration_date": "2026-10-27"
+  },
+  "employments": [
+    {
+      "company_name": "Techseba Wellness Centre",
+      "designation": "Software Engineering Team Lead",
+      "department": "Platform & Healthcare Architecture",
+      "start_date": "2023-03-01",
+      "end_date": null,
+      "is_current": true,
+      "company_location": "Dhanmondi, Dhaka, Bangladesh",
+      "business_type": "Healthcare IT & Enterprise SaaS",
+      "responsibilities": "Lead a high-performing engineering squad of 8 developers maintaining enterprise-grade hospital ERP.\nArchitected modular EMR, e-Prescriptions, biometric attendance, and dual-entry financial accounting modules.\nImplemented zero-downtime CI/CD deployment pipelines on Ubuntu cloud servers with Docker and Nginx.",
+      "achievements": "Decreased patient intake turnaround time by 65% and maintained 99.98% system uptime during hospital peak loads."
+    },
+    {
+      "company_name": "Genuity Systems Ltd.",
+      "designation": "Software Engineer (Laravel & API Integration)",
+      "department": "Core Product Engineering",
+      "start_date": "2021-06-01",
+      "end_date": "2023-02-28",
+      "is_current": false,
+      "company_location": "Mohakhali DOHS, Dhaka, Bangladesh",
+      "business_type": "Telecom & Software Solutions",
+      "responsibilities": "Engineered RESTful backend microservices in Laravel and MySQL for enterprise telecom billing.\nDeveloped real-time WebSocket notifications and integrated multiple SMS and banking gateways.\nAuthored comprehensive PHPUnit automated test suites covering 85%+ critical business paths.",
+      "achievements": "Awarded Employee of the Quarter for seamless migration of 500k customer records with zero data discrepancy."
+    },
+    {
+      "company_name": "Bank Asia Agent Banking Network",
+      "designation": "Customer Service Officer (CSO)",
+      "department": "Retail Financial Operations",
+      "start_date": "2019-01-01",
+      "end_date": "2020-12-31",
+      "is_current": false,
+      "company_location": "Dhaka, Bangladesh",
+      "business_type": "Banking & Financial Services",
+      "responsibilities": "Managed day-to-day core banking transactions, account onboarding, and agent reconciliation reports.\nEnforced strict KYC compliance and security guidelines for rural financial transactions.",
+      "achievements": "Recognized for maintaining flawless transaction accuracy and resolving customer grievances within 2 hours."
+    }
+  ],
+  "academics": [
+    {
+      "degree_name": "B.Sc. in Computer Science & Engineering (CSE)",
+      "institution": "Daffodil International University",
+      "board_or_university": "DIU",
+      "group_or_major": "Computer Science & Engineering",
+      "result": "CGPA 3.82 / 4.00",
+      "passing_year": "2020"
+    },
+    {
+      "degree_name": "Higher Secondary Certificate (HSC)",
+      "institution": "Cantonment Public School & College",
+      "board_or_university": "Dhaka",
+      "group_or_major": "Science",
+      "result": "GPA 5.00 / 5.00",
+      "passing_year": "2015"
+    },
+    {
+      "degree_name": "Secondary School Certificate (SSC)",
+      "institution": "Dhaka Government High School",
+      "board_or_university": "Dhaka",
+      "group_or_major": "Science",
+      "result": "GPA 5.00 / 5.00",
+      "passing_year": "2013"
+    }
+  ],
+  "trainings": [
+    {
+      "training_title": "Enterprise Web Application Development with Laravel & Vue",
+      "institute": "IsDB-BISEW IT Scholarship Project",
+      "duration": "1 Year (850 Hours)",
+      "year": "2021",
+      "certificate_details": "Rigorous full-time immersion into OOP, MVC, SQL Database Optimization, Laravel, and Security."
+    },
+    {
+      "training_title": "AWS Cloud Practitioner & DevOps Architecture",
+      "institute": "Amazon Web Services (AWS Training)",
+      "duration": "3 Months",
+      "year": "2023",
+      "certificate_details": "Cloud architecture, EC2, S3, RDS, IAM, VPC, and Automated Docker deployment."
+    }
+  ],
+  "professional_qualifications": [
+    {
+      "title": "Certified Laravel & PHP Solution Architect",
+      "authority": "Laravel Certification Hub",
+      "result_or_score": "Score: 94%",
+      "year": "2024",
+      "details": "Advanced mastery of modern PHP 8.3+, design patterns, event-driven queues, and database indexing."
+    },
+    {
+      "title": "IsDB-BISEW Certified IT Professional (Enterprise Track)",
+      "authority": "Islamic Development Bank (Jeddah)",
+      "result_or_score": "Grade A+ (Distinction)",
+      "year": "2021",
+      "details": "Professional engineering certification in enterprise software development and database administration."
+    }
+  ],
+  "skills": [
+    {
+      "skill_type": "Backend & Core",
+      "skill_name": "PHP 8.3",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Backend & Core",
+      "skill_name": "Laravel 11",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Backend & Core",
+      "skill_name": "RESTful APIs",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Backend & Core",
+      "skill_name": "MySQL & Indexing",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Backend & Core",
+      "skill_name": "Redis & Caching",
+      "skill_level": "Advanced"
+    },
+    {
+      "skill_type": "DevOps & Cloud",
+      "skill_name": "Docker & Compose",
+      "skill_level": "Advanced"
+    },
+    {
+      "skill_type": "DevOps & Cloud",
+      "skill_name": "Linux / Ubuntu Server",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "DevOps & Cloud",
+      "skill_name": "Git & CI/CD Actions",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Frontend & UI",
+      "skill_name": "JavaScript (ES6+)",
+      "skill_level": "Advanced"
+    },
+    {
+      "skill_type": "Frontend & UI",
+      "skill_name": "Vue.js 3",
+      "skill_level": "Advanced"
+    },
+    {
+      "skill_type": "Frontend & UI",
+      "skill_name": "Tailwind CSS / Bootstrap",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Soft & Management",
+      "skill_name": "Agile / Scrum Leadership",
+      "skill_level": "Expert"
+    },
+    {
+      "skill_type": "Soft & Management",
+      "skill_name": "System Architecture",
+      "skill_level": "Expert"
+    }
+  ],
+  "projects": [
+    {
+      "title": "Hospital360 – Enterprise Medical ERP & Clinic Automation",
+      "role": "Lead Architect & Developer",
+      "technologies": "Laravel 11, MySQL, Redis, Vue.js, Tailwind CSS, Docker",
+      "link": "https://hospital.techseba.com",
+      "github_url": "https://github.com/Mostak1/hospital360",
+      "description": "Comprehensive multi-branch hospital management platform handling OPD, IPD, e-Prescriptions, diagnostic test analyzers, pharmacy inventory, and double-entry general ledger accounting.",
+      "problem": "Clinics suffered from delayed physical reports, billing leaks, and appointment double-bookings.",
+      "solution": "Built a unified real-time dashboard connecting lab machines, doctor prescriptions, and barcode cash counters.",
+      "demo_user": "admin@hospital.com",
+      "demo_password": "password123"
+    },
+    {
+      "title": "TechSeba Multi-Vendor Marketplace & Service Platform",
+      "role": "Full-Stack Software Engineer",
+      "technologies": "PHP, Laravel, Livewire, MySQL, bKash / Nagad API, SSLCommerz",
+      "link": "https://techseba.com",
+      "github_url": "https://github.com/Mostak1/techseba_main",
+      "description": "National digital services platform connecting thousands of skilled IT professionals and freelancers with verified clients across Bangladesh.",
+      "problem": "Lack of secure escrow payment mechanisms and transparent job delivery tracking in local markets.",
+      "solution": "Implemented biometric KYC verification, multi-channel payment gateway escrow, and instant milestone releases.",
+      "demo_user": "demo_user",
+      "demo_password": "password"
+    },
+    {
+      "title": "EduMaster – Modern Institute Management & Online Examination",
+      "role": "Backend Engineer",
+      "technologies": "Laravel, PostgreSQL, Redis, WebSocket, Chart.js",
+      "link": "https://edumaster.example.com",
+      "github_url": "https://github.com/Mostak1/edumaster",
+      "description": "Cloud-based learning management system (LMS) serving 50,000+ active students with dynamic randomized exams and automatic grade calculations.",
+      "problem": "Manual examination scoring and paper-based result compilation took 3+ weeks per semester.",
+      "solution": "Engineered an instant automated grading pipeline capable of evaluating 10,000 exam submissions per minute.",
+      "demo_user": "teacher@edumaster.com",
+      "demo_password": "password"
+    }
+  ],
+  "languages": [
+    {
+      "language_name": "Bangla",
+      "reading_level": "Native",
+      "writing_level": "Native",
+      "speaking_level": "Native"
+    },
+    {
+      "language_name": "English",
+      "reading_level": "Fluent",
+      "writing_level": "Fluent",
+      "speaking_level": "Professional Working"
+    }
+  ],
+  "references": [
+    {
+      "name": "Dr. Mohammad Shafiul Alam",
+      "designation": "Professor & Head of Department, CSE",
+      "organization": "Daffodil International University",
+      "phone": "+8801711000000",
+      "email": "shafiul.cse@daffodilvarsity.edu.bd",
+      "relationship": "Academic Supervisor"
+    },
+    {
+      "name": "Engr. Tanvir Ahmed",
+      "designation": "Chief Technology Officer (CTO)",
+      "organization": "Genuity Systems Ltd.",
+      "phone": "+8801819000000",
+      "email": "tanvir@genuitysystems.com",
+      "relationship": "Former Technical Lead"
+    }
+  ]
+}

@@ -116,17 +116,24 @@ class TemplateGalleryController extends Controller
 
         $view = $this->registry->resolveView($type, $template, ['context' => 'gallery-preview']);
 
-        $useUserData = $request->boolean('user_data', true);
+        $mode = $request->input('mode', $request->has('dummy') ? 'dummy' : ($request->boolean('user_data', true) ? 'user' : 'dummy'));
         $userCv = null;
-        if ($useUserData && Auth::guard('web')->check()) {
-            $userCv = Auth::guard('web')->user()->userCv()->with([
-                'employments', 'academics', 'trainings', 'professionalQualifications',
-                'skills', 'languages', 'references', 'projects', 'user', 'template', 'portfolioTemplate'
-            ])->first();
-        }
 
-        $cvToRender = $userCv ?: $this->previewData->make();
-        $username = $userCv ? ($userCv->user->username ?? 'user') : CvPreviewDataService::DEMO_USERNAME;
+        if ($mode === 'dummy') {
+            $cvToRender = $this->previewData->make();
+            $username = CvPreviewDataService::DEMO_USERNAME;
+        } else {
+            if (Auth::guard('web')->check()) {
+                $userCv = Auth::guard('web')->user()->userCv()->with([
+                    'employments', 'academics', 'trainings', 'professionalQualifications',
+                    'skills', 'languages', 'references', 'projects', 'user', 'template', 'portfolioTemplate'
+                ])->first();
+            }
+
+            // If user has CV, merge any completely empty relations with dummy fallback so preview never breaks
+            $cvToRender = $userCv ? $this->previewData->mergeWithDummyIfEmpty($userCv) : $this->previewData->make();
+            $username = $userCv ? ($userCv->user->username ?? 'user') : CvPreviewDataService::DEMO_USERNAME;
+        }
 
         $data = [
             'cv' => $cvToRender,

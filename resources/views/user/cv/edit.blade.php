@@ -678,6 +678,41 @@
         box-shadow: var(--fcv-shadow-sm);
     }
 
+    .flowcv-preview-mode-switch {
+        display: inline-flex;
+        background: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 2px;
+        gap: 2px;
+    }
+
+    .flowcv-mode-btn {
+        border: none;
+        background: transparent;
+        color: #475569;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        line-height: 1.2;
+    }
+
+    .flowcv-mode-btn:hover {
+        color: #0f172a;
+    }
+
+    .flowcv-mode-btn.active {
+        background: #172c47;
+        color: #ffffff !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+
     .flowcv-live-badge {
         display: inline-flex;
         align-items: center;
@@ -1713,13 +1748,21 @@
                 <div class="flowcv-preview-col">
                     <!-- Preview Toolbar -->
                     <div class="flowcv-preview-toolbar">
-                        <div style="display: flex; align-items: center; gap: 8px;">
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <span class="flowcv-live-badge">
                                 <span class="flowcv-pulse-dot"></span> Real-Time Live Preview
                             </span>
                             <span id="activeContentTemplateBadge" style="font-size: 11.5px; font-weight: 700; color: #172c47; background: #e2e8f0; padding: 3px 10px; border-radius: 6px;">
                                 {{ $selectedCvTemplate?->name ?? 'Modern Professional' }}
                             </span>
+                            <div class="flowcv-preview-mode-switch" title="Toggle between your data and full sample dummy data">
+                                <button type="button" class="flowcv-mode-btn js-mode-user active" onclick="switchPreviewDataMode('user')">
+                                    <i class="fas fa-user"></i> My Data
+                                </button>
+                                <button type="button" class="flowcv-mode-btn js-mode-dummy" onclick="switchPreviewDataMode('dummy')">
+                                    <i class="fas fa-magic"></i> Dummy Preview
+                                </button>
+                            </div>
                         </div>
 
                         <div class="flowcv-zoom-controls">
@@ -1849,11 +1892,19 @@
             <!-- ================= RIGHT COLUMN: LIVE TEMPLATE PREVIEW ================= -->
             <div class="flowcv-preview-col">
                 <div class="flowcv-preview-toolbar">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         <span class="flowcv-live-badge"><span class="flowcv-pulse-dot"></span> Live Template Preview</span>
                         <span id="activePreviewTemplateBadge" style="font-size: 11.5px; font-weight: 700; color: #172c47; background: #e2e8f0; padding: 3px 10px; border-radius: 6px;">
                             {{ $selectedCvTemplate?->name ?? 'Modern Professional' }}
                         </span>
+                        <div class="flowcv-preview-mode-switch" title="Toggle between your data and full sample dummy data">
+                            <button type="button" class="flowcv-mode-btn js-mode-user active" onclick="switchPreviewDataMode('user')">
+                                <i class="fas fa-user"></i> My Data
+                            </button>
+                            <button type="button" class="flowcv-mode-btn js-mode-dummy" onclick="switchPreviewDataMode('dummy')">
+                                <i class="fas fa-magic"></i> Dummy Preview
+                            </button>
+                        </div>
                     </div>
 
                     <div class="flowcv-zoom-controls">
@@ -2421,10 +2472,39 @@
     function zoomCanvas(factor) { zoomContentIframe(factor); }
     function resetZoom() { resetContentZoom(); }
 
+    // 9.5 Preview Data Mode (My Data vs Dummy Preview)
+    let currentPreviewDataMode = 'user'; // 'user' or 'dummy'
+
+    function switchPreviewDataMode(mode) {
+        currentPreviewDataMode = mode;
+
+        document.querySelectorAll('.flowcv-mode-btn').forEach(btn => {
+            if (btn.classList.contains('js-mode-' + mode)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        updateIframeSrcMode('contentPreviewIframe', mode);
+        updateIframeSrcMode('templatePreviewIframe', mode);
+    }
+
+    function updateIframeSrcMode(iframeId, mode) {
+        const iframe = document.getElementById(iframeId);
+        if (iframe && iframe.src) {
+            const url = new URL(iframe.src);
+            url.searchParams.set('mode', mode);
+            url.searchParams.set('_t', new Date().getTime());
+            iframe.src = url.toString();
+        }
+    }
+
     function refreshContentPreview() {
         const iframe = document.getElementById('contentPreviewIframe');
         if (iframe && iframe.src) {
             const url = new URL(iframe.src);
+            url.searchParams.set('mode', currentPreviewDataMode);
             url.searchParams.set('_t', new Date().getTime());
             iframe.src = url.toString();
         }
@@ -2465,13 +2545,13 @@
 
         const iframe = document.getElementById('templatePreviewIframe');
         if (iframe) {
-            iframe.src = renderUrlPattern.replace(':slug', slug) + '?user_data=1';
+            iframe.src = renderUrlPattern.replace(':slug', slug) + '?mode=' + currentPreviewDataMode;
         }
 
         // Also update Content tab preview iframe and badge so both stay in sync!
         const contentIframe = document.getElementById('contentPreviewIframe');
         if (contentIframe) {
-            contentIframe.src = renderUrlPattern.replace(':slug', slug) + '?user_data=1';
+            contentIframe.src = renderUrlPattern.replace(':slug', slug) + '?mode=' + currentPreviewDataMode;
         }
         const contentBadge = document.getElementById('activeContentTemplateBadge');
         if (contentBadge) {

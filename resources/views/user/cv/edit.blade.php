@@ -389,19 +389,30 @@
         min-width: 0;
     }
 
+    /* CRITICAL OVERRIDES: Override techseba_dark.css which turns all h1-h6 white */
+    .flowcv-root h1,
+    .flowcv-root h2,
+    .flowcv-root h3,
+    .flowcv-root h4,
+    .flowcv-root h5,
+    .flowcv-root h6 {
+        color: #0f172a !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+    }
+
     .flowcv-identity-name {
         margin: 0 0 4px;
-        font-size: 19px;
-        font-weight: 800;
-        color: #0f172a;
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
         letter-spacing: -0.3px;
     }
 
     .flowcv-identity-headline {
         margin: 0 0 10px;
-        font-size: 13.5px;
-        font-weight: 600;
-        color: #3b82f6;
+        font-size: 13.5px !important;
+        font-weight: 600 !important;
+        color: #2563eb !important;
     }
 
     .flowcv-contact-pills {
@@ -409,13 +420,14 @@
         flex-wrap: wrap;
         gap: 8px 12px;
         font-size: 12px;
-        color: var(--fcv-muted);
+        color: #475569 !important;
     }
 
     .flowcv-contact-pill {
         display: inline-flex;
         align-items: center;
         gap: 5px;
+        color: #475569 !important;
     }
 
     /* FlowCV Accordion Cards */
@@ -462,8 +474,8 @@
         width: 32px;
         height: 32px;
         border-radius: 8px;
-        background: #f1f5f9;
-        color: #172c47;
+        background: #e2e8f0 !important;
+        color: #172c47 !important;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -471,20 +483,34 @@
     }
 
     .flowcv-card-title {
-        font-size: 14px;
-        font-weight: 700;
-        color: #0f172a;
-        margin: 0;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+        margin: 0 !important;
         text-transform: capitalize;
     }
 
     .flowcv-card-count {
-        font-size: 11px;
-        font-weight: 600;
+        font-size: 11px !important;
+        font-weight: 700 !important;
         padding: 2px 8px;
         border-radius: 999px;
-        background: #f1f5f9;
-        color: var(--fcv-muted);
+        background: #e2e8f0 !important;
+        color: #334155 !important;
+    }
+
+    .flowcv-item-title {
+        font-size: 13.5px !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+    }
+
+    .flowcv-label {
+        display: block;
+        font-size: 12.5px !important;
+        font-weight: 700 !important;
+        color: #334155 !important;
+        margin-bottom: 6px;
     }
 
     .flowcv-card-chevron {

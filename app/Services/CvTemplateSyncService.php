@@ -39,24 +39,40 @@ class CvTemplateSyncService
         $syncedCount = 0;
 
         foreach ($templates as $item) {
-            if (empty($item['id']) || empty($item['path'])) {
+            if (empty($item['path'])) {
                 continue;
             }
 
-            CvTemplate::updateOrCreate(
-                ['id' => (int) $item['id']],
-                [
-                    'name' => $item['title'] ?? ($item['name'] ?? 'Template #' . $item['id']),
-                    'slug' => $item['slug'] ?? \Illuminate\Support\Str::slug($item['title'] ?? 'template-' . $item['id']),
-                    'view_path' => $item['path'],
-                    'category' => $item['category'] ?? 'Modern',
-                    'style' => $item['style'] ?? 'Clean',
-                    'description' => $item['description'] ?? null,
-                    'preview_image' => $item['preview_image'] ?? null,
-                    'is_premium' => (bool) ($item['is_paid'] ?? ($item['is_premium'] ?? false)),
-                    'is_active' => (bool) ($item['is_active'] ?? true),
-                ]
-            );
+            $slug = $item['slug'] ?? \Illuminate\Support\Str::slug($item['title'] ?? 'template-' . ($item['id'] ?? uniqid()));
+            $id = ! empty($item['id']) ? (int) $item['id'] : null;
+
+            // 1. Match by unique slug first so we never trigger unique key constraint collisions
+            $template = CvTemplate::where('slug', $slug)->first();
+
+            // 2. If not found by slug, check by ID
+            if (! $template && $id) {
+                $template = CvTemplate::find($id);
+            }
+
+            // 3. If still not found, create new instance
+            if (! $template) {
+                $template = new CvTemplate();
+                if ($id && ! CvTemplate::whereKey($id)->exists()) {
+                    $template->id = $id;
+                }
+            }
+
+            // 4. Update attributes safely
+            $template->name = $item['title'] ?? ($item['name'] ?? 'Template #' . ($id ?? $slug));
+            $template->slug = $slug;
+            $template->view_path = $item['path'];
+            $template->category = $item['category'] ?? 'Modern';
+            $template->style = $item['style'] ?? 'Clean';
+            $template->description = $item['description'] ?? null;
+            $template->preview_image = $item['preview_image'] ?? null;
+            $template->is_premium = (bool) ($item['is_paid'] ?? ($item['is_premium'] ?? false));
+            $template->is_active = (bool) ($item['is_active'] ?? true);
+            $template->save();
 
             $syncedCount++;
         }

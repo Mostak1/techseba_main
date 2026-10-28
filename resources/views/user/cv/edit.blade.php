@@ -1324,6 +1324,8 @@
             <input type="hidden" name="template_id" id="input_template_id" value="{{ $selectedCvTemplate?->id ?? 1 }}">
             <input type="hidden" name="portfolio_template_id" value="{{ $selectedPortfolioTemplate?->id ?? 1 }}">
             <input type="hidden" name="active_tab" value="content">
+            <input type="hidden" name="is_public" value="1">
+            <input type="hidden" name="public_print_enabled" value="1">
 
             <div class="flowcv-workspace">
                 <!-- ================= LEFT EDITOR COLUMN ================= -->

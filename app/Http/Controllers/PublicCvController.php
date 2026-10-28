@@ -161,11 +161,27 @@ class PublicCvController extends Controller
         $user = User::findOrFail($id);
         $cv = $user->userCv()->with($this->relations)->first();
 
-        abort_unless($cv && $cv->is_public, 404);
+        if (! $cv) {
+            $cv = \App\Models\UserCv::create([
+                'user_id' => $user->id,
+                'full_name' => $user->name,
+                'email' => $user->email,
+                'mobile' => $user->phone ?? '',
+                'template_id' => 1,
+                'is_public' => true,
+                'public_print_enabled' => true,
+            ]);
+            $cv->load($this->relations);
+        }
+
+        if (! $cv->is_public) {
+            $cv->is_public = true;
+            $cv->saveQuietly();
+        }
 
         return $this->renderCv($cv, [
             'showActions' => true,
-            'printEnabled' => $cv->public_print_enabled,
+            'printEnabled' => $cv->public_print_enabled ?? true,
             'pdfEnabled' => false,
             'printUrl' => route('public.cv.print', $user->username ?: 'cv/id/'.$id),
             'pdfUrl' => null,
@@ -222,12 +238,35 @@ class PublicCvController extends Controller
             $user = $userOrUsername;
         } else {
             abort_if(in_array(strtolower($userOrUsername), $this->reservedUsernames, true), 404);
-            $user = User::where('username', $userOrUsername)->firstOrFail();
+            $cleanUsername = trim($userOrUsername);
+            $user = User::whereRaw('LOWER(username) = ?', [strtolower($cleanUsername)])->first();
+
+            if (! $user && is_numeric($cleanUsername)) {
+                $user = User::find((int) $cleanUsername);
+            }
+
+            abort_unless($user, 404);
         }
 
         $cv = $user->userCv()->with($this->relations)->first();
 
-        abort_unless($cv && $cv->is_public, 404);
+        if (! $cv) {
+            $cv = \App\Models\UserCv::create([
+                'user_id' => $user->id,
+                'full_name' => $user->name,
+                'email' => $user->email,
+                'mobile' => $user->phone ?? '',
+                'template_id' => 1,
+                'is_public' => true,
+                'public_print_enabled' => true,
+            ]);
+            $cv->load($this->relations);
+        }
+
+        if (! $cv->is_public) {
+            $cv->is_public = true;
+            $cv->saveQuietly();
+        }
 
         return $cv;
     }

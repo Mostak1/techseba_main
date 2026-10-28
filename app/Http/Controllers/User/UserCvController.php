@@ -105,8 +105,8 @@ class UserCvController extends Controller
         DB::transaction(function () use ($request, $validated, $user, &$cv) {
             $cv = UserCv::firstOrNew(['user_id' => $user->id]);
             $cv->fill(Arr::only($validated, $this->mainFields));
-            $cv->is_public = $request->boolean('is_public');
-            $cv->public_print_enabled = $request->boolean('public_print_enabled');
+            $cv->is_public = $request->has('is_public') ? $request->boolean('is_public') : true;
+            $cv->public_print_enabled = $request->has('public_print_enabled') ? $request->boolean('public_print_enabled') : true;
             $cv->public_pdf_enabled = false;
 
             if ($request->hasFile('photo')) {

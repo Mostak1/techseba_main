@@ -18,6 +18,7 @@ use App\Http\Controllers\User\ProfileController as UserProfileController;
 use App\Http\Controllers\User\DomainSettingController;
 use App\Http\Controllers\User\UserCvController;
 use App\Http\Controllers\User\TemplateGalleryController;
+use App\Http\Controllers\User\PortfolioSettingController;
 use Modules\Wishlist\App\Http\Controllers\WishlistController;
 use App\Http\Controllers\User\WorkOrderController as UserWorkOrderController;
 use App\Http\Controllers\Admin\WorkOrderController as AdminWorkOrderController;
@@ -257,6 +258,12 @@ Route::group(['middleware' => ['HtmlSpecialchars', 'MaintenanceMode']], function
                 Route::delete('/custom-domain/{id}', 'destroyCustomDomain')->name('destroy');
             });
 
+            Route::controller(PortfolioSettingController::class)->prefix('portfolio-settings')->name('portfolio-settings.')->group(function () {
+                Route::get('/', 'index')->name('index');
+                Route::post('/select-template', 'selectTemplate')->name('select-template');
+                Route::post('/visibility', 'updateVisibility')->name('visibility');
+            });
+
             Route::get('/orders', [UserProfileController::class, 'orders'])->name('orders');
             Route::get('/order/details/{order_id}', [UserProfileController::class, 'order_show'])->name('order_show');
             Route::get('/transactions/history', [UserProfileController::class, 'transactions'])->name('transactions');
@@ -404,6 +411,12 @@ Route::middleware(['resolve.profile.domain', 'auth:web', 'ensure.profile.owner']
     Route::post('/portfolio/templates/select', [TemplateGalleryController::class, 'select'])->defaults('type', 'portfolio')->name('profile.domain.cv.portfolio-templates.select');
     Route::get('/portfolio/templates/{slug}/preview', [TemplateGalleryController::class, 'preview'])->defaults('type', 'portfolio')->where('slug', '[A-Za-z0-9_-]+')->name('profile.domain.cv.portfolio-templates.preview');
     Route::get('/portfolio/templates/{slug}/render', [TemplateGalleryController::class, 'render'])->defaults('type', 'portfolio')->where('slug', '[A-Za-z0-9_-]+')->name('profile.domain.cv.portfolio-templates.render');
+
+    Route::controller(PortfolioSettingController::class)->prefix('portfolio-settings')->name('profile.domain.portfolio-settings.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/select-template', 'selectTemplate')->name('select-template');
+        Route::post('/visibility', 'updateVisibility')->name('visibility');
+    });
 });
 
 

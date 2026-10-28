@@ -314,8 +314,8 @@ if (!function_exists('profile_route')) {
 
         if ($isProfileContext) {
             $mappedName = str_replace(
-                ['user.cv.', 'user.dashboard', 'user.login', 'user.store-login'],
-                ['profile.domain.cv.', 'profile.domain.dashboard', 'profile.domain.login', 'profile.domain.store-login'],
+                ['user.cv.', 'user.dashboard', 'user.login', 'user.store-login', 'user.portfolio-settings.'],
+                ['profile.domain.cv.', 'profile.domain.dashboard', 'profile.domain.login', 'profile.domain.store-login', 'profile.domain.portfolio-settings.'],
                 $name
             );
 

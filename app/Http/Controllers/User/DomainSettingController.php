@@ -33,6 +33,8 @@ class DomainSettingController extends Controller
 
         $customDomains = $user->profileDomains()->where('type', 'custom_domain')->latest()->get();
         $serverIp = $_SERVER['SERVER_ADDR'] ?? gethostbyname($baseDomain);
+        $cv = $user->userCv()->with('portfolioTemplate')->first();
+        $portfolioTemplate = $cv?->portfolioTemplate ?? app(\App\Services\TemplateRegistry::class)->effectiveTemplate('portfolio', null);
 
         return view('user.domain_settings', [
             'user' => $user,
@@ -40,6 +42,7 @@ class DomainSettingController extends Controller
             'customDomains' => $customDomains,
             'baseDomain' => $baseDomain,
             'serverIp' => $serverIp,
+            'portfolioTemplate' => $portfolioTemplate,
         ]);
     }
 

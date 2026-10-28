@@ -1219,8 +1219,11 @@
                     <i class="far fa-file-alt"></i> Content
                 </button>
                 <button type="button" class="flowcv-nav-tab" data-nav-target="templates">
-                    <i class="fas fa-th-large"></i> Choose Template
+                    <i class="fas fa-th-large"></i> CV Templates
                 </button>
+                <a href="{{ profile_route('user.portfolio-settings.index') }}" class="flowcv-nav-tab" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-globe"></i> Portfolio Design
+                </a>
                 <button type="button" class="flowcv-nav-tab" data-nav-target="ai-tools">
                     <i class="fas fa-magic"></i> AI Tools
                 </button>
@@ -1796,8 +1799,15 @@
             <div class="flowcv-editor-col">
                 <div class="flowcv-identity-card" style="display: block; padding: 20px;">
                     <div style="margin-bottom: 16px;">
-                        <h3 style="margin: 0 0 4px; font-size: 19px; font-weight: 800; color: #0f172a !important;">Choose CV Template</h3>
-                        <p style="margin: 0; font-size: 13px; color: #64748b;">Click on any template below to immediately preview your real CV data on the right.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap;">
+                            <div>
+                                <h3 style="margin: 0 0 4px; font-size: 19px; font-weight: 800; color: #0f172a !important;">Choose CV Template</h3>
+                                <p style="margin: 0; font-size: 13px; color: #64748b;">Click on any template below to immediately preview your real CV data on the right.</p>
+                            </div>
+                            <a href="{{ profile_route('user.portfolio-settings.index') }}" style="background: #eef2ff; color: #4f46e5; border: 1px solid #c7d2fe; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+                                <i class="fas fa-globe"></i> Website / Portfolio Designs &rarr;
+                            </a>
+                        </div>
                     </div>
 
                     <!-- Search & Filter Controls -->

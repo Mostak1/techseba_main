@@ -135,6 +135,46 @@
         <h4>{{ __('translate.Domain Settings') }}</h4>
     </div>
 
+    <!-- Active Portfolio UI Design on this Domain -->
+    <div class="domain-card" style="background: linear-gradient(135deg, rgba(14, 22, 48, 0.9) 0%, rgba(19, 32, 74, 0.9) 100%); border-color: rgba(0, 212, 255, 0.35);">
+        <div class="domain-card-header" style="border-bottom-color: rgba(0, 212, 255, 0.15);">
+            <h5 class="domain-card-title">
+                <i class="ri-palette-line"></i> {{ __('translate.Domain Portfolio UI & Design') }}
+            </h5>
+            <span class="badge bg-info text-dark font-weight-bold" style="background: #00D4FF !important;">
+                <i class="ri-checkbox-circle-line me-1"></i> Connected to Domain
+            </span>
+        </div>
+
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div class="d-flex align-items-center gap-3">
+                <div style="width: 54px; height: 54px; border-radius: 12px; background: rgba(0, 212, 255, 0.15); border: 1px solid rgba(0, 212, 255, 0.3); display: flex; align-items: center; justify-content: center; color: #00D4FF; font-size: 26px;">
+                    <i class="ri-layout-masonry-line"></i>
+                </div>
+                <div>
+                    <h6 class="text-white mb-1" style="font-size: 16px; font-weight: 700;">
+                        {{ $portfolioTemplate?->name ?? 'Modern Portfolio' }}
+                        <span class="badge bg-secondary ms-2" style="font-size: 11px;">{{ $portfolioTemplate?->style ?? 'Interactive Showcase' }}</span>
+                    </h6>
+                    <p class="text-muted small m-0">
+                        This is the design layout displayed when visitors visit your subdomain (e.g. <code>{{ $subdomain?->url }}</code>) or custom domain.
+                    </p>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ profile_route('user.portfolio-settings.index') }}" class="btn btn-sm btn-primary" style="background: #00D4FF; color: #000; border: none; font-weight: 700; padding: 8px 16px;">
+                    <i class="ri-brush-line me-1"></i> Change Portfolio Design
+                </a>
+                @if($subdomain)
+                    <a href="{{ $subdomain->url }}" target="_blank" class="btn btn-sm btn-outline-info" style="padding: 8px 14px;">
+                        <i class="ri-external-link-line me-1"></i> Visit Domain
+                    </a>
+                @endif
+            </div>
+        </div>
+    </div>
+
     <!-- Section 1: Free Subdomain -->
     <div class="domain-card">
         <div class="domain-card-header">

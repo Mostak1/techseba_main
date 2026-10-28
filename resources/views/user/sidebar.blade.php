@@ -91,6 +91,21 @@
                 </a>
             </li>
             <li>
+                <a href="{{ profile_route('user.portfolio-settings.index') }}" class="{{ request()->routeIs('user.portfolio-settings.*', 'profile.domain.portfolio-settings.*') ? 'active' : '' }}">
+                    <span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="3" y="4" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M3 10H21" stroke="currentColor" stroke-width="1.5"/>
+                            <circle cx="6.5" cy="7" r="1" fill="currentColor"/>
+                            <circle cx="9.5" cy="7" r="1" fill="currentColor"/>
+                            <circle cx="12.5" cy="7" r="1" fill="currentColor"/>
+                            <path d="M7 14H11M7 17H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    Portfolio Settings
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('user.work_orders.index') }}" class="{{ request()->routeIs('user.work_orders.*') ? 'active' : '' }}">
                     <span>
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"

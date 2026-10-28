@@ -69,7 +69,11 @@ class CvTemplateSyncService
             $template->category = $item['category'] ?? 'Modern';
             $template->style = $item['style'] ?? 'Clean';
             $template->description = $item['description'] ?? null;
-            $template->preview_image = $item['preview_image'] ?? null;
+
+            // Never overwrite existing uploaded/set preview images in the database
+            if (empty($template->preview_image)) {
+                $template->preview_image = $item['preview_image'] ?? null;
+            }
             $template->is_premium = (bool) ($item['is_paid'] ?? ($item['is_premium'] ?? false));
             $template->is_active = (bool) ($item['is_active'] ?? true);
             $template->save();

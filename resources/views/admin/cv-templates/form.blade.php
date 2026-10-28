@@ -78,9 +78,9 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
 
-                                                @if($template->preview_image)
+                                                @if($template->thumbnail_url)
                                                     <div class="mg-top-25">
-                                                        <img src="{{ asset($template->preview_image) }}" alt="{{ $template->name }}" style="width: 96px; height: 124px; object-fit: cover; border-radius: 4px;">
+                                                        <img src="{{ $template->thumbnail_url }}" alt="{{ $template->name }}" style="width: 96px; height: 124px; object-fit: cover; border-radius: 4px;">
                                                     </div>
                                                 @endif
                                             </div>

@@ -24,7 +24,7 @@
                                 <div class="crancy-customer-filter d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
                                     <h4 class="crancy-product-card__title m-0">CV Template List</h4>
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
-                                        <button type="button" class="btn btn-outline-info btn-sm" onclick="if(confirm('Sync database templates from database/data/cv_templates.json?')) document.getElementById('syncJsonForm').submit();">
+                                        <button type="button" class="btn btn-outline-info btn-sm" onclick="confirmSyncJson()">
                                             <i class="fas fa-sync"></i> Sync with JSON File
                                         </button>
 
@@ -60,10 +60,10 @@
                                                 <tr>
                                                     <td><strong>#{{ $template->id }}</strong></td>
                                                     <td>
-                                                        @if($template->preview_image)
-                                                            <img src="{{ asset($template->preview_image) }}" alt="{{ $template->name }}" style="width: 50px; height: 65px; object-fit: cover; border-radius: 4px; border: 1px solid #dee2e6;">
+                                                        @if($template->thumbnail_url)
+                                                            <img src="{{ $template->thumbnail_url }}" alt="{{ $template->name }}" style="width: 50px; height: 65px; object-fit: cover; border-radius: 4px; border: 1px solid #dee2e6;">
                                                         @else
-                                                            <div style="width: 50px; height: 65px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #adb5bd;">
+                                                            <div style="width: 50px; height: 65px; background: #e9ecef; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #adb5bd;" title="No preview image">
                                                                 <i class="fas fa-file-alt"></i>
                                                             </div>
                                                         @endif
@@ -100,10 +100,10 @@
                                                         <a href="{{ route('admin.cv-templates.edit', $template) }}" class="btn btn-primary btn-sm" title="Edit Template">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <form action="{{ route('admin.cv-templates.destroy', $template) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete this CV template?')">
+                                                        <form action="{{ route('admin.cv-templates.destroy', $template) }}" method="POST" class="d-inline">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                            <button type="button" class="btn btn-danger btn-sm" title="Delete" onclick="confirmDeleteTemplate(this.closest('form'))">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -129,3 +129,42 @@
         </div>
     </section>
 @endsection
+
+@push('js_section')
+    <script src="{{ asset('global/sweetalert/sweetalert2@11.js') }}"></script>
+    <script>
+        function confirmSyncJson() {
+            Swal.fire({
+                title: 'Sync Templates from JSON?',
+                text: 'This will synchronize CV templates from database/data/cv_templates.json with the database.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#0c2340',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-sync"></i> Yes, Sync Now',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('syncJsonForm').submit();
+                }
+            });
+        }
+
+        function confirmDeleteTemplate(form) {
+            Swal.fire({
+                title: 'Delete CV Template?',
+                text: 'Are you sure you want to delete this CV template? This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: '<i class="fas fa-trash"></i> Yes, Delete',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        }
+    </script>
+@endpush

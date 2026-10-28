@@ -118,8 +118,9 @@
         }
 
         .section {
-            margin-top: 15px;
-            page-break-inside: avoid;
+            margin-top: 14px;
+            break-inside: auto;
+            page-break-inside: auto;
         }
 
         .section-title {
@@ -128,8 +129,11 @@
             background: #e8eef9;
             border-left: 4px solid #1e3a8a;
             color: #102a63;
-            font-size: 15px;
+            font-size: 14px;
+            font-weight: 700;
             line-height: 1.25;
+            break-after: avoid;
+            page-break-after: avoid;
         }
 
         .info-grid {
@@ -177,10 +181,12 @@
             text-align: left;
         }
 
-        .job-item {
+        .job-item, .project-item {
             border: 1px solid #cbd5e1;
             padding: 9px;
             margin-bottom: 8px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .job-title {
@@ -253,21 +259,31 @@
                 min-height: 0 !important;
                 height: auto !important;
                 margin: 0 !important;
-                padding: 10mm 14mm !important;
+                padding: 0 !important;
                 box-shadow: none !important;
-                page-break-after: always !important;
-                break-after: page !important;
             }
 
             .page-break {
                 display: none !important;
             }
 
-            .section,
+            .section {
+                break-inside: auto !important;
+                page-break-inside: auto !important;
+            }
+
+            .section-title {
+                break-after: avoid !important;
+                page-break-after: avoid !important;
+            }
+
             .job-item,
-            table {
-                page-break-inside: avoid;
-                break-inside: avoid;
+            .project-item,
+            .reference-box,
+            .signature,
+            tr {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
 
@@ -335,8 +351,10 @@
         <h1 class="cv-name">{{ $cv->full_name }}</h1>
         <div class="cv-contact">
             @if($cv->mobile)<div><strong>Mobile:</strong> {{ $cv->mobile }}</div>@endif
-            @if($cv->email)<div><strong>Email:</strong> {{ $cv->email }}</div>@endif
-            @if($cv->website_url)<div><strong>Website:</strong> {{ $cv->website_url }}</div>@endif
+            @if($cv->email)<div><strong>Email:</strong> <a href="mailto:{{ $cv->email }}">{{ $cv->email }}</a></div>@endif
+            @if($cv->website_url)<div><strong>Website:</strong> <a href="{{ $cv->website_url }}" target="_blank">{{ $cv->website_url }}</a></div>@endif
+            @if($cv->linkedin_url)<div><strong>LinkedIn:</strong> <a href="{{ $cv->linkedin_url }}" target="_blank">{{ $cv->linkedin_url }}</a></div>@endif
+            @if($cv->github_url)<div><strong>GitHub:</strong> <a href="{{ $cv->github_url }}" target="_blank">{{ $cv->github_url }}</a></div>@endif
             @if($cv->present_address)<div><strong>Address:</strong> {{ $cv->present_address }}</div>@endif
         </div>
         @if($photoSrc)
@@ -486,23 +504,26 @@
 
     @if($cv->projects->isNotEmpty())
         <section class="section">
-            <h2 class="section-title">Projects & Software Engineering Case Studies</h2>
+            <h2 class="section-title">Projects &amp; Case Studies</h2>
             @foreach($cv->projects as $project)
-                <div style="margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #ccc;">
-                    <div style="font-weight: 700; font-size: 13px; color: #000;">{{ $loop->iteration }}. {{ $project->title }} @if($project->role)<span style="font-weight: normal; color: #555;">({{ $project->role }})</span>@endif</div>
-                    @if($project->link)
-                        <div style="font-size: 11px; color: #0056b3; margin-top: 2px;"><strong>Demo Link:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a></div>
-                    @endif
-                    @if($project->demo_user || $project->demo_password)
-                        <div style="font-size: 11px; color: #155724; background-color: #d4edda; border: 1px dashed #c3e6cb; padding: 3px 8px; border-radius: 4px; margin: 4px 0; display: inline-block;">
-                            @if($project->demo_user)<span style="margin-right: 12px;"><strong>Demo User:</strong> <code>{{ $project->demo_user }}</code></span>@endif
-                            @if($project->demo_password)<span><strong>Demo Password:</strong> <code>{{ $project->demo_password }}</code></span>@endif
+                <div class="project-item">
+                    <div class="job-title">{{ $loop->iteration }}. {{ $project->title }} @if($project->role)<span class="muted" style="font-weight: normal; font-size: 12px;">({{ $project->role }})</span>@endif</div>
+                    @if($project->link || $project->github_url)
+                        <div style="font-size: 11px; margin-top: 2px;">
+                            @if($project->link)<strong>Demo:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a>@endif
+                            @if($project->github_url)<span style="margin-left: 10px;"><strong>GitHub:</strong> <a href="{{ $project->github_url }}" target="_blank">{{ $project->github_url }}</a></span>@endif
                         </div>
                     @endif
-                    @if($project->technologies)<div style="font-size: 11px; color: #333; margin-top: 2px;"><strong>Technologies:</strong> {{ $project->technologies }}</div>@endif
-                    @if($project->description)<div style="margin-top: 3px; font-size: 11px; color: #444;">{!! clean($project->description) !!}</div>@endif
-                    @if($project->problem)<div style="margin-top: 2px; font-size: 11px; color: #555;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>@endif
-                    @if($project->solution)<div style="margin-top: 2px; font-size: 11px; color: #555;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>@endif
+                    @if($project->demo_user || $project->demo_password)
+                        <div style="font-size: 11px; color: #155724; background-color: #d4edda; border: 1px dashed #c3e6cb; padding: 2px 7px; border-radius: 4px; margin: 4px 0; display: inline-block;">
+                            @if($project->demo_user)<span style="margin-right: 12px;"><strong>User:</strong> <code>{{ $project->demo_user }}</code></span>@endif
+                            @if($project->demo_password)<span><strong>Pass:</strong> <code>{{ $project->demo_password }}</code></span>@endif
+                        </div>
+                    @endif
+                    @if($project->technologies)<div class="muted" style="font-size: 11px; margin-top: 2px;"><strong>Technologies:</strong> {{ $project->technologies }}</div>@endif
+                    @if($project->description)<div style="margin-top: 3px; font-size: 12px; color: #374151;">{!! clean($project->description) !!}</div>@endif
+                    @if($project->problem)<div style="margin-top: 2px; font-size: 11px; color: #4b5563;"><strong>Problem:</strong> {!! clean($project->problem) !!}</div>@endif
+                    @if($project->solution)<div style="margin-top: 2px; font-size: 11px; color: #4b5563;"><strong>Solution:</strong> {!! clean($project->solution) !!}</div>@endif
                 </div>
             @endforeach
         </section>

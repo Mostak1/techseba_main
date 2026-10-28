@@ -34,6 +34,30 @@ class CvTemplateSeeder extends Seeder
                 'is_active' => true,
                 'sort_order' => 2,
             ],
+            [
+                'slug' => 'creative',
+                'name' => 'Creative Executive',
+                'description' => 'High-impact executive layout with indigo gradient sidebar, skill pills, and timeline milestones.',
+                'category' => 'Creative',
+                'style' => 'Indigo Gradient Sidebar',
+                'view_path' => 'frontend.cv.templates.creative',
+                'preview_image' => 'uploads/website-images/templates/creative.webp',
+                'is_premium' => false,
+                'is_active' => true,
+                'sort_order' => 3,
+            ],
+            [
+                'slug' => 'cv-it',
+                'name' => 'CV IT & Software',
+                'description' => 'Clean professional 2-column IT & Software Engineering resume layout designed for maximum interview callbacks.',
+                'category' => 'IT & Software',
+                'style' => 'Navy Dual-Column Professional',
+                'view_path' => 'frontend.cv.templates.cv_it',
+                'preview_image' => 'uploads/website-images/templates/cv_it.webp',
+                'is_premium' => false,
+                'is_active' => true,
+                'sort_order' => 4,
+            ],
         ];
 
         foreach ($templates as $t) {

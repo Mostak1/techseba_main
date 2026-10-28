@@ -463,12 +463,23 @@
                 clear: both;
             }
 
-            .section,
+            .section {
+                break-inside: auto !important;
+                page-break-inside: auto !important;
+            }
+
+            .section-header {
+                break-after: avoid !important;
+                page-break-after: avoid !important;
+            }
+
             .job-entry,
             .project-card,
-            .edu-entry {
-                page-break-inside: avoid;
-                break-inside: avoid;
+            .edu-entry,
+            .ref-card,
+            .header {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
             }
         }
     </style>
@@ -610,12 +621,12 @@
     </section>
     @endif
 
-    <!-- Selected Featured Projects (Page 1 Top Projects) -->
+    <!-- Featured Projects -->
     @if($cv->projects->isNotEmpty())
     <section class="section">
-        <h2 class="section-header">Selected Featured Projects</h2>
+        <h2 class="section-header">Featured Projects &amp; Case Studies</h2>
 
-        @foreach($cv->projects->take(2) as $project)
+        @foreach($cv->projects as $project)
         <div class="project-card">
             <div class="project-header">
                 <span class="project-title">{{ $loop->iteration }}. {{ $project->title }}</span>
@@ -626,51 +637,10 @@
                 <div class="tech-line"><strong>Tech Stack:</strong> {{ $project->technologies }}</div>
             @endif
 
-            @if($project->link || $project->demo_user || $project->demo_password)
+            @if($project->link || $project->github_url || $project->demo_user || $project->demo_password)
                 <div class="demo-bar">
                     @if($project->link)<span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Live Demo:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a></span>@endif
-                    @if($project->demo_user)<span><i class="fa-solid fa-user"></i> <strong>User:</strong> {{ $project->demo_user }}</span>@endif
-                    @if($project->demo_password)<span><i class="fa-solid fa-key"></i> <strong>Pass:</strong> {{ $project->demo_password }}</span>@endif
-                </div>
-            @endif
-
-            @if($project->description)
-                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->description) !!}</div>
-            @elseif($project->solution)
-                <div class="summary-text" style="font-size: 9px; line-height: 1.34;">{!! clean($project->solution) !!}</div>
-            @endif
-        </div>
-        @endforeach
-    </section>
-    @endif
-
-    <div class="page-num">Page 1 of 2</div>
-</div>
-
-<!-- PAGE BREAK FOR EXACT 2-PAGE LAYOUT -->
-<div class="page-break"></div>
-
-<!-- PAGE 2 OF 2 -->
-<div class="resume-page">
-    <!-- Additional Featured Projects Case Studies -->
-    @if($cv->projects->count() > 2)
-    <section class="section">
-        <h2 class="section-header">Featured Projects & Live Demos (Contd.)</h2>
-
-        @foreach($cv->projects->skip(2) as $project)
-        <div class="project-card">
-            <div class="project-header">
-                <span class="project-title">{{ $loop->iteration + 2 }}. {{ $project->title }}</span>
-                @if($project->role)<span class="project-role">{{ $project->role }}</span>@endif
-            </div>
-
-            @if($project->technologies)
-                <div class="tech-line"><strong>Tech Stack:</strong> {{ $project->technologies }}</div>
-            @endif
-
-            @if($project->link || $project->demo_user || $project->demo_password)
-                <div class="demo-bar">
-                    @if($project->link)<span><i class="fa-solid fa-arrow-up-right-from-square"></i> <strong>Live Demo:</strong> <a href="{{ $project->link }}" target="_blank">{{ $project->link }}</a></span>@endif
+                    @if($project->github_url)<span><i class="fa-brands fa-github"></i> <strong>GitHub:</strong> <a href="{{ $project->github_url }}" target="_blank">{{ $project->github_url }}</a></span>@endif
                     @if($project->demo_user)<span><i class="fa-solid fa-user"></i> <strong>User:</strong> {{ $project->demo_user }}</span>@endif
                     @if($project->demo_password)<span><i class="fa-solid fa-key"></i> <strong>Pass:</strong> {{ $project->demo_password }}</span>@endif
                 </div>
@@ -706,7 +676,7 @@
     <!-- Certifications & Professional Training -->
     @if($cv->trainings->isNotEmpty())
     <section class="section">
-        <h2 class="section-header">Certifications & Professional Training</h2>
+        <h2 class="section-header">Certifications &amp; Professional Training</h2>
         @foreach($cv->trainings as $training)
         <div class="edu-entry">
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
@@ -723,15 +693,42 @@
     </section>
     @endif
 
-    <!-- Key Achievements & Leadership -->
+    <!-- Professional Qualifications -->
+    @if($cv->professionalQualifications && $cv->professionalQualifications->isNotEmpty())
     <section class="section">
-        <h2 class="section-header">Key Achievements & Leadership</h2>
-        <ul class="bullet-list">
-            <li><strong>Engineering Team Leadership:</strong> Led cross-functional developer team at American Wellness Centre, enforcing code quality, modular architecture, and CI/CD best practices.</li>
-            <li><strong>Enterprise Solution Delivery:</strong> Successfully engineered 5+ commercial enterprise applications across ERP, POS, Healthcare, and EdTech domains with zero floating-point accounting errors.</li>
-            <li><strong>Community Welfare & Voluntary Initiative:</strong> Organized community relief distribution for 525 flood-affected victims in 2019.</li>
-        </ul>
+        <h2 class="section-header">Professional Qualifications</h2>
+        @foreach($cv->professionalQualifications as $qual)
+        <div class="edu-entry">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <strong>{{ $qual->title }}</strong>
+                <span style="font-size: 8.5px; color: #475569; font-weight: 600;">{{ $qual->authority }} @if($qual->year)({{ $qual->year }})@endif</span>
+            </div>
+            @if($qual->details)
+                <div class="summary-text" style="font-size: 8.5px; color: #475569; margin-left: 8px;">
+                    • {!! clean($qual->details) !!}
+                </div>
+            @endif
+        </div>
+        @endforeach
     </section>
+    @endif
+
+    <!-- Languages -->
+    @if($cv->languages && $cv->languages->isNotEmpty())
+    <section class="section">
+        <h2 class="section-header">Languages</h2>
+        <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            @foreach($cv->languages as $lang)
+                <div style="font-size: 9px; color: #334155;">
+                    <strong>{{ $lang->language_name }}</strong>:
+                    {{ $lang->reading_level ? $lang->reading_level . ' (Reading)' : '' }}
+                    {{ $lang->writing_level ? ', ' . $lang->writing_level . ' (Writing)' : '' }}
+                    {{ $lang->speaking_level ? ', ' . $lang->speaking_level . ' (Speaking)' : '' }}
+                </div>
+            @endforeach
+        </div>
+    </section>
+    @endif
 
     <!-- References -->
     @if($cv->references->isNotEmpty())
@@ -739,7 +736,7 @@
         <h2 class="section-header">Professional References</h2>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
             @foreach($cv->references as $ref)
-            <div style="border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; background: #f8fafc; padding: 5px 8px; border-radius: 4px; font-size: 8.5px; line-height: 1.35;">
+            <div style="border: 1px solid #e2e8f0; border-left: 3px solid #2563eb; background: #f8fafc; padding: 5px 8px; border-radius: 4px; font-size: 8.5px; line-height: 1.35; break-inside: avoid;">
                 <div style="font-weight: 800; color: #0f172a; font-size: 10px;">{{ $ref->name }}</div>
                 <div><strong>Designation:</strong> {{ $ref->designation }}</div>
                 <div><strong>Organization:</strong> {{ $ref->organization }}</div>
@@ -753,7 +750,7 @@
     @endif
 
     <!-- Declaration -->
-    <section class="section" style="margin-top: 8px;">
+    <section class="section" style="margin-top: 8px; break-inside: avoid;">
         <h2 class="section-header">Declaration</h2>
         <div class="summary-text" style="font-size: 8.5px; line-height: 1.35;">{!! clean($cv->declaration ?: 'I hereby declare that all information provided in this curriculum vitae is authentic, correct, and complete to the best of my knowledge.') !!}</div>
 
@@ -773,8 +770,6 @@
             </div>
         </div>
     </section>
-
-    <div class="page-num">Page 2 of 2</div>
 </div>
 
 @if(!empty($printMode))

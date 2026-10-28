@@ -35,12 +35,11 @@
         ? public_path('frontend/assets/css/fontawesome.css')
         : asset('frontend/assets/css/fontawesome.css');
 
-    $username = $username ?? ($cv->user->username ?? 'user');
-    $primaryRole = $cv->employments->first()->designation ?? 'AI & Full-Stack Software Engineer';
+    $username = $username ?? ($cv->user?->username ?? 'user');
+    $primaryRole = $cv->employments->first()->designation ?? 'Full-Stack Software Engineer & DevOps';
 
-    // Partition child entities across 2 pages cleanly
     $employments = $cv->employments ?? collect();
-    $academics = $cv->academics ?? ($cv->educations ?? collect());
+    $academics = $cv->academics->isNotEmpty() ? $cv->academics : ($cv->educations ?? collect());
     $trainings = $cv->trainings ?? collect();
     $skills = $cv->skills ?? collect();
     $projects = $cv->projects ?? collect();
@@ -48,22 +47,10 @@
     $languages = $cv->languages ?? collect();
     $references = $cv->references ?? collect();
 
-    // Page 1 vs Page 2 partitioning
-    $page1Trainings = $trainings->slice(0, 1);
-    $page2Trainings = $trainings->slice(1);
-
-    $page1Projects = $projects->slice(0, 1);
-    $page2Projects = $projects->slice(1);
-
-    // Group skills by category if available, otherwise default IT grouped structure
+    // Group skills by category/type
     $groupedSkills = $skills->groupBy(function ($item) {
-        return $item->category ?? ($item->skill_type ?? 'Key Competencies');
+        return $item->skill_type ?: 'Technical Skills';
     });
-
-    // Default categorized skills fallback if user skills lack categories
-    $hasCategoryGroupedSkills = $groupedSkills->count() > 1;
-
-    $hasPage2 = ($page2Projects->isNotEmpty() || $page2Trainings->isNotEmpty() || $certifications->isNotEmpty() || $references->isNotEmpty() || $languages->isNotEmpty());
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -94,8 +81,8 @@
             background: #e2e8f0;
             color: #1e293b;
             font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 9.5px;
-            line-height: 1.45;
+            font-size: 9.3px;
+            line-height: 1.42;
             -webkit-font-smoothing: antialiased;
         }
 
@@ -124,37 +111,32 @@
             box-shadow: 0 2px 5px rgba(12, 35, 64, 0.2);
             transition: all 0.2s ease;
         }
-        .btn:hover {
-            background: #173b67;
-        }
+        .btn:hover { background: #173b67; }
+        .btn-secondary { background: #475569; }
 
-        /* Standard A4 Sheet: 210mm x 297mm */
+        /* A4 Sheet Container */
         .cv-page {
             width: 210mm;
             min-height: 297mm;
-            max-height: 297mm;
-            margin: 18px auto 26px;
+            margin: 16px auto 26px;
             background: #ffffff;
             display: flex;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
             border-radius: 2px;
-            overflow: hidden;
-            page-break-after: always;
             position: relative;
             box-sizing: border-box;
         }
 
-        /* Left Column: Deep Navy Blue Sidebar (approx 36% width) */
+        /* Left Column: Deep Navy Blue Sidebar (34% width) */
         .cv-sidebar {
-            width: 76mm;
+            width: 74mm;
             background-color: #0c2340;
             color: #ffffff;
-            padding: 24px 20px;
+            padding: 22px 16px;
             display: flex;
             flex-direction: column;
+            gap: 14px;
             flex-shrink: 0;
-            gap: 15px;
-            box-sizing: border-box;
         }
 
         .name-block {
@@ -162,128 +144,124 @@
         }
 
         .full-name {
-            font-size: 23px;
+            font-size: 19px;
             font-weight: 800;
             color: #ffffff;
-            margin: 0 0 4px 0;
-            line-height: 1.15;
+            text-transform: uppercase;
             letter-spacing: -0.3px;
+            line-height: 1.15;
+            margin: 0 0 4px 0;
         }
 
         .job-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: #94a3b8;
-            line-height: 1.35;
+            font-size: 10px;
+            font-weight: 700;
+            color: #38bdf8;
+            letter-spacing: 0.4px;
+            line-height: 1.25;
+            text-transform: uppercase;
         }
 
         .avatar-wrap {
+            margin: 4px 0 6px;
             text-align: center;
-            margin: 8px 0 10px;
         }
 
         .avatar-img {
-            width: 95px;
-            height: 95px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid #1e3a5f;
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+            border: 3px solid rgba(56, 189, 248, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
-        /* Contact Details with Icons */
         .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            font-size: 9.5px;
-            color: #f1f5f9;
-            margin-bottom: 2px;
+            gap: 5px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         .contact-item {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             gap: 8px;
+            font-size: 8.8px;
+            color: #e2e8f0;
             word-break: break-all;
-            line-height: 1.35;
-        }
-
-        .contact-item i {
-            font-size: 10.5px;
-            color: #38bdf8;
-            width: 13px;
-            margin-top: 1.5px;
-            flex-shrink: 0;
         }
 
         .contact-item a {
-            color: #f1f5f9;
+            color: #e2e8f0;
             text-decoration: none;
         }
+        .contact-item a:hover { color: #38bdf8; text-decoration: underline; }
 
-        /* Sidebar Section */
+        .contact-item i {
+            color: #38bdf8;
+            font-size: 9.5px;
+            width: 13px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
         .sidebar-section {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .sidebar-sec-title {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: #ffffff;
-            letter-spacing: 0.8px;
             text-transform: uppercase;
+            letter-spacing: 1.2px;
+            border-bottom: 1px solid #38bdf8;
+            padding-bottom: 3px;
+            margin-bottom: 7px;
             display: flex;
             align-items: center;
-            gap: 7px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-            padding-bottom: 4px;
-            margin-bottom: 2px;
+            gap: 6px;
         }
 
         .sidebar-sec-title i {
-            font-size: 10.5px;
             color: #38bdf8;
+            font-size: 9.5px;
         }
 
         .profile-text {
-            font-size: 9px;
-            line-height: 1.48;
+            font-size: 8.8px;
             color: #cbd5e1;
-            text-align: justify;
+            line-height: 1.45;
             margin: 0;
         }
 
-        .sidebar-edu-item, .sidebar-train-item {
+        .sidebar-edu-item {
             margin-bottom: 7px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .sidebar-edu-degree {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 700;
             color: #ffffff;
-            line-height: 1.25;
+            line-height: 1.2;
         }
 
         .sidebar-edu-school {
-            font-size: 9px;
-            color: #e2e8f0;
-            margin: 1px 0;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .sidebar-edu-school i {
-            font-size: 8px;
+            font-size: 8.5px;
             color: #38bdf8;
+            font-weight: 600;
+            margin-top: 1px;
         }
 
         .sidebar-edu-meta {
-            font-size: 8.5px;
+            font-size: 8px;
             color: #94a3b8;
+            margin-top: 1px;
         }
 
         .sidebar-bullet-list {
@@ -292,238 +270,244 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
 
         .sidebar-bullet-list li {
-            font-size: 9px;
-            color: #f1f5f9;
+            font-size: 8.6px;
+            color: #e2e8f0;
             display: flex;
-            align-items: flex-start;
-            gap: 6px;
-            line-height: 1.35;
+            align-items: baseline;
+            gap: 5px;
         }
 
         .sidebar-bullet-list li::before {
             content: "•";
             color: #38bdf8;
             font-weight: bold;
-            font-size: 12px;
-            line-height: 1;
+            font-size: 11px;
         }
 
-        /* Right Column: Main Content (approx 64% width) */
+        /* Right Column: Main Content (Pure White) */
         .cv-main {
-            width: 134mm;
-            padding: 24px 22px;
+            flex: 1;
             background: #ffffff;
+            padding: 22px 22px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            color: #1e293b;
-            box-sizing: border-box;
+            gap: 14px;
+            min-width: 0;
         }
 
         .main-section {
-            display: flex;
-            flex-direction: column;
-            gap: 7px;
+            break-inside: auto;
+            page-break-inside: auto;
         }
 
         .main-sec-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             color: #0c2340;
             text-transform: uppercase;
-            letter-spacing: 0.8px;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #0c2340;
+            padding-bottom: 3px;
+            margin-bottom: 9px;
             display: flex;
             align-items: center;
             gap: 7px;
-            border-bottom: 1.5px solid #0c2340;
-            padding-bottom: 4px;
-            margin-bottom: 4px;
+            break-after: avoid;
+            page-break-after: avoid;
         }
 
         .main-sec-title i {
-            font-size: 11.5px;
             color: #0c2340;
+            font-size: 10px;
         }
 
-        /* Professional Experience */
+        /* Experience Item */
         .exp-item {
-            margin-bottom: 9px;
+            margin-bottom: 10px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .exp-header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            margin-bottom: 2px;
         }
 
         .exp-company {
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 800;
             color: #0c2340;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .exp-company i {
-            font-size: 8.5px;
-            color: #64748b;
-        }
-
-        .exp-role {
-            font-size: 10px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 1px;
         }
 
         .exp-meta {
             font-size: 8.5px;
             color: #64748b;
-            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .exp-role {
+            font-size: 9.6px;
+            font-weight: 700;
+            color: #2563eb;
+            margin: 1px 0 3px 0;
         }
 
         .exp-bullets {
-            margin: 0;
-            padding-left: 13px;
-            font-size: 9px;
-            line-height: 1.45;
+            margin: 2px 0 0 14px;
+            padding: 0;
+            font-size: 8.8px;
             color: #334155;
+            line-height: 1.4;
         }
 
         .exp-bullets li {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
-        /* Technical Skills Section */
+        /* Skills Grid */
         .skills-grid {
             display: flex;
             flex-direction: column;
-            gap: 5px;
-            font-size: 9px;
-            line-height: 1.42;
-            color: #334155;
+            gap: 4px;
         }
 
         .skill-group-row {
-            display: flex;
-            align-items: baseline;
-            gap: 4px;
+            font-size: 8.8px;
+            line-height: 1.38;
         }
 
         .skill-group-title {
             font-weight: 800;
             color: #0c2340;
-            white-space: nowrap;
+            margin-right: 4px;
         }
 
         .skill-group-items {
             color: #334155;
         }
 
-        /* Projects Section */
+        /* Project Item */
         .project-item {
-            margin-bottom: 8px;
+            border-left: 2.5px solid #0c2340;
+            background: #f8fafc;
+            padding: 5px 8px;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 7px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .project-title-line {
-            font-size: 10.5px;
-            font-weight: 800;
-            color: #0c2340;
-            margin-bottom: 1px;
             display: flex;
+            justify-content: space-between;
             align-items: baseline;
-            gap: 5px;
-            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .project-title-line strong {
+            font-size: 9.8px;
+            color: #0c2340;
         }
 
         .project-title-line a {
-            color: #0c2340;
+            color: #2563eb;
             text-decoration: none;
-        }
-
-        .project-title-line i {
             font-size: 8.5px;
-            color: #64748b;
         }
+        .project-title-line a:hover { text-decoration: underline; }
 
         .project-tech {
-            font-size: 9px;
+            font-size: 8.5px;
             font-weight: 600;
             color: #475569;
         }
 
         .project-desc {
-            font-size: 9px;
-            line-height: 1.42;
+            font-size: 8.6px;
+            line-height: 1.38;
             color: #334155;
             margin: 2px 0 0;
         }
 
+        .demo-credentials {
+            font-size: 8px;
+            color: #155724;
+            background: #d4edda;
+            padding: 1px 6px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-top: 2px;
+        }
+
         /* Certifications & References */
         .cert-item {
-            margin-bottom: 7px;
+            margin-bottom: 6px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .cert-title {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 800;
             color: #0c2340;
         }
 
         .cert-meta {
-            font-size: 8.5px;
+            font-size: 8.3px;
             color: #64748b;
-            margin-top: 1px;
         }
 
         .ref-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
+            gap: 8px;
         }
 
         .ref-card {
-            font-size: 9px;
-            line-height: 1.4;
-            color: #334155;
+            border: 1px solid #e2e8f0;
+            border-left: 3px solid #0c2340;
+            background: #f8fafc;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 8.5px;
+            line-height: 1.35;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         .ref-name {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 800;
             color: #0c2340;
         }
 
         .ref-role {
             color: #64748b;
-            font-size: 8.5px;
-        }
-
-        .ref-contact {
-            color: #475569;
-            font-size: 8.5px;
-            margin-top: 2px;
-            display: flex;
-            flex-direction: column;
-            gap: 1px;
+            font-size: 8.3px;
         }
 
         .ref-contact-item {
             display: flex;
             align-items: center;
             gap: 5px;
+            font-size: 8.3px;
+            color: #475569;
+            margin-top: 2px;
             word-break: break-all;
         }
 
-        .ref-contact-item i {
-            font-size: 8.5px;
-            color: #64748b;
+        .signature-box {
+            margin-top: auto;
+            display: flex;
+            justify-content: flex-end;
+            padding-top: 10px;
+            break-inside: avoid;
+            page-break-inside: avoid;
         }
 
         @media print {
@@ -534,14 +518,40 @@
                 display: none !important;
             }
             .cv-page {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-height: 0 !important;
+                height: auto !important;
                 margin: 0 !important;
                 box-shadow: none !important;
                 border-radius: 0 !important;
-                max-height: 297mm !important;
-                height: 297mm !important;
-                page-break-after: always !important;
+            }
+            .main-section {
+                break-inside: auto !important;
+                page-break-inside: auto !important;
+            }
+            .exp-item, .project-item, .ref-card, .cert-item, .sidebar-edu-item {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+            .main-sec-title, .sidebar-sec-title {
+                break-after: avoid !important;
+                page-break-after: avoid !important;
             }
         }
+
+        @if(!empty($forPdf))
+        body {
+            background: #ffffff;
+            font-size: 9px;
+        }
+        .no-print-area { display: none !important; }
+        .cv-page {
+            width: 100%;
+            margin: 0;
+            box-shadow: none;
+        }
+        @endif
     </style>
 </head>
 <body>
@@ -551,16 +561,13 @@
             <button type="button" class="btn" onclick="window.print()">
                 <i class="fas fa-print"></i> Print CV (A4)
             </button>
-            <a href="{{ profile_route('user.cv.edit') }}" class="btn" style="background: #475569;">
+            <a href="{{ profile_route('user.cv.edit') }}" class="btn btn-secondary">
                 <i class="fas fa-edit"></i> Edit Content
             </a>
         </div>
     @endif
 
-    <!-- ========================================== -->
-    <!--                 PAGE 1                     -->
-    <!-- ========================================== -->
-    <div class="cv-page" id="cvPage1">
+    <div class="cv-page">
         <!-- LEFT SIDEBAR (DEEP NAVY) -->
         <aside class="cv-sidebar">
             <div class="name-block">
@@ -579,7 +586,7 @@
                 @if($cv->email)
                     <div class="contact-item">
                         <i class="far fa-envelope"></i>
-                        <span>{{ $cv->email }}</span>
+                        <span><a href="mailto:{{ $cv->email }}">{{ $cv->email }}</a></span>
                     </div>
                 @endif
                 @if($cv->mobile)
@@ -597,19 +604,19 @@
                 @if($cv->linkedin_url)
                     <div class="contact-item">
                         <i class="fab fa-linkedin"></i>
-                        <span>{{ str_replace(['https://', 'http://'], '', $cv->linkedin_url) }}</span>
+                        <span><a href="{{ $cv->linkedin_url }}" target="_blank">{{ str_replace(['https://', 'http://'], '', $cv->linkedin_url) }}</a></span>
                     </div>
                 @endif
                 @if($cv->github_url)
                     <div class="contact-item">
                         <i class="fab fa-github"></i>
-                        <span>{{ str_replace(['https://', 'http://'], '', $cv->github_url) }}</span>
+                        <span><a href="{{ $cv->github_url }}" target="_blank">{{ str_replace(['https://', 'http://'], '', $cv->github_url) }}</a></span>
                     </div>
                 @endif
                 @if($cv->website_url)
                     <div class="contact-item">
                         <i class="fas fa-globe"></i>
-                        <span>{{ str_replace(['https://', 'http://'], '', $cv->website_url) }}</span>
+                        <span><a href="{{ $cv->website_url }}" target="_blank">{{ str_replace(['https://', 'http://'], '', $cv->website_url) }}</a></span>
                     </div>
                 @endif
             </div>
@@ -621,7 +628,7 @@
                         <i class="fas fa-id-badge"></i> PROFILE
                     </div>
                     <p class="profile-text">
-                        {{ $cv->career_summary ?: $cv->career_objective }}
+                        {!! clean($cv->career_summary ?: $cv->career_objective) !!}
                     </p>
                 </div>
             @endif
@@ -634,18 +641,17 @@
                     </div>
                     @foreach($academics as $edu)
                         <div class="sidebar-edu-item">
-                            <div class="sidebar-edu-degree">{{ $edu->degree_title }}</div>
+                            <div class="sidebar-edu-degree">{{ $edu->degree_name ?? $edu->degree_title }}</div>
                             <div class="sidebar-edu-school">
                                 <span>{{ $edu->institution }}</span>
-                                <i class="fas fa-external-link-alt"></i>
                             </div>
                             <div class="sidebar-edu-meta">
-                                <span>{{ $edu->passing_year ? $edu->passing_year : $formatDate($edu->end_date ?? null) }}</span>
+                                <span>{{ $edu->passing_year ?: ($edu->passing_year ?? '') }}</span>
                                 @if(!empty($edu->result))
-                                    <span> | GPA: {{ $edu->result }}</span>
+                                    <span> | GPA/Result: {{ $edu->result }}</span>
                                 @endif
-                                @if(!empty($edu->concentration))
-                                    <div>{{ $edu->concentration }}</div>
+                                @if(!empty($edu->group_or_major))
+                                    <div>Major: {{ $edu->group_or_major }}</div>
                                 @endif
                             </div>
                         </div>
@@ -653,24 +659,39 @@
                 </div>
             @endif
 
-            <!-- Training (Page 1) -->
-            @if($page1Trainings->isNotEmpty())
+            <!-- Training & Certifications (Sidebar) -->
+            @if($trainings->isNotEmpty())
                 <div class="sidebar-section">
                     <div class="sidebar-sec-title">
                         <i class="fas fa-chalkboard-teacher"></i> TRAINING
                     </div>
-                    @foreach($page1Trainings as $train)
-                        <div class="sidebar-train-item">
+                    @foreach($trainings as $train)
+                        <div class="sidebar-edu-item">
                             <div class="sidebar-edu-degree">{{ $train->training_title }}</div>
                             <div class="sidebar-edu-school">
-                                <span>{{ $train->institution }}</span>
-                                <i class="fas fa-external-link-alt"></i>
+                                <span>{{ $train->institute ?? $train->institution }}</span>
                             </div>
                             <div class="sidebar-edu-meta">
-                                <span>{{ $train->duration ? $train->duration : ($train->completion_year ?? '') }}</span>
+                                <span>{{ $train->duration ?: ($train->year ?? '') }}</span>
                             </div>
                         </div>
                     @endforeach
+                </div>
+            @endif
+
+            <!-- Languages -->
+            @if($languages->isNotEmpty())
+                <div class="sidebar-section">
+                    <div class="sidebar-sec-title">
+                        <i class="fas fa-language"></i> LANGUAGES
+                    </div>
+                    <ul class="sidebar-bullet-list">
+                        @foreach($languages as $lang)
+                            <li>
+                                <span><strong>{{ $lang->language_name }}</strong>: {{ $lang->reading_level ?: 'Fluent' }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             @endif
         </aside>
@@ -686,33 +707,24 @@
                     @foreach($employments as $emp)
                         <div class="exp-item">
                             <div class="exp-header">
-                                <span class="exp-company">
-                                    {{ $emp->company_name }}
-                                    <i class="fas fa-external-link-alt"></i>
-                                </span>
+                                <span class="exp-company">{{ $emp->company_name }}</span>
+                                <span class="exp-meta">{{ $formatDate($emp->start_date) }} – {{ $emp->is_current ? 'Present' : $formatDate($emp->end_date) }}@if(!empty($emp->company_location)) · {{ $emp->company_location }}@endif</span>
                             </div>
                             <div class="exp-role">{{ $emp->designation }}</div>
-                            <div class="exp-meta">
-                                <span>{{ $formatDate($emp->start_date) }} - {{ (!empty($emp->is_current) || !empty($emp->currently_working)) ? 'Present' : $formatDate($emp->end_date) }}</span>
-                                @if(!empty($emp->company_location))
-                                    <span> | {{ $emp->company_location }}</span>
-                                @endif
-                            </div>
                             @php
                                 $respText = $emp->responsibilities ?? ($emp->job_responsibilities ?? '');
-                                $bulletLines = array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', (string) $respText)));
                             @endphp
-                            @if(!empty($bulletLines))
-                                <ul class="exp-bullets">
-                                    @foreach($bulletLines as $line)
-                                        @php
-                                            $cleanLine = ltrim($line, "•-*\t ");
-                                        @endphp
-                                        @if($cleanLine)
-                                            <li>{{ $cleanLine }}</li>
-                                        @endif
-                                    @endforeach
-                                </ul>
+                            @if(!empty($respText))
+                                @if(strip_tags($respText) !== $respText)
+                                    <div style="font-size: 8.8px; color: #334155; line-height: 1.4;">{!! clean($respText) !!}</div>
+                                @else
+                                    <ul class="exp-bullets">
+                                        @foreach(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', (string) $respText))) as $line)
+                                            @php $cleanLine = ltrim($line, "•-*\t "); @endphp
+                                            @if($cleanLine)<li>{{ $cleanLine }}</li>@endif
+                                        @endforeach
+                                    </ul>
+                                @endif
                             @endif
                         </div>
                     @endforeach
@@ -720,237 +732,117 @@
             @endif
 
             <!-- Technical Skills -->
-            <section class="main-section">
-                <div class="main-sec-title">
-                    <i class="fas fa-code"></i> TECHNICAL SKILLS
-                </div>
-                <div class="skills-grid">
-                    @if($hasCategoryGroupedSkills)
+            @if($skills->isNotEmpty())
+                <section class="main-section">
+                    <div class="main-sec-title">
+                        <i class="fas fa-code"></i> TECHNICAL SKILLS
+                    </div>
+                    <div class="skills-grid">
                         @foreach($groupedSkills as $categoryName => $catSkills)
                             <div class="skill-group-row">
                                 <span class="skill-group-title">{{ $categoryName }}:</span>
-                                <span class="skill-group-items">{{ $catSkills->map(fn($s) => $s->skill_name ?? $s->name)->filter()->implode(', ') }}</span>
+                                <span class="skill-group-items">{{ $catSkills->map(fn($s) => ($s->skill_name ?? $s->name) . ($s->skill_level ? ' ('.$s->skill_level.')' : ''))->filter()->implode(', ') }}</span>
                             </div>
                         @endforeach
-                    @elseif($skills->isNotEmpty())
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">Core Technologies:</span>
-                            <span class="skill-group-items">{{ $skills->map(fn($s) => $s->skill_name ?? $s->name)->filter()->implode(', ') }}</span>
-                        </div>
-                    @else
-                        <!-- Default High-Impact IT Skills Matching Image -->
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">AI & Automation:</span>
-                            <span class="skill-group-items">LLM, RAG, AI Agents, Voice AI, n8n, Prompt Engineering</span>
-                        </div>
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">Backend Architecture:</span>
-                            <span class="skill-group-items">Laravel 11, PHP 8.3, Python, REST APIs, Microservices</span>
-                        </div>
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">Frontend Engineering:</span>
-                            <span class="skill-group-items">Vue.js 3, JavaScript (ES6+), Tailwind CSS, Bootstrap, Inertia.js</span>
-                        </div>
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">Databases & Caching:</span>
-                            <span class="skill-group-items">MySQL, PostgreSQL, MariaDB, Redis, Eloquent ORM</span>
-                        </div>
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">DevOps & Cloud:</span>
-                            <span class="skill-group-items">Docker, Linux / Ubuntu Server, Nginx, Git, CI/CD Actions</span>
-                        </div>
-                        <div class="skill-group-row">
-                            <span class="skill-group-title">APIs & Integrations:</span>
-                            <span class="skill-group-items">Vapi, WhatsApp Business API, Facebook API, SSLCommerz, bKash</span>
-                        </div>
-                    @endif
-                </div>
-            </section>
+                    </div>
+                </section>
+            @endif
 
-            <!-- Projects (Page 1 Item) -->
-            @if($page1Projects->isNotEmpty())
+            <!-- Projects & Engineering Case Studies -->
+            @if($projects->isNotEmpty())
                 <section class="main-section">
                     <div class="main-sec-title">
-                        <i class="fas fa-folder-open"></i> PROJECTS
+                        <i class="fas fa-folder-open"></i> FEATURED PROJECTS &amp; CASE STUDIES
                     </div>
-                    @foreach($page1Projects as $proj)
+                    @foreach($projects as $proj)
                         <div class="project-item">
                             <div class="project-title-line">
                                 <span>
-                                    <strong>{{ $proj->project_title ?? ($proj->title ?? 'Featured Project') }}</strong>
-                                    <i class="fas fa-external-link-alt"></i>
+                                    <strong>{{ $loop->iteration }}. {{ $proj->title ?? $proj->project_title }}</strong>
+                                    @if(!empty($proj->role)) <span style="font-weight: 500; font-size: 8.5px; color: #64748b;">({{ $proj->role }})</span>@endif
                                 </span>
-                                @if(!empty($proj->technologies_used) || !empty($proj->technologies))
-                                    <span class="project-tech">| {{ $proj->technologies_used ?? $proj->technologies }}</span>
+                                @if(!empty($proj->link) || !empty($proj->github_url))
+                                    <div>
+                                        @if(!empty($proj->link))<a href="{{ $proj->link }}" target="_blank"><i class="fas fa-external-link-alt"></i> Live Demo</a>@endif
+                                        @if(!empty($proj->github_url))<a href="{{ $proj->github_url }}" target="_blank" style="margin-left: 8px;"><i class="fab fa-github"></i> Code</a>@endif
+                                    </div>
                                 @endif
                             </div>
-                            @if(!empty($proj->project_description) || !empty($proj->description))
-                                <p class="project-desc">{{ $proj->project_description ?? $proj->description }}</p>
+                            @if(!empty($proj->technologies))
+                                <div class="project-tech">Tech Stack: {{ $proj->technologies }}</div>
+                            @endif
+                            @if(!empty($proj->demo_user) || !empty($proj->demo_password))
+                                <div class="demo-credentials">
+                                    @if($proj->demo_user)<span style="margin-right: 8px;"><strong>User:</strong> {{ $proj->demo_user }}</span>@endif
+                                    @if($proj->demo_password)<span><strong>Pass:</strong> {{ $proj->demo_password }}</span>@endif
+                                </div>
+                            @endif
+                            @if(!empty($proj->description))
+                                <p class="project-desc">{!! clean($proj->description) !!}</p>
+                            @elseif(!empty($proj->solution))
+                                <p class="project-desc">{!! clean($proj->solution) !!}</p>
                             @endif
                         </div>
                     @endforeach
                 </section>
             @endif
+
+            <!-- Professional Qualifications -->
+            @if($certifications->isNotEmpty())
+                <section class="main-section">
+                    <div class="main-sec-title">
+                        <i class="fas fa-certificate"></i> CERTIFICATIONS &amp; QUALIFICATIONS
+                    </div>
+                    @foreach($certifications as $cert)
+                        <div class="cert-item">
+                            <div class="cert-title">{{ $cert->title }}</div>
+                            <div class="cert-meta">
+                                <span>{{ $cert->authority ?? ($cert->institute ?? '') }}</span>
+                                @if(!empty($cert->year))<span>, {{ $cert->year }}</span>@endif
+                                @if(!empty($cert->result_or_score))<span> | Score: {{ $cert->result_or_score }}</span>@endif
+                            </div>
+                        </div>
+                    @endforeach
+                </section>
+            @endif
+
+            <!-- References -->
+            @if($references->isNotEmpty())
+                <section class="main-section">
+                    <div class="main-sec-title">
+                        <i class="fas fa-users"></i> REFERENCES
+                    </div>
+                    <div class="ref-grid">
+                        @foreach($references as $ref)
+                            <div class="ref-card">
+                                <div class="ref-name">{{ $ref->name }}</div>
+                                <div class="ref-role">{{ $ref->designation }}@if(!empty($ref->organization)), {{ $ref->organization }}@endif</div>
+                                <div style="margin-top: 2px;">
+                                    @if(!empty($ref->phone))<div class="ref-contact-item"><i class="fas fa-phone-alt"></i> {{ $ref->phone }}</div>@endif
+                                    @if(!empty($ref->email))<div class="ref-contact-item"><i class="far fa-envelope"></i> {{ $ref->email }}</div>@endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+            @endif
+
+            <!-- Declaration & Signature -->
+            @if($signatureSrc || $cv->declaration)
+                <div class="signature-box">
+                    <div style="text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 4px; min-width: 130px;">
+                        @if($signatureSrc)
+                            <img src="{{ $signatureSrc }}" alt="Signature" style="max-height: 36px; max-width: 120px; object-fit: contain;">
+                        @endif
+                        <div style="font-size: 8.5px; font-weight: 700; color: #0c2340; margin-top: 2px;">{{ $cv->full_name }}</div>
+                        @if($cv->declaration_date)
+                            <div style="font-size: 7.5px; color: #64748b;">{{ $formatDate($cv->declaration_date) }}</div>
+                        @endif
+                    </div>
+                </div>
+            @endif
         </main>
     </div>
-
-    <!-- ========================================== -->
-    <!--                 PAGE 2                     -->
-    <!-- ========================================== -->
-    @if($hasPage2)
-        <div class="cv-page" id="cvPage2">
-            <!-- LEFT SIDEBAR (PAGE 2) -->
-            <aside class="cv-sidebar">
-                <!-- Training Continued -->
-                @if($page2Trainings->isNotEmpty())
-                    <div class="sidebar-section">
-                        <div class="sidebar-sec-title">
-                            <i class="fas fa-chalkboard-teacher"></i> TRAINING
-                        </div>
-                        @foreach($page2Trainings as $train)
-                            <div class="sidebar-train-item">
-                                <div class="sidebar-edu-degree">{{ $train->training_title }}</div>
-                                <div class="sidebar-edu-school">
-                                    <span>{{ $train->institution }}</span>
-                                    <i class="fas fa-external-link-alt"></i>
-                                </div>
-                                <div class="sidebar-edu-meta">
-                                    <span>{{ $train->duration ? $train->duration : ($train->completion_year ?? '') }}</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-
-                <!-- Languages -->
-                <div class="sidebar-section">
-                    <div class="sidebar-sec-title">
-                        <i class="fas fa-language"></i> LANGUAGES
-                    </div>
-                    <ul class="sidebar-bullet-list">
-                        @if($languages->isNotEmpty())
-                            @foreach($languages as $lang)
-                                <li>
-                                    <span><strong>{{ $lang->language_name ?? ($lang->name ?? 'Language') }}</strong> {{ !empty($lang->proficiency) ? '('.$lang->proficiency.')' : '' }}</span>
-                                </li>
-                            @endforeach
-                        @else
-                            <li><span><strong>Bangla</strong> (Native)</span></li>
-                            <li><span><strong>English</strong> (Professional Working Proficiency)</span></li>
-                            <li><span><strong>Hindi</strong> (Conversational)</span></li>
-                        @endif
-                    </ul>
-                </div>
-
-                <!-- Interests & Focus -->
-                <div class="sidebar-section">
-                    <div class="sidebar-sec-title">
-                        <i class="fas fa-heart"></i> INTERESTS
-                    </div>
-                    <ul class="sidebar-bullet-list">
-                        <li><span>Open Source Software & Tools</span></li>
-                        <li><span>AI Agents & Voice Automation</span></li>
-                        <li><span>High-Availability System Architecture</span></li>
-                        <li><span>Tech Writing & Mentorship</span></li>
-                        <li><span>Automation Workflow Design</span></li>
-                    </ul>
-                </div>
-            </aside>
-
-            <!-- RIGHT MAIN CONTENT (PAGE 2) -->
-            <main class="cv-main">
-                <!-- Projects (Continued) -->
-                @if($page2Projects->isNotEmpty())
-                    <section class="main-section">
-                        <div class="main-sec-title">
-                            <i class="fas fa-folder-open"></i> PROJECTS
-                        </div>
-                        @foreach($page2Projects as $proj)
-                            <div class="project-item">
-                                <div class="project-title-line">
-                                    <span>
-                                        <strong>{{ $proj->project_title ?? ($proj->title ?? 'Featured Project') }}</strong>
-                                        <i class="fas fa-external-link-alt"></i>
-                                    </span>
-                                    @if(!empty($proj->technologies_used) || !empty($proj->technologies))
-                                        <span class="project-tech">| {{ $proj->technologies_used ?? $proj->technologies }}</span>
-                                    @endif
-                                </div>
-                                @if(!empty($proj->project_description) || !empty($proj->description))
-                                    <p class="project-desc">{{ $proj->project_description ?? $proj->description }}</p>
-                                @endif
-                            </div>
-                        @endforeach
-                    </section>
-                @endif
-
-                <!-- Certifications -->
-                @if($certifications->isNotEmpty())
-                    <section class="main-section">
-                        <div class="main-sec-title">
-                            <i class="fas fa-certificate"></i> CERTIFICATIONS
-                        </div>
-                        @foreach($certifications as $cert)
-                            <div class="cert-item">
-                                <div class="cert-title">{{ $cert->certification_title ?? ($cert->title ?? 'Professional Certificate') }}</div>
-                                <div class="cert-meta">
-                                    <span>{{ $cert->institute ?? ($cert->institution ?? 'Accredited Institute') }}</span>
-                                    @if(!empty($cert->year) || !empty($cert->passing_year))
-                                        <span>, {{ $cert->year ?? $cert->passing_year }}</span>
-                                    @endif
-                                </div>
-                            </div>
-                        @endforeach
-                    </section>
-                @endif
-
-                <!-- References -->
-                @if($references->isNotEmpty())
-                    <section class="main-section">
-                        <div class="main-sec-title">
-                            <i class="fas fa-users"></i> REFERENCES
-                        </div>
-                        <div class="ref-grid">
-                            @foreach($references as $ref)
-                                <div class="ref-card">
-                                    <div class="ref-name">{{ $ref->name }}</div>
-                                    <div class="ref-role">
-                                        {{ $ref->designation }}
-                                        @if(!empty($ref->organization) || !empty($ref->company))
-                                            , {{ $ref->organization ?? $ref->company }}
-                                        @endif
-                                    </div>
-                                    <div class="ref-contact">
-                                        @if(!empty($ref->email))
-                                            <div class="ref-contact-item">
-                                                <i class="far fa-envelope"></i>
-                                                <span>{{ $ref->email }}</span>
-                                            </div>
-                                        @endif
-                                        @if(!empty($ref->phone) || !empty($ref->mobile))
-                                            <div class="ref-contact-item">
-                                                <i class="fas fa-phone-alt"></i>
-                                                <span>{{ $ref->phone ?? $ref->mobile }}</span>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </section>
-                @endif
-
-                @if($signatureSrc)
-                    <div style="margin-top: auto; display: flex; justify-content: flex-end; padding-top: 15px;">
-                        <div style="text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 4px; min-width: 140px;">
-                            <img src="{{ $signatureSrc }}" alt="Signature" style="max-height: 38px; max-width: 130px; object-fit: contain;">
-                            <div style="font-size: 8.5px; font-weight: 700; color: #64748b; margin-top: 2px;">{{ $cv->full_name }}</div>
-                        </div>
-                    </div>
-                @endif
-            </main>
-        </div>
-    @endif
 
 </body>
 </html>

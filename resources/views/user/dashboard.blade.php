@@ -16,7 +16,7 @@
     @if(!Auth::guard('web')->user()->userCv()->exists())
         <div class="alert d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4" role="alert" style="background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 18px 24px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);">
             <div>
-                <strong style="font-size: 16px; font-family: 'Space Grotesk', sans-serif; display: block; margin-bottom: 4px; color: var(--text);">{{ __('translate.You haven\'t created a Digital CV yet!') }}</strong>
+                <strong style="font-size: 16px; font-family: 'Space Grotesk', sans-serif; display: block; margin-bottom: 4px; color: var(--text);">{{ __("translate.You haven't created a Digital CV yet!") }}</strong>
                 <p class="mb-0" style="font-size: 14px; color: var(--muted);">{{ __('translate.Create your professional Digital CV to apply for jobs and build your online presence.') }}</p>
             </div>
             <a href="{{ profile_route('user.cv.edit') }}" class="btn-primary" style="padding: 10px 20px; text-decoration: none; border-radius: 10px; font-size: 13px; font-weight: 600; white-space: nowrap;">

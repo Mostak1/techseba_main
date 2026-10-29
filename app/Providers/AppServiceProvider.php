@@ -36,6 +36,20 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->extend('translator', function ($translator, $app) {
+            $customTranslator = new class($translator->getLoader(), $translator->getLocale()) extends \Illuminate\Translation\Translator {
+                public function get($key, array $replace = [], $locale = null, $fallback = true)
+                {
+                    $result = parent::get($key, $replace, $locale, $fallback);
+                    if (is_string($result) && str_starts_with($result, 'translate.')) {
+                        return substr($result, 10);
+                    }
+                    return $result;
+                }
+            };
+            $customTranslator->setFallback($translator->getFallback());
+            return $customTranslator;
+        });
 
         try{
             $setting = Cache::rememberForever('setting', function(){

@@ -96,7 +96,13 @@ function getRegexBetween($content) {
     foreach ($Alldata as  $value) {
         if(!empty($value)){
             foreach ($value as $val) {
-                $data[$val] = $val;
+                $val = trim($val);
+                if (str_starts_with($val, 'translate.')) {
+                    $val = substr($val, 10);
+                }
+                if ($val !== '') {
+                    $data[$val] = $val;
+                }
             }
         }
     }

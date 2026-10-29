@@ -239,8 +239,7 @@
                                     </svg>
                                     </span>
                                 </a>
-                    <a class="optech-shop-btn cart-add-btn" data-product-id="{{ $relateProduct->id }}" data-text="Add to Cart"><span class="btn-wraper">{{ __('translate.Add to
-                  Cart') }}</span></a>
+                    <a class="optech-shop-btn cart-add-btn" data-product-id="{{ $relateProduct->id }}" data-text="Add to Cart"><span class="btn-wraper">{{ __('translate.Add to Cart') }}</span></a>
                         </div>
                         <div class="optech-shop-data">
                             <a href="{{ route('product.view', $relateProduct->slug) }}">

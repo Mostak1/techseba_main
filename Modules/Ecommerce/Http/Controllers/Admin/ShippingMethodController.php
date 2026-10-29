@@ -36,7 +36,7 @@ class ShippingMethodController extends Controller
         $method->price = $request->price;
         $method->save();
 
-        $notification = trans('translate.' . ($id ? 'Updated Successfully' : 'Created Successfully'));
+        $notification = $id ? trans('translate.Updated Successfully') : trans('translate.Created Successfully');
         $notification = array('message' => $notification, 'alert-type' => 'success');
         return redirect()->route('admin.shipping-method.index')->with($notification);
     }

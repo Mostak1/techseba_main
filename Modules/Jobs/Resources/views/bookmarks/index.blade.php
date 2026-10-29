@@ -19,7 +19,7 @@
 
             @if($bookmarks->isEmpty())
                 <div class="text-center py-5 card shadow-sm border-0" style="border-radius: 12px; background: #fff;">
-                    <h5 class="text-muted mb-0">{{ __('translate.You haven\'t bookmarked any jobs yet.') }}</h5>
+                    <h5 class="text-muted mb-0">{{ __("translate.You haven't bookmarked any jobs yet.") }}</h5>
                     <div class="mt-3">
                         <a href="{{ route('jobs.index') }}" class="btn btn-primary px-4" style="border-radius: 8px; font-weight: bold; background: #007bff; border: none;">
                             {{ __('translate.Browse Jobs') }}

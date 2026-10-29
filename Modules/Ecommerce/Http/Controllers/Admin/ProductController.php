@@ -101,7 +101,7 @@ class ProductController extends Controller
             $listing_translate->save();
         }
 
-        $notification = trans('translate.' . ($id ? 'Updated Successfully' : 'Created Successfully'));
+        $notification = $id ? trans('translate.Updated Successfully') : trans('translate.Created Successfully');
         $notification = array('message' => $notification, 'alert-type' => 'success');
 
         return redirect()->route('admin.product.index')->with($notification);
@@ -176,7 +176,7 @@ class ProductController extends Controller
         $listing_translate->seo_description = $request->seo_description;
         $listing_translate->save();
 
-        $notification = trans('translate.' . ($id ? 'Updated Successfully' : 'Created Successfully'));
+        $notification = $id ? trans('translate.Updated Successfully') : trans('translate.Created Successfully');
         $notification = array('message' => $notification, 'alert-type' => 'success');
         return redirect()->back()->with($notification);
     }

@@ -68,7 +68,7 @@ class SliderController extends Controller
             $listing_translate->save();
         }
 
-        $notification = trans('translate.' . ($id ? 'Updated Successfully' : 'Created Successfully'));
+        $notification = $id ? trans('translate.Updated Successfully') : trans('translate.Created Successfully');
         $notification = array('messege' => $notification, 'alert-type' => 'success');
         return redirect()->route('admin.slider.index')->with($notification);
     }

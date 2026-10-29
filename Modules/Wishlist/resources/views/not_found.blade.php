@@ -143,7 +143,7 @@
             <div class="not_found_thumb_text">
                 <h4>{{ __(ucfirst(last(request()->segments())) . ' Empty') }}</h4>
                 <p>
-                    {{ __('translate.An empty '. ucfirst(last(request()->segments())) . ' indicates that the previously added list of items has been cleared.') }}
+                    {{ __('translate.An empty list indicates that the previously added items have been cleared.') }}
                     <span> {{ __('translate.Thank you') }}</span>
                 </p>
 
